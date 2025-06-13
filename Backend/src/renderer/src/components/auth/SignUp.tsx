@@ -2,21 +2,30 @@ import { useState } from 'react';
 import '../styles/auth.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faBook, faCodeBranch, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    console.log(email, password)
+  }
 
   return (
-    <div className="auth-layout">
+    <div className="fade-in auth-layout">
       <a
+
         href="https://your-docs-site.com"
         target="_blank"
         rel="noreferrer"
-        className="fade-in side-icon auth-left"
+        className="side-button noto-sans-kr"
       >
-        <FontAwesomeIcon icon={faBook} />
+        <FontAwesomeIcon icon={faBook} className="icon" />
+        <span>Documentation</span>
       </a>
 
       <div className="fade-in auth-container">
@@ -32,6 +41,7 @@ export default function SignUp() {
                   type="email"
                   id="email"
                   value={email}
+                  placeholder="Example@gmail.com"
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="auth-input"
@@ -47,6 +57,7 @@ export default function SignUp() {
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   value={password}
+                  placeholder="•••••••••••"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="auth-input"
@@ -60,17 +71,17 @@ export default function SignUp() {
 
             </div>
 
-            <p className="privacy-note">
+            <p className="privacy-note roboto">
               Note - Your privacy matters to us. We never share your email with any third-party,
               including spam companies. Your trust is our priority.
             </p>
 
-            <button className="auth-btn" type="submit">
+            <button className="auth-btn" type="submit" onClick={handleSignUp}>
               Create Account
             </button>
           </form>
           <div className="auth-footer">
-            Already have an account? <a href="/login">Log in</a>
+            Already have an account? <a onClick={() => navigate('/login')}>Log in</a>
           </div>
 
         </div>
@@ -80,9 +91,10 @@ export default function SignUp() {
         href="https://github.com/your-project"
         target="_blank"
         rel="noreferrer"
-        className="fade-in side-icon auth-right"
+        className="side-button noto-sans-kr"
       >
-        <FontAwesomeIcon icon={faCodeBranch} />
+        <FontAwesomeIcon icon={faCodeBranch} className="icon" />
+        <span>GitHub</span>
       </a>
     </div>
   );

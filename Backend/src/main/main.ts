@@ -6,4 +6,8 @@ export const setUpIpcHandlers = () => {
     console.log(event.ports, data)
   })
 
+  ipcMain.on('LogIn', (event, data) => {
+    console.log(event.ports, data)
+  })
+
 } 

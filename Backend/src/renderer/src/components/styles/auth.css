@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600&display=swap');
+
 :root {
     --bg: #121212;
     --fg: #ffffff;
@@ -9,6 +12,20 @@
     --spacing: 1rem;
     --font: 'Segoe UI', sans-serif;
     --pattern-color: rgba(255, 255, 255, 0.015);
+}
+
+.roboto {
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.noto-sans-kr {
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
 }
 
 html,
@@ -38,6 +55,10 @@ body::before {
     pointer-events: none;
 }
 
+a {
+    cursor: pointer;
+}
+
 .side-icon {
     font-size: 2rem;
     color: var(--accent);
@@ -53,7 +74,7 @@ body::before {
 .auth-layout {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     height: 100vh;
     width: 100vw;
     padding: 0;
@@ -99,8 +120,12 @@ body::before {
     display: block;
     height: 2px;
     width: 100%;
-    background: linear-gradient(to right, transparent, var(--accent), transparent);
-    margin: 0.5rem 0 0 0;
+    background: linear-gradient(to right,
+            transparent 0%,
+            var(--accent) 20%,
+            var(--accent) 80%,
+            transparent 100%);
+    margin: 1.5rem 0 0 0;
     border-radius: 1px;
     opacity: 0.8;
 }
@@ -115,7 +140,7 @@ label {
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
     color: #ccc;
-    margin-left:2px;
+    margin-left: 2px;
 }
 
 .input-wrapper {
@@ -153,7 +178,7 @@ label {
     color: #aaa;
     font-size: 1rem;
     pointer-events: none;
-    padding-right:10px;
+    padding-right: 10px;
 }
 
 .toggle-password-icon {
@@ -208,7 +233,42 @@ label {
 }
 
 .auth-footer a:hover {
-    text-decoration: underline; }
+    text-decoration: underline;
+}
+
+.side-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background-color: rgba(50, 50, 50, 0.95);
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    border: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+    min-width: 180px;
+}
+
+.side-button .icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.side-button:hover {
+    background-color: var(--accent);
+    color: #fff;
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 20px rgba(31, 111, 235, 0.45);
+}
+
+.side-button:hover .icon {
+    transform: rotate(-10deg) scale(1.15);
+}
 
 /* fade-in animation */
 .fade-in {

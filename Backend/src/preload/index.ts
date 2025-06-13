@@ -11,7 +11,8 @@ if (process.contextIsolated) {
   try {
 
     contextBridge.exposeInMainWorld('electronAPI', {
-      SignUp: (data: string) => ipcRenderer.send("SignUp", data),
+      SignUp: (data: {email: string, password: string}) => ipcRenderer.send("SignUp", data),
+      LogIn: (data: {email: string, password:string}) => ipcRenderer.send("LogIn", data)
     });
 
     contextBridge.exposeInMainWorld('electron', electronAPI)
