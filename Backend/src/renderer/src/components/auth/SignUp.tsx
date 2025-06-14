@@ -3,22 +3,41 @@ import '../styles/auth.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faBook, faCodeBranch, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { sendSignUp } from '@renderer/lib/ipc';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [uiError, setUiErrors] = useState({ emailError: '', passError: '' });
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     console.log(email, password)
+
+    const response: {error: any, success: boolean} = await sendSignUp({ email: email, password: password });
+
+    if (response.error) {
+      setUiErrors({emailError: 'Invalid Email', passError: ''})
+    } else if (response.success) {
+      console.log('successful boi')
+      setUiErrors({emailError:'successfull', passError:'boi'})
+    }
   }
+
+  const sanitizeInput = (input: string) => {
+    return input.trim().replace(/[<>/'"]/g, ''); // basic character sanitization
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(sanitizeInput(e.target.value));
+  };
+  
 
   return (
     <div className="fade-in auth-layout">
       <a
-
         href="https://your-docs-site.com"
         target="_blank"
         rel="noreferrer"
@@ -42,11 +61,14 @@ export default function SignUp() {
                   id="email"
                   value={email}
                   placeholder="Example@gmail.com"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                   required
                   className="auth-input"
                 />
               </div>
+              {uiError.emailError && (
+                <p className="input-error-text">{uiError.emailError}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -68,8 +90,11 @@ export default function SignUp() {
                   onClick={() => setShowPassword((prev) => !prev)}
                 />
               </div>
-
+              {uiError.passError && (
+                <p className="input-error-text">{uiError.passError}</p>
+              )}
             </div>
+
 
             <p className="privacy-note roboto">
               Note - Your privacy matters to us. We never share your email with any third-party,

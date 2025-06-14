@@ -3,11 +3,27 @@ import '../styles/auth.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faBook, faCodeBranch, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { sendLogIn } from '@renderer/lib/ipc';
 
 export default function LogIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [uiError, setUiErrors] = useState({ emailError: '', passError: '' });
+
+  const hanldeLogIn = async (e) => {
+      e.preventDefault();
+      const response = await sendLogIn({ email: email, password: password });
+    }
+  
+    const sanitizeInput = (input: string) => {
+      return input.trim().replace(/[<>/'"]/g, ''); // basic character sanitization
+    };
+  
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(sanitizeInput(e.target.value));
+    };
+
   const navigate = useNavigate();
 
   return (
@@ -37,11 +53,14 @@ export default function LogIn() {
                   id="email"
                   value={email}
                   placeholder="Example@gmail.com"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                   required
                   className="auth-input"
                 />
               </div>
+              {uiError.emailError && (
+                <p className="input-error-text">{uiError.emailError}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -63,7 +82,9 @@ export default function LogIn() {
                   onClick={() => setShowPassword((prev) => !prev)}
                 />
               </div>
-
+              {uiError.passError && (
+                <p className="input-error-text">{uiError.passError}</p>
+              )}
             </div>
 
             <p className="privacy-note roboto">
@@ -71,7 +92,7 @@ export default function LogIn() {
               including spam companies. Your trust is our priority.
             </p>
 
-            <button className="auth-btn" type="submit">
+            <button className="auth-btn" type="submit" onClick={hanldeLogIn}>
               Log In
             </button>
           </form>

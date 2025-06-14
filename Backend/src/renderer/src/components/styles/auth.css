@@ -270,6 +270,15 @@ label {
     transform: rotate(-10deg) scale(1.15);
 }
 
+.input-error-text {
+    color: #e63946;
+    /* bright red */
+    font-size: 0.875rem;
+    margin-top: 4px;
+    margin-left: 2px;
+    font-family: 'Roboto', sans-serif;
+}
+
 /* fade-in animation */
 .fade-in {
     animation: fadeIn 0.6s ease-in-out forwards;
