@@ -4,39 +4,64 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faBook, faCodeBranch, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { sendSignUp } from '@renderer/lib/ipc';
+import LoadingOverlay from './LoadingOverlay';
+import SuccessDialog from './successDialog';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
   const [uiError, setUiErrors] = useState({ emailError: '', passError: '' });
+  const [loading, setLoading] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    console.log(email, password)
+    setLoading(true)
+    try {
+      if (email.trim() == '' || password.trim() == '') {
+        setUiErrors({ emailError: 'Fill all the inputs.', passError: "Fill all the inputs." })
+        return;
+      }
+      const response: { error: any, success: boolean } = await sendSignUp({ email: email, password: password });
 
-    const response: {error: any, success: boolean} = await sendSignUp({ email: email, password: password });
-
-    if (response.error) {
-      setUiErrors({emailError: 'Invalid Email', passError: ''})
-    } else if (response.success) {
-      console.log('successful boi')
-      setUiErrors({emailError:'successfull', passError:'boi'})
+      if (response.error) {
+        if (response.error.includes("already registered") || response.error.includes("already been registered")) {
+          setUiErrors(prev => ({ ...prev, emailError: "Email already in use" }));
+        } else {
+          setUiErrors({ emailError: 'Invalid Email', passError: 'Invalid password' })
+          setLoading(false)
+        }
+      } else if (response.success) {
+        setShowSuccessDialog(true);
+        setLoading(false)
+      }
+    } catch (error) {
+      setUiErrors({ emailError: 'An error occured, Please try again later.', passError: '' })
+      setLoading(false)
+    } finally {
+      setLoading(false)
     }
   }
 
   const sanitizeInput = (input: string) => {
-    return input.trim().replace(/[<>/'"]/g, ''); // basic character sanitization
+    return input.trim().replace(/[<>/'"]/g, '');
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(sanitizeInput(e.target.value));
   };
-  
 
   return (
     <div className="fade-in auth-layout">
+      {showSuccessDialog && <SuccessDialog onConfirm={() => {
+        Navigate('/')
+        setShowSuccessDialog(false);
+      }} />}
+
+      {loading && <LoadingOverlay />}
       <a
         href="https://your-docs-site.com"
         target="_blank"
@@ -66,9 +91,9 @@ export default function SignUp() {
                   className="auth-input"
                 />
               </div>
-              {uiError.emailError && (
-                <p className="input-error-text">{uiError.emailError}</p>
-              )}
+              <p className={`input-error-text ${uiError.emailError ? 'visible' : 'hidden'}`}>
+                {uiError.emailError || '‎'} {/* invisible placeholder character to keep height */}
+              </p>
             </div>
 
             <div className="form-group">
@@ -90,9 +115,9 @@ export default function SignUp() {
                   onClick={() => setShowPassword((prev) => !prev)}
                 />
               </div>
-              {uiError.passError && (
-                <p className="input-error-text">{uiError.passError}</p>
-              )}
+              <p className={`input-error-text ${uiError.passError ? 'visible' : 'hidden'}`}>
+                {uiError.passError || '‎'} {/* invisible placeholder character to keep height */}
+              </p>
             </div>
 
 
@@ -106,7 +131,7 @@ export default function SignUp() {
             </button>
           </form>
           <div className="auth-footer">
-            Already have an account? <a onClick={() => navigate('/login')}>Log in</a>
+            Already have an account? <a onClick={() => Navigate('/login')}>Log in</a>
           </div>
 
         </div>
