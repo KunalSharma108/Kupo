@@ -15,7 +15,7 @@ export default function SignUp() {
   const [uiError, setUiErrors] = useState({ emailError: '', passError: '' });
   const [loading, setLoading] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -56,10 +56,13 @@ export default function SignUp() {
 
   return (
     <div className="fade-in auth-layout">
-      {showSuccessDialog && <SuccessDialog onConfirm={() => {
-        Navigate('/')
-        setShowSuccessDialog(false);
-      }} />}
+      {showSuccessDialog && <SuccessDialog
+        data={{ heading: 'Sign Up Successful!', msg: 'You are ready to work on your portfolio\'s', buttonText: 'Get Started' }}
+        onConfirm={() => {
+          Navigate('/')
+          setShowSuccessDialog(false);
+        }}
+      />}
 
       {loading && <LoadingOverlay />}
       <a
