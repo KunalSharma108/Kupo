@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { LogIn, SignUp } from "./functions/AuthFunc";
+import { CheckAuth, LogIn, SignUp } from "./functions/AuthFunc";
 
 export const setUpIpcHandlers = async () => {
   ipcMain.handle('SignUp', async (_event, { email, password }) => {
@@ -13,6 +13,7 @@ export const setUpIpcHandlers = async () => {
   });
 
   ipcMain.handle('CheckAuth', async (_event) => {
-    
+    const response = await CheckAuth();
+    return response;
   })
 } 

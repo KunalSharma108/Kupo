@@ -59,7 +59,7 @@ async function LogIn(email: string, password: string) {
           await saveTokensToKeytar(access_token, refresh_token);
         }
       }
-      
+
       return { success: true, data }
     } catch (error) {
       return {
@@ -69,4 +69,58 @@ async function LogIn(email: string, password: string) {
   }
 }
 
-export {isValidEmail, SignUp, LogIn}
+type authResult = {
+  loggedIn: boolean,
+  data: any | null;
+}
+
+async function CheckAuth(): Promise<authResult> {
+  try {
+    const access_token = await keytar.getPassword(SERVICE_NAME, 'access_token');
+    const refresh_token = await keytar.getPassword(SERVICE_NAME, 'refresh_token');
+
+    if (!access_token || !refresh_token) {
+      return { loggedIn: false, data: null }
+    }
+    const { data: sessionData, error: sessionError } = await supabase.auth.setSession({ access_token, refresh_token });
+
+    if (!sessionData.session || sessionError) {
+      await keytar.deletePassword(SERVICE_NAME, "access_token");
+      await keytar.deletePassword(SERVICE_NAME, "refresh_token");
+      console.warn("Session invalid or expired. Tokens deleted.");
+      return { loggedIn: false, data: null };
+    }
+
+    const newAccess = sessionData.session.access_token;
+    const newRefresh = sessionData.session.refresh_token;
+
+
+    if (newAccess != access_token) {
+      await keytar.setPassword(SERVICE_NAME, 'access_token', newAccess)
+    }
+
+    if (newRefresh != refresh_token) {
+      await keytar.setPassword(SERVICE_NAME, 'refresh_token', newRefresh)
+    }
+
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+
+    if (!userData.user || userError) {
+      return { loggedIn: false, data: null }
+    }
+
+    console.log(userData.user)
+
+    return {loggedIn: true, data: userData}
+
+  } catch (error) {
+    return { loggedIn: false, data: null }
+
+  } finally {
+    return { loggedIn: false, data: null }
+  }
+
+
+}
+
+export { isValidEmail, SignUp, LogIn, CheckAuth }
