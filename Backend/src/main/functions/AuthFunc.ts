@@ -71,7 +71,6 @@ async function LogIn(email: string, password: string) {
 
 type authResult = {
   loggedIn: boolean,
-  data: any | null;
 }
 
 async function CheckAuth(): Promise<authResult> {
@@ -80,7 +79,7 @@ async function CheckAuth(): Promise<authResult> {
     const refresh_token = await keytar.getPassword(SERVICE_NAME, 'refresh_token');
 
     if (!access_token || !refresh_token) {
-      return { loggedIn: false, data: null }
+      return { loggedIn: false }
     }
     const { data: sessionData, error: sessionError } = await supabase.auth.setSession({ access_token, refresh_token });
 
@@ -88,12 +87,11 @@ async function CheckAuth(): Promise<authResult> {
       await keytar.deletePassword(SERVICE_NAME, "access_token");
       await keytar.deletePassword(SERVICE_NAME, "refresh_token");
       console.warn("Session invalid or expired. Tokens deleted.");
-      return { loggedIn: false, data: null };
+      return { loggedIn: false };
     }
 
     const newAccess = sessionData.session.access_token;
     const newRefresh = sessionData.session.refresh_token;
-
 
     if (newAccess != access_token) {
       await keytar.setPassword(SERVICE_NAME, 'access_token', newAccess)
@@ -106,21 +104,15 @@ async function CheckAuth(): Promise<authResult> {
     const { data: userData, error: userError } = await supabase.auth.getUser();
 
     if (!userData.user || userError) {
-      return { loggedIn: false, data: null }
+      return { loggedIn: false }
     }
 
-    console.log(userData.user)
-
-    return {loggedIn: true, data: userData}
+    return { loggedIn: true }
 
   } catch (error) {
-    return { loggedIn: false, data: null }
+    return { loggedIn: false }
 
-  } finally {
-    return { loggedIn: false, data: null }
   }
-
-
 }
 
 export { isValidEmail, SignUp, LogIn, CheckAuth }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/welcome.css'
 
 function Welcome(): React.JSX.Element {
   const navigate = useNavigate();

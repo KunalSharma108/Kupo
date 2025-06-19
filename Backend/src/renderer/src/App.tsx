@@ -15,7 +15,7 @@ function App(): React.JSX.Element {
     const AuthCheck = async (): Promise<any> => {
       const response = await CheckAuth();
 
-      if (response.loggedIn) {
+      if (response.loggedIn == true) {
         setLoggedIn(true)
         setLoading(false);
       } else {
