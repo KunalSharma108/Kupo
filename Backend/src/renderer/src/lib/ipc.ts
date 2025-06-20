@@ -9,3 +9,15 @@ export const sendLogIn = (data: { email: string, password: string }) => {
 export const CheckAuth = () => {
   return window.electronAPI.CheckAuth();
 }
+
+export const minimizeWindow = () => {
+  return window.electronAPI.minimize();
+}
+
+export const maximizeWindow = () => {
+  return window.electronAPI.maximize();
+}
+
+export const closeWindow = () => {
+  return window.electronAPI.close();
+}

@@ -2,161 +2,182 @@
 
 .sour-gummy {
     font-family: "Sour Gummy", sans-serif;
-    font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-variation-settings:
-        "wdth" 100;
 }
 
 .dashboard-container {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color: black;
+    background-color: #000;
     color: white;
+}
+
+.dashboard-navbar {
+    height: 64px;
+    background-color: #070707;;
+    /* deep black */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    color: white;
+    position: relative;
+    z-index: 10;
+    user-select: none;
+    -webkit-app-region: drag;
+    border-bottom: none;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 0 rgba(255, 255, 255, 0.03);
+    background-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.07) 50%, transparent);
+    background-size: 100% 1px;
+    background-position: bottom;
+    background-repeat: no-repeat;
 }
 
 .nav-section {
     display: flex;
     align-items: center;
-    gap: 1rem;
-}
-
-.dashboard-navbar {
-    height: 64px;
-    background-color: #111827;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    border-bottom: 1px solid #2d3748;
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
-    position: relative;
-    z-index: 10;
+    gap: 1.25rem;
 }
 
 .nav-left,
 .nav-right {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 1rem;
 }
 
 .nav-left {
     justify-content: flex-start;
-    flex: 1;
-}
-
-.nav-right {
-    justify-content: flex-end;
-    flex: 1;
 }
 
 .nav-center {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     justify-content: center;
     flex: 0;
+    gap: 0.5rem;
+}
+
+.nav-right {
+    justify-content: flex-end;
+    gap: 0.75rem;
 }
 
 .dashboard-logo {
-    height: 40px;
-    /* bumped from 32px */
+    height: 48px;
     object-fit: contain;
+    user-select: none;
 }
 
 .logo-text {
-    font-size: 1.5rem;
-    /* bumped from 1.2rem */
+    font-size: 1.65rem;
     color: #f3f4f6;
     font-weight: 600;
+    user-select: none;
 }
 
+.nav-link {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color:#0a0a0ac5;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    -webkit-app-region: no-drag;
+}
 
-/* Same button styles as before */
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    transform: scale(1.03);
+}
+
+.github-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.github-stars {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
 .dashboard-btn {
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.primary-btn {
-    background-color: #00bfff;
-    color: white;
-    border: none;
-}
-
-.primary-btn:hover {
-    background-color: #00a6d6;
-    transform: scale(1.05);
-}
-
-.dropdown-btn {
+    -webkit-app-region: no-drag;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     background-color: transparent;
     color: #e5e7eb;
-    border: 1px solid #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
-.dropdown-btn:hover {
-    background-color: #1f2937;
-    border-color: #6b7280;
+.dashboard-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-.dropdown-container {
-    position: relative;
-    display: inline-block;
+.build-btn {
+    border: 1px solid #00bfff;
+    color: #00bfff;
+    background-color: rgba(0, 191, 255, 0.05);
+    font-weight: 700;
 }
 
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #1f2937;
-    border: 1px solid #374151;
-    border-radius: 6px;
-    padding-top: 0.25rem;
-    min-width: 180px;
-    z-index: 20;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    animation: fadeIn 0.2s ease-in-out;
+.build-btn:hover {
+    background-color: rgba(0, 191, 255, 0.1);
+    transform: scale(1.05) rotate(-1deg);
 }
 
-.dropdown-container:hover .dropdown-menu,
-.dropdown-menu:hover {
-    display: block;
+.vertical-separator {
+    height: 32px;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-left: 0.75rem;
+    margin-right: 0.25rem;
 }
 
-.dropdown-item {
-    padding: 0.75rem 1rem;
-    width: 100%;
-    background: none;
+.window-controls {
+    display: flex;
+    align-items: center;
+    -webkit-app-region: no-drag;
+}
+
+.window-controls button {
+    width: 36px;
+    height: 28px;
     border: none;
-    color: #e5e7eb;
-    text-align: left;
-    font-size: 0.9rem;
+    background: transparent;
+    color: #d1d5db;
+    font-size: 1rem;
     cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.dropdown-item:hover {
+.window-controls button:hover {
     background-color: #374151;
-    color: #ffffff;
+    border-radius: 4px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
+.window-controls button:last-child:hover {
+    background-color: #ef4444;
+    color: white;
+}
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.dashboard-navbar:-moz-drag-over {
+    user-select: none;
 }
