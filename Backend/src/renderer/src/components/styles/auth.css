@@ -15,6 +15,12 @@
     --pattern-color: rgba(255, 255, 255, 0.015);
 }
 
+html, body {
+    margin:0;
+    padding:0;
+    background-color: #1e1e1e;
+}
+
 .mulish {
     font-family: "Mulish", sans-serif;
     font-optical-sizing: auto;
@@ -36,8 +42,7 @@
     font-style: normal;
 }
 
-html,
-body {
+.auth-layout {
     height: 100%;
     overflow: hidden;
     background-color: var(--bg);
@@ -47,7 +52,7 @@ body {
     padding: 0;
 }
 
-body::before {
+.auth-layout::before {
     content: "";
     position: absolute;
     top: 0;

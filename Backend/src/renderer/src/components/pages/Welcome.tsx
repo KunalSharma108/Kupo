@@ -15,7 +15,7 @@ function Welcome(): React.JSX.Element {
       gap: '1.5rem',
       backgroundColor: '#121212',
       color: '#fff'
-    }} className='fade-in'>
+    }} className='welcome fade-in'>
       <h1 style={{ fontSize: '2rem' }}>Welcome to the App 🚀</h1>
       <div style={{ display: 'flex', gap: '1rem' }}>
         <button

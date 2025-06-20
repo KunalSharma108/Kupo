@@ -1,88 +1,162 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    background-color: #121212;
-    color: white;
-}
+@import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@700&display=swap');
 
-.dashboard-navbar {
-    height: 60px;
-    background-color: #1f1f1f;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-    border-bottom: 1px solid #333;
-}
-
-.dashboard-sidebar {
-    width: 250px;
-    background-color: #1a1a1a;
-    height: calc(100vh - 60px);
-    padding: 1rem;
-    border-right: 1px solid #333;
-    box-sizing: border-box;
-    float: left;
-}
-
-.dashboard-main {
-    margin-left: 250px;
-    padding: 1rem;
-    height: calc(100vh - 60px);
-    overflow-y: auto;
-    box-sizing: border-box;
-}
-
-.dashboard-btn {
-    background-color: #00bfff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0.25rem;
-    font-weight: 500;
-}
-
-.dashboard-btn:hover {
-    background-color: #009acf;
-}
-
-.section-block {
-    background-color: #1e1e1e;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-}
-
-.project-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.project-item {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #333;
-    cursor: pointer;
-}
-
-.sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+.sour-gummy {
+    font-family: "Sour Gummy", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
 }
 
 .dashboard-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: black;
+    color: white;
 }
 
-.dashboard-body {
+.nav-section {
     display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-navbar {
+    height: 64px;
+    background-color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    border-bottom: 1px solid #2d3748;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    position: relative;
+    z-index: 10;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-left {
+    justify-content: flex-start;
     flex: 1;
-    height: calc(100vh - 60px);
+}
+
+.nav-right {
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    flex: 0;
+}
+
+.dashboard-logo {
+    height: 40px;
+    /* bumped from 32px */
+    object-fit: contain;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    /* bumped from 1.2rem */
+    color: #f3f4f6;
+    font-weight: 600;
+}
+
+
+/* Same button styles as before */
+.dashboard-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.primary-btn {
+    background-color: #00bfff;
+    color: white;
+    border: none;
+}
+
+.primary-btn:hover {
+    background-color: #00a6d6;
+    transform: scale(1.05);
+}
+
+.dropdown-btn {
+    background-color: transparent;
+    color: #e5e7eb;
+    border: 1px solid #4b5563;
+}
+
+.dropdown-btn:hover {
+    background-color: #1f2937;
+    border-color: #6b7280;
+}
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    padding-top: 0.25rem;
+    min-width: 180px;
+    z-index: 20;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-container:hover .dropdown-menu,
+.dropdown-menu:hover {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    width: 100%;
+    background: none;
+    border: none;
+    color: #e5e7eb;
+    text-align: left;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #374151;
+    color: #ffffff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

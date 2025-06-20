@@ -4,11 +4,14 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { setUpIpcHandlers } from './main'
 
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     show: false,
+    title: 'Kupo',
     autoHideMenuBar: true,
+    icon:'renderer/src/components/assets/Logo.ico',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
