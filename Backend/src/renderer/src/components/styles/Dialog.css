@@ -1,0 +1,94 @@
+/* Dialog.css */
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dialog-box {
+    background-color: #1e1e1e;
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    animation: scaleUp 0.25s ease-in-out;
+}
+
+.dialog-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.dialog-message {
+    font-size: 1rem;
+    color: #cccccc;
+    margin-bottom: 1.5rem;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.dialog-cancel,
+.dialog-confirm {
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dialog-cancel {
+    background-color: #3a3a3a;
+    color: #bbb;
+}
+
+.dialog-cancel:hover {
+    background-color: #4a4a4a;
+}
+
+.dialog-confirm {
+    background-color: #ff4d4f;
+    color: #fff;
+}
+
+.dialog-confirm:hover {
+    background-color: #e64545;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

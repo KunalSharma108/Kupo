@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/Dashboard.css';
+import '../../styles/NavDashboard.css';
 import icon from '../../assets/icon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowMinimize, faWindowMaximize, faTimes, faRocket, faBook } from '@fortawesome/free-solid-svg-icons';
@@ -34,9 +34,9 @@ const NavDashboard = (): React.JSX.Element => {
         </button>
         <div className="vertical-separator"></div>
         <div className="window-controls">
-          <button><FontAwesomeIcon onClick={minimizeWindow} icon={faWindowMinimize} /></button>
-          <button><FontAwesomeIcon onClick={maximizeWindow} icon={faWindowMaximize} /></button>
-          <button><FontAwesomeIcon onClick={closeWindow} icon={faTimes} /></button>
+          <button onClick={() => minimizeWindow()}><FontAwesomeIcon icon={faWindowMinimize} /></button>
+          <button onClick={() => maximizeWindow()}><FontAwesomeIcon icon={faWindowMaximize} /></button>
+          <button onClick={() => closeWindow()} ><FontAwesomeIcon icon={faTimes} /></button>
         </div>
       </div>
     </nav>

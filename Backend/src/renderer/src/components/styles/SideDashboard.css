@@ -1,0 +1,194 @@
+.dashboard-sidebar {
+    width: 260px;
+    background-color: #1e1e24;
+    color: #ffffff;
+    height: 100vh;
+    padding: 1.5rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #333;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.dashboard-btn {
+    background-color: transparent;
+    border: none;
+    color: #00bfff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.dashboard-btn:hover {
+    transform: scale(1.15);
+    color: #1fb6ff;
+}
+
+.new-project-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.new-project-input input {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    background-color: #2b2b31;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.new-project-input button {
+    align-self: flex-end;
+    padding: 0.4rem 0.9rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #00bfff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.new-project-input button:hover {
+    background-color: #1fb6ff;
+}
+
+.project-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.project-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    gap: 0.4rem;
+    text-align: left;
+    /* align span to the left */
+}
+
+.project-item span {
+    flex-grow: 1;
+    text-align: left;
+    color: #ddd;
+}
+
+.rename-input {
+    flex: 1;
+    padding: 0.4rem 0.6rem;
+    border-radius: 5px;
+    background-color: #2b2b31;
+    color: white;
+    border: none;
+    outline: none;
+    text-align: left;
+    /* ensure renaming is also left aligned */
+}
+
+/* Update hr divider */
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #2c2c32;
+    /* subtle, dark-friendly */
+    margin: 0.5rem 0 1rem 0;
+}
+
+.project-item:hover {
+    background-color: #2c2c33;
+}
+
+.project-icon {
+    color: #b0b0b0;
+    margin-right: 0.5rem;
+}
+
+.rename-input {
+    flex: 1;
+    padding: 0.4rem 0.6rem;
+    border-radius: 5px;
+    background-color: #2b2b31;
+    color: white;
+    border: none;
+    outline: none;
+}
+
+.project-options {
+    position: relative;
+}
+
+.dots-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.dots-btn:hover {
+    color: #fff;
+}
+
+.options-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: #2e2e38;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    padding: 0.3rem 0;
+}
+
+.options-menu button {
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.options-menu button:hover {
+    background-color: #40404a;
+}

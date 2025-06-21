@@ -16,7 +16,8 @@
 
 .dashboard-navbar {
     height: 64px;
-    background-color: #070707;;
+    background-color: #070707;
+    ;
     /* deep black */
     display: flex;
     align-items: center;
@@ -66,9 +67,25 @@
 }
 
 .dashboard-logo {
-    height: 48px;
+    height: 65px;
     object-fit: contain;
     user-select: none;
+    /* animation: logo-spin infinite 10s linear; */
+    transition: filter 300ms;
+}
+
+.dashboard-logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+@keyframes logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .logo-text {
@@ -85,7 +102,7 @@
     padding: 0.4rem 0.8rem;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color:#0a0a0ac5;
+    background-color: #0a0a0ac5;
     transition: background-color 0.2s ease, transform 0.2s ease;
     display: flex;
     align-items: center;

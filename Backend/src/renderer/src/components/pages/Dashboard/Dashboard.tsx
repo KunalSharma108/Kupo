@@ -2,7 +2,6 @@ import React from 'react';
 import DashSidebar from './SideDashboard';
 import NavDashboard from './NavDashboard';
 import MainDashboard from './MainDashboard';
-import '../../styles/Dashboard.css';
 
 function Dashboard(): React.JSX.Element {
   return (

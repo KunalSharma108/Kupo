@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../styles/Dashboard.css';
 
 const MainDashboard = (): React.JSX.Element => {
   return (
