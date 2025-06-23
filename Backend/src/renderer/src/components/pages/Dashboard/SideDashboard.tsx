@@ -127,7 +127,7 @@ const SideDashboard = (): React.JSX.Element => {
                 <FontAwesomeIcon icon={faEllipsisV} />
               </button>
               {showMenu === idx && (
-                <div className="options-menu">
+                <div className="fade-in-fast options-menu">
                   <button onClick={() => handleRename(idx)}><FontAwesomeIcon icon={faPen} /> Rename</button>
                   <button onClick={() => handleDelete(idx)}><FontAwesomeIcon icon={faTrash} /> Delete</button>
                 </div>
