@@ -32,5 +32,3 @@ export interface HeroSection {
   };
 }
 
-
-// Make custom css for Type: in background {} too 
