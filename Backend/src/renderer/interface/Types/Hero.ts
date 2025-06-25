@@ -1,4 +1,6 @@
-import { ButtonBlock, horizontalPositionKey, spacingKey, TextBlock, verticalPositionKey } from "../designPresets";
+import { BackgroundTypeMapKey } from "../Presets/Background";
+import { horizontalPositionKey, spacingKey, verticalPositionKey } from "../Presets/Style";
+import { ButtonBlock, TextBlock } from "../Presets/uiBlocks";
 
 export interface HeroSection {
   id: string;
@@ -8,13 +10,7 @@ export interface HeroSection {
   horizontalPosition: horizontalPositionKey;
   verticalPosition: verticalPositionKey;
 
-  background: {
-    type: "color" | "image" | "gradient" | "image+gradient";
-    color?: string;
-    imageUrl?: string;
-    gradient?: string;
-    blendMode?: string;
-  };
+  backgroundType: BackgroundTypeMapKey;
 
   texts: TextBlock[];
   buttons?: ButtonBlock[];

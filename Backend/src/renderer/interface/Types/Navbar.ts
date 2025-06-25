@@ -1,18 +1,18 @@
+import { fontOptionsKey, fontSizesKey } from "../Presets/FontFamily";
 import {
-  fontOptionsKey,
-  fontSizesKey,
   hoverEffectsKey,
   horizontalPositionKey,
   spacingKey,
-  TextBlock,
-  ButtonBlock
-} from "../designPresets";
+  verticalPositionKey,
+} from "../Presets/Style";
+import { ButtonBlock } from "../Presets/uiBlocks";
 
 export interface Navbar {
   enabled: boolean;
   sticky: boolean;
   logo?: string;
-  logoPosition: horizontalPositionKey;
+  logoHorizontalPosition: horizontalPositionKey;
+  logoVerticalPosition: verticalPositionKey;
 
   navLinks?: ButtonBlock[];
   navLinksPosition: horizontalPositionKey;
