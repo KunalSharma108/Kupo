@@ -1,4 +1,4 @@
-import { spacingKey } from "../Presets/Style";
+import { styles } from "../Presets/Style";
 import { FeatureBlock } from "../Presets/uiBlocks";
 
 export interface FeatureSection {
@@ -9,17 +9,5 @@ export interface FeatureSection {
   heading?: string;
   blocks: FeatureBlock[];
 
-  styles?: {
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingLeft?: spacingKey;
-    paddingRight?: spacingKey;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginLeft?: spacingKey;
-    marginRight?: spacingKey;
-
-    backgroundColor?: string;
-  };
+  style:styles;
 }

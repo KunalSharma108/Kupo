@@ -1,57 +1,18 @@
-import { fontOptionsKey, fontSizesKey } from "../Presets/FontFamily";
 import {
-  hoverEffectsKey,
-  horizontalPositionKey,
-  spacingKey,
-  verticalPositionKey,
+  styles,
 } from "../Presets/Style";
 import { ButtonBlock } from "../Presets/uiBlocks";
 
 export interface Navbar {
   enabled: boolean;
   sticky: boolean;
-  logo?: string;
-  logoHorizontalPosition: horizontalPositionKey;
-  logoVerticalPosition: verticalPositionKey;
+  logo?: {
+    logoURL: string;
+    style: styles;
+  }
 
   navLinks?: ButtonBlock[];
-  navLinksPosition: horizontalPositionKey;
+  navLinksPosition: 'Left' | 'Center' | 'Right';
 
-  styles: {
-    backgroundColor: string;
-    textColor: string;
-    fontSize: fontSizesKey;
-    fontFamily: fontOptionsKey;
-    fontWeight: string;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginLeft?: spacingKey;
-    marginRight?: spacingKey;
-
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingLeft?: spacingKey;
-    paddingRight?: spacingKey;
-  };
-
-  hoverStyles?: {
-    backgroundColor?: string;
-    textColor?: string;
-    fontFamily?: fontOptionsKey;
-    fontWeight?: string;
-    fontSize?: fontSizesKey;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginLeft?: spacingKey;
-    marginRight?: spacingKey;
-
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingLeft?: spacingKey;
-    paddingRight?: spacingKey;
-
-    hoverEffect?: hoverEffectsKey;
-  };
+  style: styles
 }

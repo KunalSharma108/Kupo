@@ -1,30 +1,31 @@
-import { dynamicStyleOption, horizontalPositionKey, hoverEffectsKey, spacingKey, styleOption, verticalPositionKey } from "./Style";
+import { dynamicStyleOption, hoverEffectsKey, spacingKey, styleOption, styles } from "./Style";
 import { fontOptionsKey, fontSizesKey } from "./FontFamily";
+import { BackgroundTypeMapKey } from "./Background";
 
-export const textColors: Record<string, styleOption> = {
-  red: { label: "Red", css: "color: #e74c3c;" },
-  blue: { label: "Blue", css: "color: #3498db;" },
-  green: { label: "Green", css: "color: #2ecc71;" },
-  yellow: { label: "Yellow", css: "color: #f1c40f;" },
-  orange: { label: "Orange", css: "color: #e67e22;" },
-  purple: { label: "Purple", css: "color: #9b59b6;" },
-  pink: { label: "Pink", css: "color: #ff69b4;" },
-  teal: { label: "Teal", css: "color: #1abc9c;" },
-  gray: { label: "Gray", css: "color: #7f8c8d;" },
-  black: { label: "Black", css: "color: #000000;" },
-  white: { label: "White", css: "color: #ffffff;" },
-  lightRed: { label: "Light Red", css: "color: #f8d7da;" },
-  lightBlue: { label: "Light Blue", css: "color: #d0ebff;" },
-  lightGreen: { label: "Light Green", css: "color: #d4edda;" },
-  lightYellow: { label: "Light Yellow", css: "color: #fff3cd;" },
-  lightGray: { label: "Light Gray", css: "color: #f0f0f0;" },
-  darkRed: { label: "Dark Red", css: "color: #c0392b;" },
-  darkBlue: { label: "Dark Blue", css: "color: #2c3e50;" },
-  darkGreen: { label: "Dark Green", css: "color: #145a32;" },
-  navy: { label: "Navy", css: "color: #001f3f;" },
-};
+export const Colors: Record<string, styleOption> = {
+  red: { label: "Red", css: "e74c3c;" },
+  blue: { label: "Blue", css: "3498db;" },
+  green: { label: "Green", css: "2ecc71;" },
+  yellow: { label: "Yellow", css: "f1c40f;" },
+  orange: { label: "Orange", css: "e67e22;" },
+  purple: { label: "Purple", css: "9b59b6;" },
+  pink: { label: "Pink", css: "ff69b4;" },
+  teal: { label: "Teal", css: "1abc9c;" },
+  gray: { label: "Gray", css: "7f8c8d;" },
+  black: { label: "Black", css: "000000;" },
+  white: { label: "White", css: "ffffff;" },
+  lightRed: { label: "Light Red", css: "f8d7da;" },
+  lightBlue: { label: "Light Blue", css: "d0ebff;" },
+  lightGreen: { label: "Light Green", css: "d4edda;" },
+  lightYellow: { label: "Light Yellow", css: "fff3cd;" },
+  lightGray: { label: "Light Gray", css: "f0f0f0;" },
+  darkRed: { label: "Dark Red", css: "c0392b;" },
+  darkBlue: { label: "Dark Blue", css: "2c3e50;" },
+  darkGreen: { label: "Dark Green", css: "145a32;" },
+  navy: { label: "Navy", css: "001f3f;" },
+} as const;
 
-export const customTextColor: Record<string, dynamicStyleOption<string>> = {
+export const customColor: Record<string, dynamicStyleOption<string>> = {
   customColor: {
     label: 'Custom Color',
     value: '#fff000',
@@ -32,119 +33,32 @@ export const customTextColor: Record<string, dynamicStyleOption<string>> = {
   }
 };
 
-export const textColorOptions = {
-  ...textColors,
-  ...customTextColor
+export const ColorOptions = {
+  ...Colors,
+  ...customColor
 } as const;
 
+export type ColorsKey = keyof typeof ColorOptions;
 
 export interface TextBlock {
   text: string;
-  styles: {
-    fontFamily: fontOptionsKey;
-    fontWeight: string;
-    fontSize: fontSizesKey;
-    textColor: keyof typeof textColorOptions;
-    horizontalPosition: horizontalPositionKey;
-    verticalPosition: verticalPositionKey;
-
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingRight?: spacingKey;
-    paddingLeft?: spacingKey;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginRight?: spacingKey;
-    marginLeft?: spacingKey;
-
-    transition?: number;
-  };
-  hoverStyles: {
-    hoverEffect?: hoverEffectsKey;
-    fontFamily: fontOptionsKey;
-    fontWeight: string;
-    fontSize: fontSizesKey;
-    textColor: string;
-
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingRight?: spacingKey;
-    paddingLeft?: spacingKey;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginRight?: spacingKey;
-    marginLeft?: spacingKey;
-  }
+  style: styles;
 }
 
 export interface ButtonBlock {
   label: string;
   link: string;
-
-  styles: {
-    backgroundColor: string;
-    textColor: keyof typeof textColorOptions;
-    fontFamily: fontOptionsKey;
-    fontWeight: string;
-    fontSize: fontSizesKey;
-
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingLeft?: spacingKey;
-    paddingRight?: spacingKey;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginLeft?: spacingKey;
-    marginRight?: spacingKey;
-
-    border?: string;
-    borderRadius?: string;
-  };
-
-  hoverStyles?: {
-    backgroundColor?: string;
-    textColor?: string;
-    fontFamily?: fontOptionsKey;
-    fontWeight?: string;
-    fontSize?: fontSizesKey;
-
-    paddingTop?: spacingKey;
-    paddingBottom?: spacingKey;
-    paddingLeft?: spacingKey;
-    paddingRight?: spacingKey;
-
-    marginTop?: spacingKey;
-    marginBottom?: spacingKey;
-    marginLeft?: spacingKey;
-    marginRight?: spacingKey;
-
-    border?: string;
-    borderRadius?: string;
-    hoverEffect?: hoverEffectsKey;
-  };
+  style: styles;
 }
 
 export interface FeatureBlockTitle {
   text: string;
-
-  fontSize?: fontSizesKey;
-  fontFamily?: fontOptionsKey;
-  color?: keyof typeof textColorOptions;
-
-  textAlign?: verticalPositionKey;
+  style: styles;
 }
 
 export interface FeatureBlockDesc {
   text: string;
-
-  fontSize?: fontSizesKey;
-  fontFamily?: fontOptionsKey;
-  color?: keyof typeof textColorOptions;
-
-  textAlign?: verticalPositionKey;
+  style: styles;
 }
 
 export interface FeatureBlock {
@@ -153,7 +67,5 @@ export interface FeatureBlock {
   title: FeatureBlockTitle;
   description: FeatureBlockDesc;
 
-  imageUrl: string;
-  imageAlt?: string;
-  imagePosition?: 'left' | 'right' | 'toggle';
+  style: styles;
 }

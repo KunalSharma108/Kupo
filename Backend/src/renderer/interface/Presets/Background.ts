@@ -1,4 +1,4 @@
-import { dynamicStyleOption, styleOption, verticalPosition } from "./Style";
+import { dynamicStyleOption, styleOption } from "./Style";
 
 export const colorBackgrounds: Record<string, styleOption> = {
   red: { label: "Red", css: "background-color: #e74c3c;" },

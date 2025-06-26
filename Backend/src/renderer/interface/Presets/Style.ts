@@ -1,3 +1,7 @@
+import { BackgroundTypeMapKey } from "./Background";
+import { fontOptionsKey, fontSizesKey } from "./FontFamily";
+import { ColorsKey } from "./uiBlocks";
+
 export interface styleOption {
   label: string;
   css: string;
@@ -15,36 +19,6 @@ export const hoverEffects: Record<string, styleOption> = {
   none: { label: 'None', css: '' },
 } as const;
 
-export const horizontalPosition = {
-  left: {
-    label: 'Left',
-    css: 'justify-content: flex-start; text-align: left;'
-  },
-  center: {
-    label: 'Center',
-    css: 'justify-content: center; text-align: center;'
-  },
-  right: {
-    label: 'Right',
-    css: 'justify-content: flex-end; text-align: right;'
-  }
-} as const;
-
-export const verticalPosition = {
-  top: {
-    label: 'Top',
-    css: 'align-items: flex-start;'
-  },
-  center: {
-    label: 'Center',
-    css: 'align-items: center;'
-  },
-  bottom: {
-    label: 'Bottom',
-    css: 'align-items: flex-end;'
-  }
-} as const;
-
 export const spacingOptions: Record<string, styleOption> = {
   none: { label: 'None', css: '0' },
   xs: { label: 'Extra Small', css: '4px' },
@@ -54,7 +28,112 @@ export const spacingOptions: Record<string, styleOption> = {
   xl: { label: 'Extra Large', css: '32px' },
 } as const;
 
-export type verticalPositionKey = keyof typeof verticalPosition;
+export interface styles {
+  styles?: {
+    background?: BackgroundTypeMapKey;
+
+    layout?: {
+      verticalAlign: 'Left' | 'Center' | 'Right';
+      horizontalAlign: 'Top' | 'Center' | 'bottom';
+      width?: 'Default' | number;
+      height: 'Default' | number;
+      maxWidth?: 'Default' | number;
+      maxHeight: 'Default' | number;
+    };
+
+    border?: {
+      borderColor?: ColorsKey;
+      borderWidth?: 'Default (2px)' | number;
+      borderStyle?: "solid" | "dashed" | "dotted" | "none";
+      borderRadius?: number | 'none';
+    };
+
+    transition: {
+      transitionDuration: number;
+      transitionStyle: "ease" | "ease-in" | "ease-out" | "ease-in-out" | "linear";
+    }
+
+    font: {
+      fontColor?: ColorsKey;
+      fontFamily?: fontOptionsKey;
+      fontWeight?: number;
+      fontSize?: fontSizesKey;
+    }
+
+    margin: {
+      marginTop?: spacingKey;
+      marginBottom?: spacingKey;
+      marginLeft?: spacingKey;
+      marginRight?: spacingKey;
+    }
+
+    padding: {
+      paddingTop?: spacingKey;
+      paddingBottom?: spacingKey;
+      paddingLeft?: spacingKey;
+      paddingRight?: spacingKey;
+    }
+
+    shadow?: {
+      offsetX?: number;
+      offsetY?: number;
+      blurRadius?: number;
+      spreadRadius?: number;
+      color?: ColorsKey;
+      inset?: boolean;
+    };
+  };
+
+  hoverStyles?: {
+    background?: BackgroundTypeMapKey;
+
+    layout?: {
+      verticalAlign: 'Left' | 'Center' | 'Right';
+      horizontalAlign: 'Top' | 'Center' | 'bottom';
+      width?: 'Default' | number;
+      height: 'Default' | number;
+      maxWidth?: 'Default' | number;
+      maxHeight: 'Default' | number;
+    };
+
+    border?: {
+      borderColor?: ColorsKey;
+      borderWidth?: 'Default (2px)' | number;
+      borderStyle?: "solid" | "dashed" | "dotted" | "none";
+      borderRadius?: number | 'none';
+    };
+
+    font: {
+      fontColor?: ColorsKey;
+      fontFamily?: fontOptionsKey;
+      fontWeight?: number;
+      fontSize?: fontSizesKey;
+    }
+
+    margin: {
+      marginTop?: spacingKey;
+      marginBottom?: spacingKey;
+      marginLeft?: spacingKey;
+      marginRight?: spacingKey;
+    }
+
+    padding: {
+      paddingTop?: spacingKey;
+      paddingBottom?: spacingKey;
+      paddingLeft?: spacingKey;
+      paddingRight?: spacingKey;
+    }
+
+    shadow?: {
+      offsetX?: number;
+      offsetY?: number;
+      blurRadius?: number;
+      spreadRadius?: number;
+      color?: ColorsKey;
+      inset?: boolean;
+    };
+  }
+}
+
 export type spacingKey = keyof typeof spacingOptions;
 export type hoverEffectsKey = keyof typeof hoverEffects;
-export type horizontalPositionKey = keyof typeof horizontalPosition;
