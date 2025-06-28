@@ -1,6 +1,6 @@
 import React from 'react';
-import '../../styles/NavDashboard.css';
-import icon from '../../assets/icon.png';
+import '../styles/NavDashboard.css';
+import icon from '../assets/icon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowMinimize, faWindowMaximize, faTimes, faRocket, faBook } from '@fortawesome/free-solid-svg-icons';
 import { closeWindow, maximizeWindow, minimizeWindow } from '@renderer/lib/ipc';

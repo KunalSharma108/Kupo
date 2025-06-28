@@ -1,15 +1,3 @@
-export const sendSignUp = (data: {email: string, password: string}) => {
-  return window.electronAPI.SignUp(data);
-};
-
-export const sendLogIn = (data: { email: string, password: string }) => {
-  return window.electronAPI.LogIn(data);
-};
-
-export const CheckAuth = () => {
-  return window.electronAPI.CheckAuth();
-}
-
 export const minimizeWindow = () => {
   return window.electronAPI.minimize();
 }
@@ -24,4 +12,8 @@ export const closeWindow = () => {
 
 export const AddProject = (data: {name: string}) => {
   return window.electronAPI.AddProject(data);
+}
+
+export const fetchProjects = () => {
+  return window.electronAPI.fetchProjects();
 }

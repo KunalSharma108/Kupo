@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
-import '../../styles/SideDashboard.css';
+import '../styles/SideDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faGlobe, faEllipsisV, faTrash, faPen, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import Dialog from './Dialog';
 import { AddProject } from '@renderer/lib/ipc';
 
-const SideDashboard = (): React.JSX.Element => {
+interface SideDashboardProps {
+  PassedProjects: string[];
+}
+
+const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element => {
   const [projects, setProjects] = useState<string[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newProject, setNewProject] = useState('');
@@ -17,15 +21,23 @@ const SideDashboard = (): React.JSX.Element => {
   const renameInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleAddProject = () => {
-    if (newProject.trim()) {
-      AddProject({name: newProject})
+    if (!newProject.trim()) return;
 
-      console.log('done')
-      setProjects([newProject, ...projects]);
-      setNewProject('');
-      setShowInput(false);
+    const projectExists = projects.includes(newProject.trim());
+    if (projectExists) {
+      alert('Project already exists!');
+      setShowInput(false)
+      return;
     }
+
+    AddProject({ name: newProject });
+
+    console.log('done');
+    setProjects([newProject, ...projects]);
+    setNewProject('');
+    setShowInput(false);
   };
+  
 
   const confirmDelete = (index: number) => {
     const updated = [...projects];
@@ -61,6 +73,10 @@ const SideDashboard = (): React.JSX.Element => {
       action();
     }
   };
+
+  useEffect(() => {
+    setProjects(PassedProjects)
+  }, [PassedProjects])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

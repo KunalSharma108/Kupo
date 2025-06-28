@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/Dialog.css';
+import '../styles/Dialog.css';
 
 interface DialogProps {
   title: string;

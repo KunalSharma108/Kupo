@@ -1,24 +1,8 @@
 import { ipcMain } from "electron";
-import { CheckAuth, LogIn, SignUp } from "./functions/AuthFunc";
 import { mainWindow } from ".";
-import { addProject } from "./functions/LocalStorage";
+import { addProject, fetchProjects } from "./functions/Project";
 
 export const setUpIpcHandlers = async () => {
-  ipcMain.handle('SignUp', async (_event, { email, password }) => {
-    const response = await SignUp(email, password);
-    return response;
-  });
-
-  ipcMain.handle('LogIn', async (_event, {email, password}) => {
-    const response = await LogIn(email, password);
-    return response;
-  });
-
-  ipcMain.handle('CheckAuth', async (_event) => {
-    const response = await CheckAuth();
-    return response;
-  });
-
   ipcMain.on('window-minimize', () => {
     mainWindow?.minimize();
   });
@@ -32,7 +16,12 @@ export const setUpIpcHandlers = async () => {
   });
 
   ipcMain.handle('AddProject', async (_event, {name}) => {
-    const response = addProject(name);
+    const response = await addProject(name);
     return response;
+  })
+
+  ipcMain.handle('fetchProjects', async(_event) => {
+    const reponse = await fetchProjects();
+    return reponse;
   })
 } 

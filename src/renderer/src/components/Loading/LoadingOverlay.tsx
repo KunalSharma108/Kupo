@@ -1,5 +1,6 @@
 import React from 'react';
-import '../styles/auth.css'
+import '../styles/index.css'
+
 
 const LoadingOverlay = (): React.JSX.Element => {
   return (

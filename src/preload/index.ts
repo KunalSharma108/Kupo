@@ -11,13 +11,11 @@ if (process.contextIsolated) {
   try {
 
     contextBridge.exposeInMainWorld('electronAPI', {
-      SignUp: (data: {email: string, password: string}) => ipcRenderer.invoke("SignUp", data),
-      LogIn: (data: {email: string, password:string}) => ipcRenderer.invoke("LogIn", data),
-      CheckAuth: () => ipcRenderer.invoke("CheckAuth"),
       minimize: () => ipcRenderer.send('window-minimize'),
       maximize: () => ipcRenderer.send('window-maximize'),
       close: () => ipcRenderer.send('window-close'),
       AddProject: (data: {name: string}) => ipcRenderer.invoke("AddProject", data),
+      fetchProjects: () => ipcRenderer.invoke('fetchProjects'),
     });
 
     contextBridge.exposeInMainWorld('electron', electronAPI)
