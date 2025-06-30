@@ -3,13 +3,14 @@ import '../styles/SideDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faGlobe, faEllipsisV, faTrash, faPen, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import Dialog from './Dialog';
-import { AddProject } from '@renderer/lib/ipc';
+import { AddProject, deleteProject, renameProject } from '@renderer/lib/ipc';
 
 interface SideDashboardProps {
   PassedProjects: string[];
+  toggleSelectedProject: Function;
 }
 
-const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element => {
+const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardProps): React.JSX.Element => {
   const [projects, setProjects] = useState<string[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newProject, setNewProject] = useState('');
@@ -20,8 +21,15 @@ const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element 
   const menuRefs: MutableRefObject<(HTMLDivElement | null)[]> = useRef([]);
   const renameInputRef = useRef<HTMLInputElement | null>(null);
 
+  const changeSelectedProject = (name: string) => {
+    toggleSelectedProject(name);
+  }
+
   const handleAddProject = () => {
-    if (!newProject.trim()) return;
+    if (!newProject.trim()) { 
+      setShowInput(false)
+      return 
+    };
 
     const projectExists = projects.includes(newProject.trim());
     if (projectExists) {
@@ -32,19 +40,28 @@ const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element 
 
     AddProject({ name: newProject });
 
-    console.log('done');
     setProjects([newProject, ...projects]);
     setNewProject('');
     setShowInput(false);
   };
-  
 
-  const confirmDelete = (index: number) => {
-    const updated = [...projects];
-    updated.splice(index, 1);
-    setProjects(updated);
-    setShowMenu(null);
-    setShowDialog(null);
+  const confirmDelete = async (index: number) => {
+    const name = projects[index];
+
+    const success = await deleteProject({ name: name });
+
+    if (success) {
+      const updated = [...projects];
+      updated.splice(index, 1);
+      setProjects(updated);
+      setShowMenu(null);
+      setShowDialog(null);
+    } else {
+      alert('There was an error while deleting the project, Please try again later.');
+      setShowMenu(null);
+      setShowDialog(null);
+    }
+
   };
 
   const handleDelete = (index: number) => {
@@ -57,14 +74,26 @@ const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element 
     setShowMenu(null);
   };
 
-  const applyRename = () => {
+  const applyRename = async () => {
     if (editedName.trim() && editingIndex !== null) {
-      const updated = [...projects];
-      updated[editingIndex] = editedName;
-      setProjects(updated);
-      setEditingIndex(null);
-      setEditedName('');
-      setShowMenu(null);
+      const prevName = projects[editingIndex];
+      const newName = editedName;
+
+      const success = await renameProject({ prevName: prevName, newName: newName })
+
+      if (success) {
+        const updated = [...projects];
+        updated[editingIndex] = editedName;
+        setProjects(updated);
+        setEditingIndex(null);
+        setEditedName('');
+        setShowMenu(null);
+      } else {
+        alert('Renaming failed, Please try again later.')
+        setEditingIndex(null);
+        setEditedName('');
+        setShowMenu(null);
+      }
     }
   };
 
@@ -117,6 +146,8 @@ const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element 
             onChange={(e) => setNewProject(e.target.value)}
             placeholder="Enter project name"
             onKeyDown={(e) => handleKeyPress(e, handleAddProject)}
+            autoFocus={true}
+            onBlur={handleAddProject}
           />
           <button onClick={handleAddProject}>Add</button>
         </div>
@@ -131,7 +162,7 @@ const SideDashboard = ({PassedProjects}: SideDashboardProps): React.JSX.Element 
           </div>
         ) : (
           projects.map((project, idx) => (
-            <li key={idx} className="project-item">
+            <li key={idx} className="project-item" onClick={() => changeSelectedProject(project)}>
               <FontAwesomeIcon icon={faGlobe} className="project-icon" />
               {editingIndex === idx ? (
                 <input

@@ -2,9 +2,27 @@ import { app } from "electron";
 import path from "path";
 import fs from "fs";
 
-export async function addProject(name: string): Promise<{ path: string }> {
-  const defaultProjectDir = path.join(app.getPath("documents"), "Kupo", "Projects");
+export const defaultProjectDir = path.join(app.getPath("documents"), "Kupo", "Projects");
 
+export async function fetchProjects(): Promise<string[]> {
+  if (!fs.existsSync(defaultProjectDir)) {
+    return [];
+  }
+
+  try {
+    const files = await fs.promises.readdir(defaultProjectDir, { withFileTypes: true });
+
+    const folders = files
+      .filter((f) => f.isDirectory())
+      .map((f) => f.name);
+
+    return folders;
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function addProject(name: string): Promise<{ path: string }> {
   if (!fs.existsSync(defaultProjectDir)) {
     fs.mkdirSync(defaultProjectDir, { recursive: true });
   }
@@ -15,7 +33,7 @@ export async function addProject(name: string): Promise<{ path: string }> {
     fs.mkdirSync(projectPath, { recursive: true });
   }
 
-  const configPath = path.join(projectPath, "config.json");
+  const configPath = path.join(projectPath, "Kupo.config.json");
 
   const defaultConfig = {
     CreatedAt: new Date().toISOString(),
@@ -32,27 +50,27 @@ export async function addProject(name: string): Promise<{ path: string }> {
   return { path: projectPath };
 }
 
-export async function fetchProjects(): Promise<string[]> {
-  console.log('recieved');
-
-  const defaultProjectDir = path.join(app.getPath("documents"), "Kupo", "Projects");
-
-  if (!fs.existsSync(defaultProjectDir)) {
-    console.log('returning');
-    return [];
-  }
+export async function renameProject(prevName: string, newName: string): Promise<boolean> {
+  const oldPath = path.join(defaultProjectDir, prevName);
+  const newPath = path.join(defaultProjectDir, newName);
 
   try {
-    const files = await fs.promises.readdir(defaultProjectDir, { withFileTypes: true });
-
-    const folders = files
-      .filter((f) => f.isDirectory())
-      .map((f) => f.name);
-
-    console.log('Fetched');
-    return folders;
+    await fs.promises.rename(oldPath, newPath);
+    return true;
   } catch (err) {
-    console.error('Failed to read projects:', err);
-    return [];
+    return false;
   }
 }
+
+export async function deleteProject(name: string): Promise<boolean> {
+  const fullDir = path.join(defaultProjectDir, name);
+
+  try {
+    await fs.promises.rm(fullDir, { recursive: true, force: true });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+

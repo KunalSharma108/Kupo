@@ -14,8 +14,11 @@ if (process.contextIsolated) {
       minimize: () => ipcRenderer.send('window-minimize'),
       maximize: () => ipcRenderer.send('window-maximize'),
       close: () => ipcRenderer.send('window-close'),
-      AddProject: (data: {name: string}) => ipcRenderer.invoke("AddProject", data),
       fetchProjects: () => ipcRenderer.invoke('fetchProjects'),
+      AddProject: (data: {name: string}) => ipcRenderer.invoke("AddProject", data),
+      renameProject: (data: {prevName: string, newName: string}) => ipcRenderer.invoke("renameProject", data),
+      deleteProject: (data: {name: string}) => ipcRenderer.invoke('deleteProject', data),
+      fetchConfig: (data: {name: string}) => ipcRenderer.invoke('fetchConfig', data),
     });
 
     contextBridge.exposeInMainWorld('electron', electronAPI)

@@ -1,26 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import LoadingOverlay from "../Loading/LoadingOverlay";
+import { fetchConfig } from "@renderer/lib/ipc";
 
-const MainDashboard = (): React.JSX.Element => {
+interface MainDashboardProps {
+  selectedProject: string;
+}
+
+const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Element => {
+  const [project, setProject] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [configData, setConfigData] = useState<any>();
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const fetchProjectData = async () => {
+      setLoading(true);
+
+      try {
+        const response = await fetchConfig({ name: selectedProject });
+
+        if (response.exists) {
+          setConfigData(response.data);
+          setProject(selectedProject);
+        } else {
+          alert('There was an error while fetching this project, Try again later.')
+        }
+      } catch (error) {
+        setProject("");
+      } finally {
+        setLoading(false);
+        console.log(configData);
+      }
+    };
+
+    fetchProjectData();
+  }, [selectedProject]);
+
   return (
-    <main className="dashboard-main">
-      <section className="section-block fade-in">
-        <h2>Home Section</h2>
-        <button className="dashboard-btn">↑</button>
-        <button className="dashboard-btn">↓</button>
-      </section>
-
-      <section className="section-block fade-in">
-        <h2>About Section</h2>
-        <button className="dashboard-btn">↑</button>
-        <button className="dashboard-btn">↓</button>
-      </section>
-
-      <section className="section-block fade-in">
-        <h2>Projects Section</h2>
-        <button className="dashboard-btn">↑</button>
-        <button className="dashboard-btn">↓</button>
-      </section>
-    </main>
+    <>
+      {loading ? (
+        <LoadingOverlay />
+      ) : project ? (
+        <p>Selected project is {project}</p>
+      ) : (
+        <h1>NO SELECTED PROJECT!</h1>
+      )}
+    </>
   );
 };
 

@@ -10,10 +10,22 @@ export const closeWindow = () => {
   return window.electronAPI.close();
 }
 
+export const fetchProjects = () => {
+  return window.electronAPI.fetchProjects();
+}
+
 export const AddProject = (data: {name: string}) => {
   return window.electronAPI.AddProject(data);
 }
 
-export const fetchProjects = () => {
-  return window.electronAPI.fetchProjects();
+export const renameProject = (data: {prevName: string, newName: string}) => {
+  return window.electronAPI.renameProject(data)
+}
+
+export const deleteProject = (data: {name: string}) => {
+  return window.electronAPI.deleteProject(data);
+}
+
+export const fetchConfig = (data: {name: string}) => {
+  return window.electronAPI.fetchConfig(data)
 }
