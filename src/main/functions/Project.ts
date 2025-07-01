@@ -36,12 +36,9 @@ export async function addProject(name: string): Promise<{ path: string }> {
   const configPath = path.join(projectPath, "Kupo.config.json");
 
   const defaultConfig = {
-    CreatedAt: new Date().toISOString(),
-    Sections: {
-      Navbar: {
-        enabled: true,
-        sticky: false,
-      },
+    createdAt: new Date().toISOString(),
+    sections: {
+      sectionOrders: []
     },
   };
 

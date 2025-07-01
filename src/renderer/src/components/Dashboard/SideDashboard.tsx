@@ -20,21 +20,26 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
   const [showDialog, setShowDialog] = useState<number | null>(null);
   const menuRefs: MutableRefObject<(HTMLDivElement | null)[]> = useRef([]);
   const renameInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedProject, setSelectedProject] = useState<string | false>(false);
 
-  const changeSelectedProject = (name: string) => {
+  const changeSelectedProject = (name: string | false) => {
     toggleSelectedProject(name);
+    setSelectedProject(name);
+
+    console.log(name)
   }
 
   const handleAddProject = () => {
-    if (!newProject.trim()) { 
+    if (!newProject.trim()) {
       setShowInput(false)
-      return 
+      return
     };
 
     const projectExists = projects.includes(newProject.trim());
     if (projectExists) {
       alert('Project already exists!');
-      setShowInput(false)
+      setShowInput(false);
+      setNewProject('');
       return;
     }
 
@@ -54,6 +59,7 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
       const updated = [...projects];
       updated.splice(index, 1);
       setProjects(updated);
+      changeSelectedProject(false);
       setShowMenu(null);
       setShowDialog(null);
     } else {
@@ -61,7 +67,6 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
       setShowMenu(null);
       setShowDialog(null);
     }
-
   };
 
   const handleDelete = (index: number) => {
@@ -85,6 +90,10 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
         const updated = [...projects];
         updated[editingIndex] = editedName;
         setProjects(updated);
+        if (selectedProject === prevName) {
+          toggleSelectedProject(newName);
+          setSelectedProject(newName);
+        }
         setEditingIndex(null);
         setEditedName('');
         setShowMenu(null);
@@ -130,13 +139,15 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
 
   return (
     <aside className="dashboard-sidebar">
-      <div className="sidebar-header">
-        <h3>Your Projects</h3>
-        <button className="dashboard-btn" onClick={() => setShowInput(!showInput)} title="Add New Project">
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+      <div className="sticky-nav">
+        <div className="sidebar-header">
+          <h3>Your Projects</h3>
+          <button className="dashboard-btn" onClick={() => setShowInput(!showInput)} title="Add New Project">
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
+        <hr className="divider" />
       </div>
-      <hr className="divider" />
 
       {showInput && (
         <div className="new-project-input">
@@ -162,7 +173,10 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
           </div>
         ) : (
           projects.map((project, idx) => (
-            <li key={idx} className="project-item" onClick={() => changeSelectedProject(project)}>
+            <li key={idx}
+              className={`project-item ${selectedProject === project ? 'selected' : ''}`}
+              onClick={() => changeSelectedProject(project)}
+            >
               <FontAwesomeIcon icon={faGlobe} className="project-icon" />
               {editingIndex === idx ? (
                 <input

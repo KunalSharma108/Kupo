@@ -9,7 +9,7 @@ import { fetchProjects } from '@renderer/lib/ipc';
 function Dashboard(): React.JSX.Element {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState<string[]>([])
-  const [selectedProject, setSelectedProject] = useState<string>('')
+  const [selectedProject, setSelectedProject] = useState<string | false>(false)
 
   useEffect(() => {
     const FetchProjects = async () => {
@@ -24,8 +24,10 @@ function Dashboard(): React.JSX.Element {
     }, 1000)
   }, [])
 
-  const toggleSelectedProject = (name: string) => {
+  const toggleSelectedProject = (name: string | false) => {
     setSelectedProject(name)
+
+    console.log('changing')
   }
 
   return (
@@ -33,8 +35,13 @@ function Dashboard(): React.JSX.Element {
       <NavDashboard />
       {loading && <LoadingOverlay />}
       <div className="dashboard-body">
-        <SideDashboard PassedProjects={projects} toggleSelectedProject={toggleSelectedProject} />
-        <MainDashboard selectedProject={selectedProject}/>
+        <div className="side-dashboard">
+          <SideDashboard PassedProjects={projects} toggleSelectedProject={toggleSelectedProject} />
+        </div>
+
+        <div className="main-dashboard">
+          <MainDashboard selectedProject={selectedProject} />
+        </div>
       </div>
     </div>
   );
