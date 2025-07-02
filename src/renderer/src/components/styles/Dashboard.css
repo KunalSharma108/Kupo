@@ -16,10 +16,26 @@
     overflow: auto;
 }
 
+.side-dashboard::-webkit-scrollbar {
+    width: 6px;
+}
+
+.side-dashboard::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.side-dashboard::-webkit-scrollbar-thumb {
+    background-color: #3a3a45;
+    border-radius: 10px;
+}
+
+.side-dashboard::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
 /* Main area takes the rest */
 .main-dashboard {
     flex: 1;
     overflow-y: auto;
-    background-color: #121214;
-    padding: 20px;
-}    
+    background-color: #121212;
+}

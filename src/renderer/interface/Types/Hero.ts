@@ -1,9 +1,10 @@
 import { styles } from "../Presets/Style";
 import { ButtonBlock, TextBlock } from "../Presets/uiBlocks";
 
-export interface HeroSection {
+export interface Hero {
+  type: "Hero";
+  desc: 'The big intro area you see first, it usually contains a catchy headline, a short message, and maybe a button or image to grab attention';
   id: string;
-  type: "hero";
   enabled: boolean;
   texts: TextBlock[];
   buttons?: ButtonBlock[];

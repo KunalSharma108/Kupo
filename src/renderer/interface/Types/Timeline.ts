@@ -1,10 +1,11 @@
 import { styles } from "../Presets/Style";
 import { TextBlock } from "../Presets/uiBlocks";
 
-export interface TimelineSection {
+export interface Timeline {
+  type: "Timeline";
+  desc: 'A vertical list that shows your journey or progress over time — like milestones, work history, or project phases, in the order they happened.';
   id: string;
-  type: "timeline";
-  visible: boolean;
+  enabled: boolean;
   sectionTitle?: TextBlock;
   layoutStyle: "vertical" | "horizontal" | "stacked";
   styles?: styles;
