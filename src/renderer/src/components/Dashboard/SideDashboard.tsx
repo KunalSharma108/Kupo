@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
 import '../styles/SideDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faGlobe, faEllipsisV, faTrash, faPen, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
-import Dialog from './Dialog';
+import Dialog from './components/Dialog';
 import { AddProject, deleteProject, renameProject } from '@renderer/lib/ipc';
 
 interface SideDashboardProps {

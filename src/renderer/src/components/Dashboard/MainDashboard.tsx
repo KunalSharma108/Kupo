@@ -4,6 +4,8 @@ import { fetchConfig } from "@renderer/lib/ipc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLayerGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import '../styles/MainDashboard.css'
+import Tooltip from "./components/Tooltip";
+import RenderSection from "./components/RenderSection";
 
 interface MainDashboardProps {
   selectedProject: string | false;
@@ -49,17 +51,31 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
   }, [selectedProject]);
 
   const handleAddSection = (type: string) => {
-    console.log(type)
+    try {
+      if (type.toLowerCase() === 'navbar') {
+        setLoading(true);
+        
+      } else if (type.toLowerCase() === 'hero') {
+  
+      } else if (type.toLowerCase() === 'feature') {
+  
+      } else if (type.toLowerCase() === 'timeline') {
+  
+      } else {
+        return
+      }
+    } catch (error) {
+      alert('Something went wrong! Please try again later.');
+    }
   }
-
 
   const handleAddClick = () => {
     setShowDropdown(prev => !prev);
   };
 
   const handleComponentSelect = (type) => {
-    setShowDropdown(false); 
-    handleAddSection(type); 
+    setShowDropdown(false);
+    handleAddSection(type);
   };
 
   useEffect(() => {
@@ -97,13 +113,31 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                   <div className="dropdown-header">Choose a section to add</div>
                   <ul className="dropdown-list">
                     <li onClick={() => handleComponentSelect('navbar')}>
-                      <span>Navbar</span>
+                      <Tooltip text="A menu bar at the top of the site that helps visitors navigate between different pages or sections">
+                        <span>Navbar</span>
+                      </Tooltip>
                       <span className="badge raleway">Recommended</span>
                     </li>
-                    <li onClick={() => handleComponentSelect('hero')}>Hero</li>
-                    <li onClick={() => handleComponentSelect('features')}>Features</li>
-                    <li onClick={() => handleComponentSelect('timeline')}>Timeline</li>
+
+                    <li onClick={() => handleComponentSelect('hero')}>
+                      <Tooltip text="The big intro area you see first, it usually contains a catchy headline, a short message, and maybe a button or image to grab attention">
+                        <span>Hero</span>
+                      </Tooltip>
+                    </li>
+
+                    <li onClick={() => handleComponentSelect('features')}>
+                      <Tooltip text="A section that shows what you offer, with each feature explained using an image and a short message — the layout switches sides as you scroll to keep it visually engaging.">
+                        <span>Features</span>
+                      </Tooltip>
+                    </li>
+
+                    <li onClick={() => handleComponentSelect('timeline')}>
+                      <Tooltip text="A vertical list that shows your journey or progress over time — like milestones, work history, or project phases, in the order they happened.">
+                        <span>Timeline</span>
+                      </Tooltip>
+                    </li>
                   </ul>
+
                 </div>
               </div>
             )}
@@ -113,7 +147,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           configData.sections.sectionOrders.map((key) => {
             const sectionData = configData.sections[key];
             return (
-              <p>{sectionData}</p>
+              <RenderSection type={key} data={sectionData} />
             );
           })
         )
