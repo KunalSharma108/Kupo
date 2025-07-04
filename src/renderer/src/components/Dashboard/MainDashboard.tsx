@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import LoadingOverlay from "../Loading/LoadingOverlay";
-import { fetchConfig } from "@renderer/lib/ipc";
+import { fetchConfig, updateConfig } from "@renderer/lib/ipc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLayerGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import '../styles/MainDashboard.css'
-import Tooltip from "./components/Tooltip";
 import RenderSection from "./components/RenderSection";
+import Tooltip from "./components/CustomTooltip";
+import { defaultNavbar } from "@renderer/interface/default sections/Navbar/Navbar";
 
 interface MainDashboardProps {
   selectedProject: string | false;
@@ -31,7 +32,6 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           const response = await fetchConfig({ name: selectedProject });
 
           if (response.exists) {
-            console.log(response)
             setConfigData(response.data);
             setTimeout(() => {
               setProject(selectedProject);
@@ -43,6 +43,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           setProject("");
         } finally {
           setLoading(false);
+          console.log(configData)
         }
       }
     };
@@ -54,18 +55,40 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
     try {
       if (type.toLowerCase() === 'navbar') {
         setLoading(true);
+
+        let newData = {
+          ...configData,
+          sectionOrders: [...configData.sectionOrders, 'navbar'],
+          sections: {
+            ...configData.sections,
+            Navbar: defaultNavbar,
+          }
+        };
+
         
+        if (typeof selectedProject === 'string') {
+          setConfigData(newData)
+          updateConfig({name: selectedProject, data: newData})
+        } else {
+          alert('Your changes could not be updated, Please try again later.')
+        }
+
+        setLoading(false)
+
       } else if (type.toLowerCase() === 'hero') {
-  
+
       } else if (type.toLowerCase() === 'feature') {
-  
+
       } else if (type.toLowerCase() === 'timeline') {
-  
+
       } else {
         return
       }
     } catch (error) {
       alert('Something went wrong! Please try again later.');
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -73,7 +96,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
     setShowDropdown(prev => !prev);
   };
 
-  const handleComponentSelect = (type) => {
+  const handleComponentSelect = (type: string) => {
     setShowDropdown(false);
     handleAddSection(type);
   };
@@ -96,7 +119,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
       ) : project === false ? (
         <h1>NO SELECTED PROJECT!</h1>
       ) : project.trim() != '' ? (
-        configData.sections.sectionOrders.length === 0 ? (
+        configData.sectionOrders.length === 0 ? (
           <div className={`empty-state ${showDropdown ? 'with-dropdown' : ''}`}>
 
             <FontAwesomeIcon icon={faLayerGroup} className="empty-icon" />
@@ -144,7 +167,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           </div>
 
         ) : (
-          configData.sections.sectionOrders.map((key) => {
+          configData.sectionOrders.map((key) => {
             const sectionData = configData.sections[key];
             return (
               <RenderSection type={key} data={sectionData} />

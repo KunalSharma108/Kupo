@@ -1,43 +1,6 @@
 import { dynamicStyleOption, styleOption } from "./Style";
 import { ColorOptions } from "./uiBlocks";
 
-export const colorBackgrounds: Record<string, styleOption> = {
-  red: { label: "Red", css: "background-color: #e74c3c;" },
-  blue: { label: "Blue", css: "background-color: #3498db;" },
-  green: { label: "Green", css: "background-color: #2ecc71;" },
-  yellow: { label: "Yellow", css: "background-color: #f1c40f;" },
-  orange: { label: "Orange", css: "background-color: #e67e22;" },
-  purple: { label: "Purple", css: "background-color: #9b59b6;" },
-  pink: { label: "Pink", css: "background-color: #ff69b4;" },
-  teal: { label: "Teal", css: "background-color: #1abc9c;" },
-  gray: { label: "Gray", css: "background-color: #7f8c8d;" },
-  black: { label: "Black", css: "background-color: #000000;" },
-  white: { label: "White", css: "background-color: #ffffff;" },
-  lightRed: { label: "Light Red", css: "background-color: #f8d7da;" },
-  lightBlue: { label: "Light Blue", css: "background-color: #d0ebff;" },
-  lightGreen: { label: "Light Green", css: "background-color: #d4edda;" },
-  lightYellow: { label: "Light Yellow", css: "background-color: #fff3cd;" },
-  lightGray: { label: "Light Gray", css: "background-color: #f0f0f0;" },
-  darkRed: { label: "Dark Red", css: "background-color: #c0392b;" },
-  darkBlue: { label: "Dark Blue", css: "background-color: #2c3e50;" },
-  darkGreen: { label: "Dark Green", css: "background-color: #145a32;" },
-  navy: { label: "Navy", css: "background-color: #001f3f;" },
-};
-
-export const customColorBackground: Record<string, dynamicStyleOption<string>> = {
-  customColor: {
-    label: 'Custom Color',
-    value: '#fff000',
-    css: (val) => `background-color:${val}`
-  }
-}
-
-export const colorBackgroundOptions = {
-  ...colorBackgrounds,
-  ...customColorBackground
-} as const;
-
-
 export interface imageBackgroundValue {
   url: string;
   position: 'left' | 'center' | 'right';
@@ -185,5 +148,9 @@ export const backgroundTypeMap = {
 } as const;
 
 
+
+export type imageGradientBackgroundKey = keyof typeof customImageGradientBackground;
+export type imageBackgroundKey = keyof typeof customImageBackground;
+export type gradientBackgroundKey = keyof typeof gradientBackground;
 export type BackgroundTypeMapKey = keyof typeof backgroundTypeMap;
 

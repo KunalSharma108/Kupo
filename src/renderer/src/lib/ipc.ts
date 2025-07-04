@@ -29,3 +29,7 @@ export const deleteProject = (data: {name: string}) => {
 export const fetchConfig = (data: {name: string}) => {
   return window.electronAPI.fetchConfig(data)
 }
+
+export const updateConfig = (data: {name:string, data: any}) => {
+  return window.electronAPI.updateConfig(data)
+}

@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { mainWindow } from ".";
 import { addProject, deleteProject, fetchProjects, renameProject } from "./functions/Project";
-import { fetchConfig } from "./functions/config";
+import { fetchConfig, updateConfig } from "./functions/config";
 
 export const setUpIpcHandlers = async () => {
   ipcMain.on('window-minimize', () => {
@@ -34,10 +34,15 @@ export const setUpIpcHandlers = async () => {
   ipcMain.handle('deleteProject', async (_event, { name }) => {
     const response = await deleteProject(name);
     return response;
-  })
+  });
 
   ipcMain.handle('fetchConfig', async (_event, {name}) => {
     const response = await fetchConfig(name);
+    return response;
+  });
+
+  ipcMain.handle('updateConfig', async (_event, {name, data}) => {
+    const response = await updateConfig(name, data)
     return response;
   })
 } 

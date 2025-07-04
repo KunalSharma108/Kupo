@@ -38,8 +38,8 @@ export async function addProject(name: string): Promise<{ path: string }> {
   const defaultConfig = {
     createdAt: new Date().toISOString(),
     sections: {
-      sectionOrders: []
     },
+    sectionOrders: []
   };
 
   fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2), "utf-8");

@@ -19,6 +19,7 @@ if (process.contextIsolated) {
       renameProject: (data: {prevName: string, newName: string}) => ipcRenderer.invoke("renameProject", data),
       deleteProject: (data: {name: string}) => ipcRenderer.invoke('deleteProject', data),
       fetchConfig: (data: {name: string}) => ipcRenderer.invoke('fetchConfig', data),
+      updateConfig: (data: {name: string, data: any}) => ipcRenderer.invoke('updateConfig', data)
     });
 
     contextBridge.exposeInMainWorld('electron', electronAPI)
