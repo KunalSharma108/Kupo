@@ -7,6 +7,7 @@ import '../styles/MainDashboard.css'
 import RenderSection from "./components/RenderSection";
 import Tooltip from "./components/CustomTooltip";
 import { defaultNavbar } from "@renderer/interface/default sections/Navbar/Navbar";
+import '../styles/render.css'
 
 interface MainDashboardProps {
   selectedProject: string | false;
@@ -43,7 +44,6 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           setProject("");
         } finally {
           setLoading(false);
-          console.log(configData)
         }
       }
     };
@@ -61,14 +61,14 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           sectionOrders: [...configData.sectionOrders, 'navbar'],
           sections: {
             ...configData.sections,
-            Navbar: defaultNavbar,
+            navbar: defaultNavbar,
           }
         };
 
-        
+
         if (typeof selectedProject === 'string') {
           setConfigData(newData)
-          updateConfig({name: selectedProject, data: newData})
+          updateConfig({ name: selectedProject, data: newData })
         } else {
           alert('Your changes could not be updated, Please try again later.')
         }
@@ -170,7 +170,9 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           configData.sectionOrders.map((key) => {
             const sectionData = configData.sections[key];
             return (
-              <RenderSection type={key} data={sectionData} />
+              <div className="sections-container">
+                <RenderSection type={key} data={sectionData} />
+              </div>
             );
           })
         )

@@ -27,7 +27,6 @@ function Dashboard(): React.JSX.Element {
   const toggleSelectedProject = (name: string | false) => {
     setSelectedProject(name)
 
-    console.log('changing')
   }
 
   return (

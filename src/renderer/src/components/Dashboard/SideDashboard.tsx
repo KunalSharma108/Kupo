@@ -25,8 +25,6 @@ const SideDashboard = ({ PassedProjects, toggleSelectedProject }: SideDashboardP
   const changeSelectedProject = (name: string | false) => {
     toggleSelectedProject(name);
     setSelectedProject(name);
-
-    console.log(name)
   }
 
   const handleAddProject = () => {
