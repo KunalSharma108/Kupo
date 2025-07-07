@@ -7,47 +7,47 @@ export const defaultNavLogoStyle: styles = {
     },
 
     layout: {
-      horizontalAlign: 'Left',
-      verticalAlign: 'Center',
+      "horizontal align": 'Left',
+      "vertical align": 'Center',
       width: 'Default',
       height: 'Default',
-      maxWidth: false,
-      maxHeight: false
+      "max width": false,
+      "max height": false
     },
 
     border: {
-      borderColor: false,
-      borderWidth: false,
-      borderStyle: false,
-      borderRadius: 0
+      "border color": false,
+      "border width": false,
+      "border style": false,
+      "border radius": 0
     },
 
     transition: {
-      transitionDuration: 200,
-      transitionStyle: 'ease'
+      "transition duration": 200,
+      "transition style": 'ease'
     },
 
     font: false,
 
     margin: {
-      marginTop: '0',
-      marginBottom: '0',
-      marginLeft: '0',
-      marginRight: '0'
+      "margin top": '0',
+      "margin bottom": '0',
+      "margin left": '0',
+      "margin right": '0'
     },
 
     padding: {
-      paddingTop: '0',
-      paddingBottom: '0',
-      paddingLeft: '0',
-      paddingRight: '0'
+      "padding top": '0',
+      "padding bottom": '0',
+      "padding left": '0',
+      "padding right": '0'
     },
 
     shadow: {
-      offsetX: false,
-      offsetY: false,
-      blurRadius: false,
-      spreadRadius: false,
+      "offset x": false,
+      "offset y": false,
+      "blur radius": false,
+      "spread radius": false,
       color: false,
       inset: false
     }
@@ -59,47 +59,42 @@ export const defaultNavLogoStyle: styles = {
     },
 
     layout: {
-      horizontalAlign: 'Left',
-      verticalAlign: 'Center',
+      "horizontal align": 'Left',
+      "vertical align": 'Center',
       width: 'Default',
       height: 'Default',
-      maxWidth: false,
-      maxHeight: false
+      "max width": false,
+      "max height": false
     },
 
     border: {
-      borderColor: false,
-      borderWidth: false,
-      borderStyle: false,
-      borderRadius: 0
-    },
-
-    transition: {
-      transitionDuration: 200,
-      transitionStyle: 'ease'
+      "border color": false,
+      "border width": false,
+      "border style": false,
+      "border radius": 0
     },
 
     font: false,
 
     margin: {
-      marginTop: '0',
-      marginBottom: '0',
-      marginLeft: '0',
-      marginRight: '0'
+      "margin top": '0',
+      "margin bottom": '0',
+      "margin left": '0',
+      "margin right": '0'
     },
 
     padding: {
-      paddingTop: '0',
-      paddingBottom: '0',
-      paddingLeft: '0',
-      paddingRight: '0'
+      "padding top": '0',
+      "padding bottom": '0',
+      "padding left": '0',
+      "padding right": '0'
     },
 
     shadow: {
-      offsetX: false,
-      offsetY: false,
-      blurRadius: false,
-      spreadRadius: false,
+      "offset x": false,
+      "offset y": false,
+      "blur radius": false,
+      "spread radius": false,
       color: false,
       inset: false
     }

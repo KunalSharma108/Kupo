@@ -32,59 +32,59 @@ export interface styles {
   styles?: {
     background?: {
       type: BackgroundTypeMapKey | false;
-      color?: ColorsKey;
-      image?: imageBackgroundKey;
-      gradient?: gradientBackgroundKey;
-      'image + gradient'?: imageGradientBackgroundKey;
+      color?: ColorsKey | false;
+      image?: imageBackgroundKey | false;
+      gradient?: gradientBackgroundKey | false;
+      'image + gradient'?: imageGradientBackgroundKey | false;
     } | false;
 
     layout?: {
-      verticalAlign?: 'Top' | 'Center' | 'Bottom'; // required
-      horizontalAlign?: 'Left' | 'Center' | 'Right'; // required
-      width?: 'Default' | number; // essential, no | false
-      height?: 'Default' | number; // essential, no | false
-      maxWidth?: 'Default' | number | false; // optional
-      maxHeight?: 'Default' | number | false; // optional
+      'vertical align'?: 'Top' | 'Center' | 'Bottom';
+      'horizontal align'?: 'Left' | 'Center' | 'Right';
+      width?: 'Default' | number;
+      height?: 'Default' | number;
+      'max width'?: 'Default' | number | false;
+      'max height'?: 'Default' | number | false;
     } | false;
 
     border?: {
-      borderColor?: ColorsKey | false;
-      borderWidth?: 'Default (2px)' | number | false;
-      borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none' | false;
-      borderRadius?: number | 'none' | false;
+      'border color'?: ColorsKey | false;
+      'border width'?: 'Default (2px)' | number | false;
+      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none' | false;
+      'border radius'?: number | 'none' | false;
     } | false;
 
     transition?: {
-      transitionDuration?: number; // 0 is valid, false makes no sense
-      transitionStyle?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear';
+      'transition duration'?: number;
+      'transition style'?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear';
     } | false;
 
     font?: {
-      fontColor?: ColorsKey | false;
-      fontFamily?: fontOptionsKey | false;
-      fontWeight?: number | false;
-      fontSize?: fontSizesKey | false;
+      'font color'?: ColorsKey | false;
+      'font family'?: fontOptionsKey | false;
+      'font weight'?: number | false;
+      'font size'?: fontSizesKey | false;
     } | false;
 
     margin?: {
-      marginTop?: spacingKey | false;
-      marginBottom?: spacingKey | false;
-      marginLeft?: spacingKey | false;
-      marginRight?: spacingKey | false;
+      'margin top'?: spacingKey | false;
+      'margin bottom'?: spacingKey | false;
+      'margin left'?: spacingKey | false;
+      'margin right'?: spacingKey | false;
     } | false;
 
     padding?: {
-      paddingTop?: spacingKey | false;
-      paddingBottom?: spacingKey | false;
-      paddingLeft?: spacingKey | false;
-      paddingRight?: spacingKey | false;
+      'padding top'?: spacingKey | false;
+      'padding bottom'?: spacingKey | false;
+      'padding left'?: spacingKey | false;
+      'padding right'?: spacingKey | false;
     } | false;
 
     shadow?: {
-      offsetX?: number | false;
-      offsetY?: number | false;
-      blurRadius?: number | false;
-      spreadRadius?: number | false;
+      'offset x'?: number | false;
+      'offset y'?: number | false;
+      'blur radius'?: number | false;
+      'spread radius'?: number | false;
       color?: ColorsKey | false;
       inset?: boolean | false;
     } | false;
@@ -93,59 +93,54 @@ export interface styles {
   hoverStyles?: {
     background?: {
       type: BackgroundTypeMapKey | false;
-      color?: ColorsKey;
-      image?: imageBackgroundKey;
-      gradient?: gradientBackgroundKey;
-      'image + gradient'?: imageGradientBackgroundKey;
+      color?: ColorsKey | false;
+      image?: imageBackgroundKey | false;
+      gradient?: gradientBackgroundKey | false;
+      'image + gradient'?: imageGradientBackgroundKey | false;
     } | false;
 
     layout?: {
-      verticalAlign?: 'Top' | 'Center' | 'Bottom';
-      horizontalAlign?: 'Left' | 'Center' | 'Right';
+      'vertical align'?: 'Top' | 'Center' | 'Bottom';
+      'horizontal align'?: 'Left' | 'Center' | 'Right';
       width?: 'Default' | number;
       height?: 'Default' | number;
-      maxWidth?: 'Default' | number | false;
-      maxHeight?: 'Default' | number | false;
+      'max width'?: 'Default' | number | false;
+      'max height'?: 'Default' | number | false;
     };
 
     border?: {
-      borderColor?: ColorsKey | false;
-      borderWidth?: 'Default (2px)' | number | false;
-      borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none' | false;
-      borderRadius?: number | 'none' | false;
-    } | false;
-
-    transition?: {
-      transitionDuration?: number;
-      transitionStyle?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear';
+      'border color'?: ColorsKey | false;
+      'border width'?: 'Default (2px)' | number | false;
+      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none' | false;
+      'border radius'?: number | 'none' | false;
     } | false;
 
     font?: {
-      fontColor?: ColorsKey | false;
-      fontFamily?: fontOptionsKey | false;
-      fontWeight?: number | false;
-      fontSize?: fontSizesKey | false;
+      'font color'?: ColorsKey | false;
+      'font family'?: fontOptionsKey | false;
+      'font weight'?: number | false;
+      'font size'?: fontSizesKey | false;
     } | false;
 
     margin?: {
-      marginTop?: spacingKey | false;
-      marginBottom?: spacingKey | false;
-      marginLeft?: spacingKey | false;
-      marginRight?: spacingKey | false;
+      'margin top'?: spacingKey | false;
+      'margin bottom'?: spacingKey | false;
+      'margin left'?: spacingKey | false;
+      'margin right'?: spacingKey | false;
     } | false;
 
     padding?: {
-      paddingTop?: spacingKey | false;
-      paddingBottom?: spacingKey | false;
-      paddingLeft?: spacingKey | false;
-      paddingRight?: spacingKey | false;
+      'padding top'?: spacingKey | false;
+      'padding bottom'?: spacingKey | false;
+      'padding left'?: spacingKey | false;
+      'padding right'?: spacingKey | false;
     } | false;
 
     shadow?: {
-      offsetX?: number | false;
-      offsetY?: number | false;
-      blurRadius?: number | false;
-      spreadRadius?: number | false;
+      'offset x'?: number | false;
+      'offset y'?: number | false;
+      'blur radius'?: number | false;
+      'spread radius'?: number | false;
       color?: ColorsKey | false;
       inset?: boolean | false;
     } | false;

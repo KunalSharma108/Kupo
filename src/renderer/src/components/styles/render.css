@@ -95,7 +95,7 @@
     align-items: center;
     gap: 4px;
     transition: border-color 0.2s ease, color 0.2s ease;
-    font-family:sans-serif;
+    font-family: sans-serif;
     font-weight: 500;
     letter-spacing: 0.6px;
 }
@@ -137,6 +137,9 @@
     white-space: nowrap;
     transition: background 0.2s ease;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .navbar-dropdown-item:hover {
@@ -161,12 +164,19 @@
     min-width: 180px;
     padding: 8px 0;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-    display: none;
+    display: block;
+    opacity: 0;
+    transform: translateX(20px);
+    /* slide from right to left */
+    transition: opacity 0.3s ease, transform 0.3s ease;
     z-index: 1001;
+    pointer-events: none;
 }
 
 .navbar-dropdown-item.has-sub:hover .navbar-submenu {
-    display: block;
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
 }
 
 .navbar-submenu-item {
@@ -194,19 +204,38 @@
     padding: 6px;
     border-radius: 6px;
     min-width: 200px;
-    display: none;
     z-index: 1002;
+    display: block;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .navbar-submenu-item:hover .navbar-submenu-panel {
-    display: block;
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 1003;
 }
 
 .navbar-submenu-leaf {
-    padding: 4px 12px;
-    font-size: 13px;
+    padding: 10px 20px;
+    font-size: 14px;
     color: #ccc;
     white-space: nowrap;
+    border-bottom: 1px solid #2a2a2a;
+    transition: background 0.2s ease;
+    cursor: pointer;
+}
+
+.navbar-submenu-leaf:last-child {
+    border-bottom: none;
+}
+
+.navbar-submenu-leaf:hover {
+    background-color: #2a2a2a;
+    color: #fff;
+    border-radius: 4px;
 }
 
 .submenu-icon {

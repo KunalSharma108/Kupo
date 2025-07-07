@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/render.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { StyleDialog } from './styleDialog'
 
 interface RenderSectionProps {
   type: string
@@ -9,13 +10,34 @@ interface RenderSectionProps {
 }
 
 function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const [isSticky, setIsSticky] = useState(data?.sticky ?? false)
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isSticky, setIsSticky] = useState(data?.sticky ?? false);
+  const [dialogData, setDialogData] = useState<null | {
+    styleContent: string;
+    styleType: string;
+    type: string;
+    subType: string;
+    value: any;
+  }>(null);
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+  const openStyleDialog = (
+    styleContent: string,
+    styleType: string,
+    type: string,
+    subType: string,
+    value: any
+  ) => {
+    setDialogData({ styleContent, styleType, type, subType, value });
+  };
+
+  const closeDialog = () => {
+    setDialogData(null)
+  };
+  const confirmDialog = (updatedData: { styleContent: string, styleType: string, type: string, subType: string, newValue: any }) => {
+    console.log(updatedData)
+    setDialogData(null)
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -27,12 +49,9 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const renderNestedDropdown = (obj: Record<string, any>) => {
+  const renderNestedDropdown = (obj: Record<string, any>, styleType: string) => {
     return Object.entries(obj).map(([key, value]) => {
       if (!value || typeof value !== 'object') return null
-
-      const hasChildren = Object.values(value).some((v) => v !== false)
-      if (!hasChildren) return null
 
       return (
         <div className="navbar-submenu-item" key={key}>
@@ -40,10 +59,13 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
           <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
           <div className="navbar-submenu-panel">
             {Object.entries(value).map(([innerKey, innerValue]) => {
-              console.log(innerKey, innerValue);
               return (
-                <div className="navbar-submenu-leaf" key={innerKey}>
-                  {innerKey}: {typeof innerValue === 'object' ? JSON.stringify(innerValue) : String(innerValue)}
+                <div
+                  className="navbar-submenu-leaf"
+                  key={innerKey}
+                  onClick={() => openStyleDialog('navbar', styleType, key, innerKey, innerValue)}
+                >
+                  {innerKey} : {typeof innerValue === 'object' ? JSON.stringify(innerValue) : String(innerValue)}
                 </div>
               )
             })}
@@ -55,6 +77,19 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
 
   return (
     <>
+      {dialogData && (
+        <StyleDialog
+          styleContent={dialogData.styleContent}
+          styleType={dialogData.styleType}
+          type={dialogData.type}
+          subType={dialogData.subType}
+          value={dialogData.value}
+          onClose={closeDialog}
+          onConfirm={(updaedData) => {
+            confirmDialog(updaedData)
+          }}
+        />
+      )}
       <div className="section-block">
         {data?.type?.toLowerCase() === 'navbar' && (
           <>
@@ -82,14 +117,16 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
                     <div className="navbar-dropdown-menu fade-in">
                       <div className="navbar-dropdown-item has-sub">
                         Styles
+                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.styles || {})}
+                          {renderNestedDropdown(data.style?.styles || {}, 'styles')}
                         </div>
                       </div>
                       <div className="navbar-dropdown-item has-sub">
                         Hover Styles
+                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.hoverStyles || {})}
+                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hover styles')}
                         </div>
                       </div>
                     </div>
@@ -109,7 +146,3 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
 }
 
 export default RenderSection
-
-
-
-// The thing thats happening is that its not returnign the core values that are false, which shouldnt happen, it should show them as none and only ignore those grouped values if the parent value is false, for exmaple if margin: false, then dont show margin at all but if margin : {marginTop: false, marginBottom: false, marginRight: false, marginLeft: false}, in this case, show the Margin right, left etc but show None ,as it should still provide the user with an option to edit these

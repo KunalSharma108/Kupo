@@ -5,56 +5,56 @@ export const defaultNavStyle: styles = {
     background: {
       type: 'color',
       color: 'blue',
-      image: undefined,
-      gradient: undefined,
-      'image + gradient': undefined
+      image: false,
+      gradient: false,
+      'image + gradient': false
     },
 
     layout: {
       width: 'Default',
       height: 'Default',
-      maxWidth: false,
-      maxHeight: false
+      'max width': false,
+      'max height': false
     },
 
     border: {
-      borderColor: false,
-      borderWidth: false,
-      borderStyle: false,
-      borderRadius: false
+      'border color': false,
+      "border width": false,
+      "border style": false,
+      "border radius": false,
     },
 
     transition: {
-      transitionDuration: 200,
-      transitionStyle: 'ease-in-out'
+      "transition duration": 200,
+      "transition style": 'ease-in-out'
     },
 
     font: {
-      fontColor: 'white',
-      fontFamily: false,
-      fontWeight: false,
-      fontSize: 'sm'
+      "font color": 'white',
+      "font family": false,
+      "font weight": false,
+      "font size": 'sm'
     },
 
     margin: {
-      marginTop: false,
-      marginBottom: false,
-      marginLeft: false,
-      marginRight: false
+      "margin top": false,
+      "margin bottom": false,
+      "margin left": false,
+      "margin right": false
     },
 
     padding: {
-      paddingTop: 'lg',
-      paddingBottom: 'lg',
-      paddingLeft: 'xl',
-      paddingRight: 'xl'
+      "padding top": 'lg',
+      "padding bottom": 'lg',
+      "padding left": 'xl',
+      "padding right": 'xl'
     },
 
     shadow: {
-      offsetX: 0,
-      offsetY: 4,
-      blurRadius: 12,
-      spreadRadius: 0,
+      "offset x": 0,
+      "offset y": 4,
+      "blur radius": 12,
+      "spread radius": 0,
       color: 'black',
       inset: false
     }
@@ -63,31 +63,31 @@ export const defaultNavStyle: styles = {
   hoverStyles: {
     background: {
       type: false,
-      color: undefined,
-      image: undefined,
-      gradient: undefined,
-      'image + gradient': undefined
+      color: false,
+      image: false,
+      gradient: false,
+      'image + gradient': false
     },
 
     padding: {
-      paddingTop: false,
-      paddingBottom: false,
-      paddingLeft: false,
-      paddingRight: false
+      "padding top": false,
+      "padding bottom": false,
+      "padding left": false,
+      "padding right": false
     },
 
     margin: {
-      marginTop: false,
-      marginBottom: false,
-      marginLeft: false,
-      marginRight: false
+      "margin top": false,
+      "margin bottom": false,
+      "margin left": false,
+      "margin right": false
     },
 
     shadow: {
-      offsetX: false,
-      offsetY: false,
-      blurRadius: false,
-      spreadRadius: false,
+      "offset x": false,
+      "offset y": false,
+      "blur radius": false,
+      "spread radius": false,
       color: false,
       inset: false
     }

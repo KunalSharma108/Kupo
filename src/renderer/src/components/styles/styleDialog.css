@@ -1,0 +1,139 @@
+.style-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.style-dialog-container {
+    background-color: #1e1e1e;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 16px;
+    padding: 28px 30px;
+    animation: style-dialog-slide-up 0.35s ease-out forwards;
+    transform: translateY(30%);
+    opacity: 0;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+.style-dialog-heading {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f5f5f5;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+    margin-bottom: 4px;
+}
+
+.style-dialog-description {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 24px;
+    line-height: 1.4;
+}
+
+.style-dialog-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.style-dialog-subheading-inline,
+.style-dialog-type,
+.style-dialog-subtype {
+    font-size: 14px;
+    color: #ccc;
+    padding: 6px 10px;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+}
+
+.style-dialog-arrow {
+    color: #777;
+    font-size: 13px;
+}
+
+.style-dialog-input {
+    flex: 1;
+    min-width: 140px;
+    padding: 8px 12px;
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    transition: border 0.2s ease;
+}
+
+.style-dialog-input:focus {
+    outline: none;
+    border-color: #4d90fe;
+}
+
+.style-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    gap: 10px;
+}
+
+.style-dialog-confirm,
+.style-dialog-close {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.style-dialog-confirm {
+    background-color: #4caf50;
+    color: white;
+}
+
+.style-dialog-confirm:hover {
+    background-color: #3e9143;
+}
+
+.style-dialog-close {
+    background-color: #e53935;
+    color: white;
+}
+
+.style-dialog-close:hover {
+    background-color: #c62828;
+}
+
+@keyframes style-dialog-slide-up {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes style-dialog-slide-down {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(30%);
+        opacity: 0;
+    }
+}
+
+.style-dialog-container.closing {
+    animation: style-dialog-slide-down 0.3s ease forwards;
+}
