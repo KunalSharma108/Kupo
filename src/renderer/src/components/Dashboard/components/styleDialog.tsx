@@ -145,6 +145,16 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             )}
           </div>
         );
+      } else {
+        return (
+          <input
+            ref={inputRef}
+            className="style-dialog-input"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus={true}
+          />
+        )
       }
 
     } else {
