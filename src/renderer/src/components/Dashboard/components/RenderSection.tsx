@@ -7,9 +7,10 @@ import { StyleDialog } from './styleDialog'
 interface RenderSectionProps {
   type: string
   data: any
+  styleContent: string
 }
 
-function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
+function RenderSection({ type, data, styleContent }: RenderSectionProps): React.JSX.Element {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(data?.sticky ?? false);
@@ -34,10 +35,13 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
   const closeDialog = () => {
     setDialogData(null)
   };
+
   const confirmDialog = (updatedData: { styleContent: string, styleType: string, type: string, subType: string, newValue: any }) => {
     console.log(updatedData)
-    setDialogData(null)
-  }
+    setTimeout(() => {
+      setDialogData(null)
+    }, 0)
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -63,7 +67,7 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
                 <div
                   className="navbar-submenu-leaf"
                   key={innerKey}
-                  onClick={() => openStyleDialog('navbar', styleType, key, innerKey, innerValue)}
+                  onClick={() => openStyleDialog(styleContent, styleType, key, innerKey, innerValue)}
                 >
                   {innerKey} : {typeof innerValue === 'object' ? JSON.stringify(innerValue) : String(innerValue)}
                 </div>
@@ -85,8 +89,9 @@ function RenderSection({ type, data }: RenderSectionProps): React.JSX.Element {
           subType={dialogData.subType}
           value={dialogData.value}
           onClose={closeDialog}
-          onConfirm={(updaedData) => {
-            confirmDialog(updaedData)
+          onConfirm={(updatedData) => {
+            console.log("✅ Received in parent:", updatedData);
+            confirmDialog(updatedData)
           }}
         />
       )}

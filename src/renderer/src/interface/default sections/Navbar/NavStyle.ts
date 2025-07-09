@@ -13,15 +13,15 @@ export const defaultNavStyle: styles = {
     layout: {
       width: 'Default',
       height: 'Default',
-      'max width': false,
-      'max height': false
+      'max width': 0,
+      'max height': 0
     },
 
     border: {
-      'border color': false,
-      "border width": false,
-      "border style": false,
-      "border radius": false,
+      'border color': 'none',
+      "border width": 0,
+      "border style": 'none',
+      "border radius": 0,
     },
 
     transition: {
@@ -31,23 +31,23 @@ export const defaultNavStyle: styles = {
 
     font: {
       "font color": 'white',
-      "font family": false,
-      "font weight": false,
+      "font family": 'Default',
+      "font weight": 'Default',
       "font size": 'sm'
     },
 
     margin: {
-      "margin top": false,
-      "margin bottom": false,
-      "margin left": false,
-      "margin right": false
+      "margin top": 0,
+      "margin bottom": 0,
+      "margin left": 0,
+      "margin right": 0
     },
 
     padding: {
-      "padding top": 'lg',
-      "padding bottom": 'lg',
-      "padding left": 'xl',
-      "padding right": 'xl'
+      "padding top": 10,
+      "padding bottom": 10,
+      "padding left": 10,
+      "padding right": 10
     },
 
     shadow: {
@@ -70,25 +70,25 @@ export const defaultNavStyle: styles = {
     },
 
     padding: {
-      "padding top": false,
-      "padding bottom": false,
-      "padding left": false,
-      "padding right": false
+      "padding top": 0,
+      "padding bottom": 0,
+      "padding left": 0,
+      "padding right": 0
     },
 
     margin: {
-      "margin top": false,
-      "margin bottom": false,
-      "margin left": false,
-      "margin right": false
+      "margin top": 0,
+      "margin bottom": 0,
+      "margin left": 0,
+      "margin right": 0
     },
 
     shadow: {
-      "offset x": false,
-      "offset y": false,
-      "blur radius": false,
-      "spread radius": false,
-      color: false,
+      "offset x": 0,
+      "offset y": 0,
+      "blur radius": 0,
+      "spread radius": 0,
+      color: 'white',
       inset: false
     }
   }

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/styleDialog.css';
+import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
+
 
 interface StyleDialogProps {
   styleContent: string;
@@ -32,7 +34,9 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   const [inputValue, setInputValue] = useState(value);
   const [isClosing, setIsClosing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -67,8 +71,94 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   };
 
   const handleConfirm = () => {
-    onConfirm({ styleContent, styleType, type, subType, newValue: inputValue });
+    setTimeout(() => {
+      onConfirm({
+        styleContent,
+        styleType,
+        type,
+        subType,
+        newValue: inputValue
+      });
+    }, 0);
   };
+
+
+  function renderInput(type: string, subType: string) {
+    if (type.toLowerCase() === 'background') {
+      if (subType.toLowerCase() === 'type') {
+        return (
+          <select
+            ref={selectRef}
+            className="style-dialog-input"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus={true}
+          >
+            <option value="color">Color</option>
+            <option value="image">Image</option>
+            <option value="gradient">Gradient</option>
+            <option value="image+gradient">Image + Gradient</option>
+          </select>
+        )
+      } else if (subType.toLowerCase() === "color") {
+        return (
+          <div className="style-color-options-dropdown">
+            <div
+              className="dropdown-selected"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <span className="selected-label">
+                {ColorOptions[inputValue]?.label || "Select a color"}
+                {ColorOptions[inputValue]?.css && (
+                  <span
+                    className="color-circle"
+                    style={{
+                      backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
+                    }}
+                  />
+                )}
+              </span>
+
+              <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+            </div>
+            {dropdownOpen && (
+              <div className="dropdown-options">
+                {Object.entries(ColorOptions).map(([key, option]) => (
+                  <div
+                    key={key}
+                    className={`dropdown-option ${inputValue === key ? "selected" : ""}`}
+                    onClick={() => {
+                      setInputValue(key);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    {option.label}
+                    {option.css && (
+                      <span
+                        className="color-circle"
+                        style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+    } else {
+      return (
+        <input
+          ref={inputRef}
+          className="style-dialog-input"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          autoFocus={true}
+        />
+      )
+    }
+  }
 
   return createPortal(
     <div className="style-dialog-overlay">
@@ -88,13 +178,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
           <span className="style-dialog-subtype">{subType}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
-          <input
-            ref={inputRef}
-            className="style-dialog-input"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            autoFocus={true}
-          />
+          {renderInput(type, subType)}
         </div>
 
         <div className="style-dialog-actions">

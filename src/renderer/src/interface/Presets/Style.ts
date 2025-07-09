@@ -19,15 +19,6 @@ export const hoverEffects: Record<string, styleOption> = {
   none: { label: 'None', css: '' },
 } as const;
 
-export const spacingOptions: Record<string, styleOption> = {
-  none: { label: 'None', css: '0' },
-  xs: { label: 'Extra Small', css: '4px' },
-  sm: { label: 'Small', css: '8px' },
-  md: { label: 'Medium', css: '16px' },
-  lg: { label: 'Large', css: '24px' },
-  xl: { label: 'Extra Large', css: '32px' },
-} as const;
-
 export interface styles {
   styles?: {
     background?: {
@@ -43,15 +34,15 @@ export interface styles {
       'horizontal align'?: 'Left' | 'Center' | 'Right';
       width?: 'Default' | number;
       height?: 'Default' | number;
-      'max width'?: 'Default' | number | false;
-      'max height'?: 'Default' | number | false;
+      'max width'?: 'Default' | number;
+      'max height'?: 'Default' | number;
     } | false;
 
     border?: {
-      'border color'?: ColorsKey | false;
-      'border width'?: 'Default (2px)' | number | false;
-      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none' | false;
-      'border radius'?: number | 'none' | false;
+      'border color'?: ColorsKey | 'none';
+      'border width'?: 'Default (2px)' | number;
+      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
+      'border radius'?: number | 'none';
     } | false;
 
     transition?: {
@@ -60,33 +51,33 @@ export interface styles {
     } | false;
 
     font?: {
-      'font color'?: ColorsKey | false;
-      'font family'?: fontOptionsKey | false;
-      'font weight'?: number | false;
-      'font size'?: fontSizesKey | false;
+      'font color'?: ColorsKey | 'Default';
+      'font family'?: fontOptionsKey | 'Default';
+      'font weight'?: number | 'Default';
+      'font size'?: fontSizesKey | 'Default';
     } | false;
 
     margin?: {
-      'margin top'?: spacingKey | false;
-      'margin bottom'?: spacingKey | false;
-      'margin left'?: spacingKey | false;
-      'margin right'?: spacingKey | false;
+      'margin top'?: number;
+      'margin bottom'?: number;
+      'margin left'?: number;
+      'margin right'?: number;
     } | false;
 
     padding?: {
-      'padding top'?: spacingKey | false;
-      'padding bottom'?: spacingKey | false;
-      'padding left'?: spacingKey | false;
-      'padding right'?: spacingKey | false;
+      'padding top'?: number;
+      'padding bottom'?: number;
+      'padding left'?: number;
+      'padding right'?: number;
     } | false;
 
     shadow?: {
-      'offset x'?: number | false;
-      'offset y'?: number | false;
-      'blur radius'?: number | false;
-      'spread radius'?: number | false;
-      color?: ColorsKey | false;
-      inset?: boolean | false;
+      'offset x'?: number;
+      'offset y'?: number;
+      'blur radius'?: number;
+      'spread radius'?: number;
+      color?: ColorsKey;
+      inset?: boolean;
     } | false;
   };
 
@@ -104,49 +95,48 @@ export interface styles {
       'horizontal align'?: 'Left' | 'Center' | 'Right';
       width?: 'Default' | number;
       height?: 'Default' | number;
-      'max width'?: 'Default' | number | false;
-      'max height'?: 'Default' | number | false;
+      'max width'?: 'Default' | number;
+      'max height'?: 'Default' | number;
     };
 
     border?: {
-      'border color'?: ColorsKey | false;
-      'border width'?: 'Default (2px)' | number | false;
-      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none' | false;
-      'border radius'?: number | 'none' | false;
+      'border color'?: ColorsKey | 'none';
+      'border width'?: 'Default (2px)' | number;
+      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
+      'border radius'?: number | 'none';
     } | false;
 
     font?: {
-      'font color'?: ColorsKey | false;
-      'font family'?: fontOptionsKey | false;
-      'font weight'?: number | false;
-      'font size'?: fontSizesKey | false;
+      'font color'?: ColorsKey | 'Default';
+      'font family'?: fontOptionsKey | 'Default';
+      'font weight'?: number | 'Default';
+      'font size'?: fontSizesKey | 'Default';
     } | false;
 
     margin?: {
-      'margin top'?: spacingKey | false;
-      'margin bottom'?: spacingKey | false;
-      'margin left'?: spacingKey | false;
-      'margin right'?: spacingKey | false;
+      'margin top'?: number;
+      'margin bottom'?: number;
+      'margin left'?: number;
+      'margin right'?: number;
     } | false;
 
     padding?: {
-      'padding top'?: spacingKey | false;
-      'padding bottom'?: spacingKey | false;
-      'padding left'?: spacingKey | false;
-      'padding right'?: spacingKey | false;
+      'padding top'?: number;
+      'padding bottom'?: number;
+      'padding left'?: number;
+      'padding right'?: number;
     } | false;
 
     shadow?: {
-      'offset x'?: number | false;
-      'offset y'?: number | false;
-      'blur radius'?: number | false;
-      'spread radius'?: number | false;
+      'offset x'?: number;
+      'offset y'?: number;
+      'blur radius'?: number;
+      'spread radius'?: number;
       color?: ColorsKey | false;
-      inset?: boolean | false;
+      inset?: boolean;
     } | false;
   };
 }
 
 
-export type spacingKey = keyof typeof spacingOptions;
 export type hoverEffectsKey = keyof typeof hoverEffects;

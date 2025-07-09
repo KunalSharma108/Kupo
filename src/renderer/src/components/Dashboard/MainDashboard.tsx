@@ -171,7 +171,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
             const sectionData = configData.sections[key];
             return (
               <div className="sections-container">
-                <RenderSection type={key} data={sectionData} />
+                <RenderSection type={key} data={sectionData} styleContent={key} />
               </div>
             );
           })

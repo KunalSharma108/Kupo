@@ -11,14 +11,14 @@ export const defaultNavLogoStyle: styles = {
       "vertical align": 'Center',
       width: 'Default',
       height: 'Default',
-      "max width": false,
-      "max height": false
+      "max width": 0,
+      "max height": 0
     },
 
     border: {
-      "border color": false,
-      "border width": false,
-      "border style": false,
+      "border color": 'none',
+      "border width": 0,
+      "border style": 'none',
       "border radius": 0
     },
 
@@ -30,25 +30,25 @@ export const defaultNavLogoStyle: styles = {
     font: false,
 
     margin: {
-      "margin top": '0',
-      "margin bottom": '0',
-      "margin left": '0',
-      "margin right": '0'
+      "margin top": 0,
+      "margin bottom": 0,
+      "margin left": 0,
+      "margin right": 0
     },
 
     padding: {
-      "padding top": '0',
-      "padding bottom": '0',
-      "padding left": '0',
-      "padding right": '0'
+      "padding top": 0,
+      "padding bottom": 0,
+      "padding left": 0,
+      "padding right": 0
     },
 
     shadow: {
-      "offset x": false,
-      "offset y": false,
-      "blur radius": false,
-      "spread radius": false,
-      color: false,
+      "offset x": 0,
+      "offset y": 0,
+      "blur radius": 0,
+      "spread radius": 0,
+      color: 'Default',
       inset: false
     }
   },
@@ -63,40 +63,40 @@ export const defaultNavLogoStyle: styles = {
       "vertical align": 'Center',
       width: 'Default',
       height: 'Default',
-      "max width": false,
-      "max height": false
+      "max width": 0,
+      "max height": 0
     },
 
     border: {
-      "border color": false,
-      "border width": false,
-      "border style": false,
+      "border color": 'none',
+      "border width": 0,
+      "border style": 'none',
       "border radius": 0
     },
 
     font: false,
 
     margin: {
-      "margin top": '0',
-      "margin bottom": '0',
-      "margin left": '0',
-      "margin right": '0'
+      "margin top": 0,
+      "margin bottom": 0,
+      "margin left": 0,
+      "margin right": 0
     },
 
     padding: {
-      "padding top": '0',
-      "padding bottom": '0',
-      "padding left": '0',
-      "padding right": '0'
+      "padding top": 0,
+      "padding bottom": 0,
+      "padding left": 0,
+      "padding right": 0
     },
 
     shadow: {
-      "offset x": false,
-      "offset y": false,
-      "blur radius": false,
-      "spread radius": false,
-      color: false,
-      inset: false
+      "offset x": 0,
+      "offset y": 0,
+      "blur radius": 0,
+      "spread radius": 0,
+      color: 'white',
+      inset: false,
     }
   }
 };
