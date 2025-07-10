@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import LoadingOverlay from "../Loading/LoadingOverlay";
 import { fetchConfig, updateConfig } from "@renderer/lib/ipc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLayerGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faFolderOpen, faLayerGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import '../styles/MainDashboard.css'
 import RenderSection from "./components/RenderSection";
 import Tooltip from "./components/CustomTooltip";
@@ -65,7 +65,6 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           }
         };
 
-
         if (typeof selectedProject === 'string') {
           setConfigData(newData)
           updateConfig({ name: selectedProject, data: newData })
@@ -111,13 +110,53 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  interface forUpdateData {
+    pathParts: [stlyeContent: string, styleContentType: string, styleType: string, type: string, subType: string];
+    newValue: any;
+  }
+
+  const updateData = ({pathParts, newValue}: forUpdateData) => {
+    console.log(pathParts, newValue)
+
+    const copyData = structuredClone(configData);
+    const lastKeyIndex = pathParts.length - 1;
+
+    let current = copyData;
+
+    for (let i = 0; i < lastKeyIndex; i++) {
+      let currentKey = current[pathParts[i]];
+      if (!currentKey) {
+        alert('There was an error while updating your changes.')
+        return;
+      }
+      current = currentKey;
+    }
+
+    current[pathParts[lastKeyIndex]] = newValue;
+
+    setConfigData(copyData)
+
+    setTimeout(async () => {
+      if (typeof selectedProject === 'string') {
+        const response = await updateConfig({name: selectedProject, data: copyData});
+
+        if (!response.done) {
+          alert('Your recent change(s) could not be saved.');
+        }
+      }
+    }, 0)
+  }
+
   return (
     <>
-
       {loading ? (
         <LoadingOverlay />
       ) : project === false ? (
-        <h1>NO SELECTED PROJECT!</h1>
+          <div className="no-project-container">
+            <FontAwesomeIcon icon={faFolderOpen} className="no-project-icon" />
+            <h2>No Project Selected</h2>
+            <p>Please select or create a project to get started.</p>
+          </div>
       ) : project.trim() != '' ? (
         configData.sectionOrders.length === 0 ? (
           <div className={`empty-state ${showDropdown ? 'with-dropdown' : ''}`}>
@@ -171,7 +210,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
             const sectionData = configData.sections[key];
             return (
               <div className="sections-container">
-                <RenderSection type={key} data={sectionData} styleContent={key} />
+                <RenderSection type={key} data={sectionData} styleContent={key} updateData={updateData} />
               </div>
             );
           })
@@ -185,3 +224,4 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
 };
 
 export default MainDashboard;
+

@@ -8,6 +8,7 @@ import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 
 interface StyleDialogProps {
   styleContent: string;
+  styleContentType: string;
   styleType: string;
   type: string;
   subType: string;
@@ -15,6 +16,7 @@ interface StyleDialogProps {
   onClose: () => void;
   onConfirm: (data: {
     styleContent: string;
+    styleContentType: string;
     styleType: string;
     type: string;
     subType: string;
@@ -24,6 +26,7 @@ interface StyleDialogProps {
 
 export const StyleDialog: React.FC<StyleDialogProps> = ({
   styleContent,
+  styleContentType,
   styleType,
   type,
   subType,
@@ -37,13 +40,19 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   const selectRef = useRef<HTMLSelectElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [canConfirm, setCanConfirm] = useState(false);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      const currentInputValue = inputRef.current.value;
+      setCanConfirm(inputValue !== value && inputValue === currentInputValue);
+    } else {
+      setCanConfirm(inputValue !== value)
+    }
+  }, [inputValue, value]);
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') handleConfirm();
-    };
 
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -54,11 +63,9 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
@@ -74,14 +81,19 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
     setTimeout(() => {
       onConfirm({
         styleContent,
+        styleContentType,
         styleType,
         type,
         subType,
         newValue: inputValue
       });
     }, 0);
-  };
 
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
 
   function renderInput(type: string, subType: string) {
     if (type.toLowerCase() === 'background') {
@@ -108,7 +120,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <span className="selected-label">
-                {ColorOptions[inputValue]?.label || "Select a color"}
+                {inputValue || "Select a color"}
                 {ColorOptions[inputValue]?.css && (
                   <span
                     className="color-circle"
@@ -126,9 +138,9 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 {Object.entries(ColorOptions).map(([key, option]) => (
                   <div
                     key={key}
-                    className={`dropdown-option ${inputValue === key ? "selected" : ""}`}
+                    className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
                     onClick={() => {
-                      setInputValue(key);
+                      setInputValue(option.label);
                       setDropdownOpen(false);
                     }}
                   >
@@ -182,6 +194,8 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         </p>
 
         <div className="style-dialog-input-row">
+          <span className="style-dialog-subheading-inline">{styleContentType}</span>
+          <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
           <span className="style-dialog-subheading-inline">{styleType}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
           <span className="style-dialog-type">{type}</span>
@@ -193,7 +207,21 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
         <div className="style-dialog-actions">
           <button className="style-dialog-close" onClick={handleClose}>Close</button>
-          <button className="style-dialog-confirm" onClick={handleConfirm}>Confirm</button>
+          {canConfirm ? (
+            <button
+              className="style-dialog-confirm"
+              onClick={handleConfirm}
+            >
+              Confirm
+            </button>
+          ) : (
+            <button
+              className="style-dialog-confirm disabled"
+              disabled
+            >
+              Confirm
+            </button>
+          )}
         </div>
       </div>
     </div>,

@@ -8,14 +8,16 @@ interface RenderSectionProps {
   type: string
   data: any
   styleContent: string
+  updateData: any
 }
 
-function RenderSection({ type, data, styleContent }: RenderSectionProps): React.JSX.Element {
+function RenderSection({ type, data, styleContent, updateData }: RenderSectionProps): React.JSX.Element {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(data?.sticky ?? false);
   const [dialogData, setDialogData] = useState<null | {
     styleContent: string;
+    styleContentType: string;
     styleType: string;
     type: string;
     subType: string;
@@ -24,23 +26,41 @@ function RenderSection({ type, data, styleContent }: RenderSectionProps): React.
 
   const openStyleDialog = (
     styleContent: string,
+    styleContentType: string,
     styleType: string,
     type: string,
     subType: string,
     value: any
   ) => {
-    setDialogData({ styleContent, styleType, type, subType, value });
+    setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
   };
 
   const closeDialog = () => {
     setDialogData(null)
   };
 
-  const confirmDialog = (updatedData: { styleContent: string, styleType: string, type: string, subType: string, newValue: any }) => {
-    console.log(updatedData)
-    setTimeout(() => {
-      setDialogData(null)
-    }, 0)
+  const confirmDialog = (
+    updatedData: {
+      styleContent: string,
+      styleContentType: string,
+      styleType: string,
+      type: string,
+      subType: string,
+      newValue: any
+    }) => {
+    console.log('inside the confirmDialog', updatedData)
+    const pathParts = [
+      'sections',
+      updatedData.styleContent,
+      updatedData.styleContentType,
+      updatedData.styleType,
+      updatedData.type,
+      updatedData.subType
+    ]
+
+    const newValue = updatedData.newValue;
+
+    updateData({pathParts, newValue})
   };
 
   useEffect(() => {
@@ -53,7 +73,7 @@ function RenderSection({ type, data, styleContent }: RenderSectionProps): React.
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const renderNestedDropdown = (obj: Record<string, any>, styleType: string) => {
+  const renderNestedDropdown = (obj: Record<string, any>, styleType: string, styleContentType: string) => {
     return Object.entries(obj).map(([key, value]) => {
       if (!value || typeof value !== 'object') return null
 
@@ -67,7 +87,7 @@ function RenderSection({ type, data, styleContent }: RenderSectionProps): React.
                 <div
                   className="navbar-submenu-leaf"
                   key={innerKey}
-                  onClick={() => openStyleDialog(styleContent, styleType, key, innerKey, innerValue)}
+                  onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
                 >
                   {innerKey} : {typeof innerValue === 'object' ? JSON.stringify(innerValue) : String(innerValue)}
                 </div>
@@ -84,13 +104,13 @@ function RenderSection({ type, data, styleContent }: RenderSectionProps): React.
       {dialogData && (
         <StyleDialog
           styleContent={dialogData.styleContent}
+          styleContentType={dialogData.styleContentType}
           styleType={dialogData.styleType}
           type={dialogData.type}
           subType={dialogData.subType}
           value={dialogData.value}
           onClose={closeDialog}
           onConfirm={(updatedData) => {
-            console.log("✅ Received in parent:", updatedData);
             confirmDialog(updatedData)
           }}
         />
@@ -115,7 +135,7 @@ function RenderSection({ type, data, styleContent }: RenderSectionProps): React.
                     className="navbar-dropdown-toggle"
                     onClick={() => setDropdownOpen((prev) => !prev)}
                   >
-                    Styling <FontAwesomeIcon icon={faChevronDown} />
+                    Style <FontAwesomeIcon icon={faChevronDown} />
                   </button>
 
                   {dropdownOpen && (
@@ -124,14 +144,14 @@ function RenderSection({ type, data, styleContent }: RenderSectionProps): React.
                         Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.styles || {}, 'styles')}
+                          {renderNestedDropdown(data.style?.styles || {}, 'styles', 'style')}
                         </div>
                       </div>
                       <div className="navbar-dropdown-item has-sub">
                         Hover Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hover styles')}
+                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', 'style')}
                         </div>
                       </div>
                     </div>
