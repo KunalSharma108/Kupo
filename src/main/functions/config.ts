@@ -16,11 +16,9 @@ export async function fetchConfig(name: string): Promise<{ exists: boolean, data
 
 export async function updateConfig(name: string, data: any): Promise<{ done: boolean }> {
   try {
-    console.log('got')
     const configPath = path.join(defaultProjectDir, name, 'Kupo.config.json');
     const json = JSON.stringify(data, null, 2);
     await fs.promises.writeFile(configPath, json, 'utf-8');
-    console.log('done')
     return { done: true };
 
   } catch (err) {

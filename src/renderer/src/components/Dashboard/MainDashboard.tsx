@@ -115,36 +115,74 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
     newValue: any;
   }
 
-  const updateData = ({pathParts, newValue}: forUpdateData) => {
+  const updateData = ({ pathParts, newValue }: forUpdateData) => {
     console.log(pathParts, newValue)
 
-    const copyData = structuredClone(configData);
-    const lastKeyIndex = pathParts.length - 1;
+    try {
+      const copyData = structuredClone(configData);
+      const lastKeyIndex = pathParts.length - 1;
+      const type = pathParts.length - 2;
 
-    let current = copyData;
+      let current = copyData;
 
-    for (let i = 0; i < lastKeyIndex; i++) {
-      let currentKey = current[pathParts[i]];
-      if (!currentKey) {
-        alert('There was an error while updating your changes.')
-        return;
+      for (let i = 0; i < lastKeyIndex; i++) {
+        let currentKey = current[pathParts[i]];
+        if (!currentKey) {
+          alert('There was an error while updating your changes.')
+          return;
+        }
+        current = currentKey;
       }
-      current = currentKey;
-    }
 
-    current[pathParts[lastKeyIndex]] = newValue;
 
-    setConfigData(copyData)
+      current[pathParts[lastKeyIndex]] = newValue;
 
-    setTimeout(async () => {
-      if (typeof selectedProject === 'string') {
-        const response = await updateConfig({name: selectedProject, data: copyData});
+      console.log(lastKeyIndex)
+      console.log('starting')
 
-        if (!response.done) {
-          alert('Your recent change(s) could not be saved.');
+      if (pathParts[type] === 'background') {
+        console.log(pathParts[type])
+
+        if (pathParts[lastKeyIndex] === 'type') {
+          console.log(current)
+
+          if (newValue === 'color') {
+            current.image = false;
+            current.gradient = false;
+            current['image + gradient'] = false;
+
+          } else if (newValue === 'image') {
+            current.color = false;
+            current.gradient = false;
+            current['image + gradient'] = false;
+
+          } else if (newValue === 'gradient') {
+            current.color = false;
+            current.image = false;
+            current['image + gradient'] = false;
+
+          } else if (newValue === 'image + gradient') {
+            current.color = false;
+            current.image = false;
+            current.gradient = false;
+          }
         }
       }
-    }, 0)
+
+      setConfigData(copyData)
+
+      setTimeout(async () => {
+        if (typeof selectedProject === 'string') {
+          const response = await updateConfig({ name: selectedProject, data: copyData });
+
+          if (!response.done) {
+            alert('Your recent change(s) could not be saved.');
+          }
+        }
+      }, 0)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -152,11 +190,11 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
       {loading ? (
         <LoadingOverlay />
       ) : project === false ? (
-          <div className="no-project-container">
-            <FontAwesomeIcon icon={faFolderOpen} className="no-project-icon" />
-            <h2>No Project Selected</h2>
-            <p>Please select or create a project to get started.</p>
-          </div>
+        <div className="no-project-container">
+          <FontAwesomeIcon icon={faFolderOpen} className="no-project-icon" />
+          <h2>No Project Selected</h2>
+          <p>Please select or create a project to get started.</p>
+        </div>
       ) : project.trim() != '' ? (
         configData.sectionOrders.length === 0 ? (
           <div className={`empty-state ${showDropdown ? 'with-dropdown' : ''}`}>

@@ -15,6 +15,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(data?.sticky ?? false);
+  const [styleWarning, setStyleWarning] = useState<string | null>(null);
   const [dialogData, setDialogData] = useState<null | {
     styleContent: string;
     styleContentType: string;
@@ -32,8 +33,25 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     subType: string,
     value: any
   ) => {
+    const currentType =
+      styleType === 'styles'
+        ? data.style?.styles.background.type
+        : data.style?.hoverStyles.background.type;
+
+    const isBlocked =
+      ['color', 'image', 'gradient', 'image + gradient'].includes(subType) &&
+      currentType !== subType;
+
+    if (isBlocked) {
+      setStyleWarning(
+        `You cannot change ${subType}, because the background type is "${currentType}". Change it to "${subType}" if you want to edit ${subType}.`
+      );
+      return;
+    }
+
     setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
   };
+  
 
   const closeDialog = () => {
     setDialogData(null)
@@ -60,7 +78,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
     const newValue = updatedData.newValue;
 
-    updateData({pathParts, newValue})
+    updateData({ pathParts, newValue })
   };
 
   useEffect(() => {
@@ -101,6 +119,15 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
   return (
     <>
+      {styleWarning && (
+        <div className="overlay">
+          <div className="warning-modal">
+            <p>{styleWarning}</p>
+            <button onClick={() => setStyleWarning(null)}>OK</button>
+          </div>
+        </div>
+      )}
+
       {dialogData && (
         <StyleDialog
           styleContent={dialogData.styleContent}

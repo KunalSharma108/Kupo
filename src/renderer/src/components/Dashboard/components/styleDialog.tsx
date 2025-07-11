@@ -37,7 +37,6 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   const [inputValue, setInputValue] = useState(value);
   const [isClosing, setIsClosing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const selectRef = useRef<HTMLSelectElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [canConfirm, setCanConfirm] = useState(false);
@@ -99,19 +98,36 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
     if (type.toLowerCase() === 'background') {
       if (subType.toLowerCase() === 'type') {
         return (
-          <select
-            ref={selectRef}
-            className="style-dialog-input"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            autoFocus={true}
-          >
-            <option value="color">Color</option>
-            <option value="image">Image</option>
-            <option value="gradient">Gradient</option>
-            <option value="image+gradient">Image + Gradient</option>
-          </select>
-        )
+          <div className="style-color-options-dropdown">
+            <div
+              className="dropdown-selected"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <span className="selected-label">
+                {inputValue || "Select a type"}
+              </span>
+
+              <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+            </div>
+
+            {dropdownOpen && (
+              <div className="dropdown-options">
+                {["color", "image", "gradient", "image + gradient"].map((option) => (
+                  <div
+                    key={option}
+                    className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
+                    onClick={() => {
+                      setInputValue(option);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
       } else if (subType.toLowerCase() === "color") {
         return (
           <div className="style-color-options-dropdown">
