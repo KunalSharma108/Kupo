@@ -1,4 +1,5 @@
 import { Navbar } from "../../Types/Navbar";
+import { NavButtons } from "./NavButtons";
 import { defaultNavLinkStyle } from "./NavLinkStyle";
 import { defaultNavLogoStyle } from "./NavLogoStyle";
 import { defaultNavStyle } from "./NavStyle";
@@ -13,9 +14,9 @@ export const defaultNavbar: Navbar = {
     style: defaultNavLogoStyle
   }, 
 
-  navLinks: false,
+  navLinks: NavButtons,
   navLinkStyle: defaultNavLinkStyle,
-  navLinksPosition: false,
+  navLinksPosition: 'right',
 
   style: defaultNavStyle
 }

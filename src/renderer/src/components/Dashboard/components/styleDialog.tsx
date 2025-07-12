@@ -8,7 +8,7 @@ import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 
 interface StyleDialogProps {
   styleContent: string;
-  styleContentType: string;
+  styleContentType: string[];
   styleType: string;
   type: string;
   subType: string;
@@ -16,7 +16,7 @@ interface StyleDialogProps {
   onClose: () => void;
   onConfirm: (data: {
     styleContent: string;
-    styleContentType: string;
+    styleContentType: string[];
     styleType: string;
     type: string;
     subType: string;

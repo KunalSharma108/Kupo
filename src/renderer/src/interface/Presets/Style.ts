@@ -30,8 +30,8 @@ export interface styles {
     } | false;
 
     layout?: {
-      'vertical align'?: 'Top' | 'Center' | 'Bottom';
-      'horizontal align'?: 'Left' | 'Center' | 'Right';
+      'vertical align'?: 'Top' | 'Center' | 'Bottom' | 'undefined';
+      'horizontal align'?: 'Left' | 'Center' | 'Right' | 'undefined';
       width?: 'Default' | number;
       height?: 'Default' | number;
       'max width'?: 'Default' | number;
@@ -40,14 +40,14 @@ export interface styles {
 
     border?: {
       'border color'?: ColorsKey | 'none';
-      'border width'?: 'Default (2px)' | number;
+      'border width'?: 'Default (2px)' | number | 'undefined';
       'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
       'border radius'?: number | 'none';
     } | false;
 
     transition?: {
-      'transition duration'?: number;
-      'transition style'?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear';
+      'transition duration'?: number | 'undefined';
+      'transition style'?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'undefined';
     } | false;
 
     font?: {
@@ -58,26 +58,26 @@ export interface styles {
     } | false;
 
     margin?: {
-      'margin top'?: number;
-      'margin bottom'?: number;
-      'margin left'?: number;
-      'margin right'?: number;
+      'margin top'?: number | 'undefined';
+      'margin bottom'?: number | 'undefined';
+      'margin left'?: number | 'undefined';
+      'margin right'?: number | 'undefined';
     } | false;
 
     padding?: {
-      'padding top'?: number;
-      'padding bottom'?: number;
-      'padding left'?: number;
-      'padding right'?: number;
+      'padding top'?: number | 'undefined';
+      'padding bottom'?: number | 'undefined';
+      'padding left'?: number | 'undefined';
+      'padding right'?: number | 'undefined';
     } | false;
 
     shadow?: {
-      'offset x'?: number;
-      'offset y'?: number;
-      'blur radius'?: number;
-      'spread radius'?: number;
-      color?: ColorsKey;
-      inset?: boolean;
+      'offset x'?: number | 'undefined';
+      'offset y'?: number | 'undefined';
+      'blur radius'?: number | 'undefined';
+      'spread radius'?: number | 'undefined';
+      color?: ColorsKey | 'undefined';
+      inset?: boolean | 'undefined';
     } | false;
   };
 
@@ -91,8 +91,8 @@ export interface styles {
     } | false;
 
     layout?: {
-      'vertical align'?: 'Top' | 'Center' | 'Bottom';
-      'horizontal align'?: 'Left' | 'Center' | 'Right';
+      'vertical align'?: 'Top' | 'Center' | 'Bottom' | 'undefined';
+      'horizontal align'?: 'Left' | 'Center' | 'Right' | 'undefined';
       width?: 'Default' | number;
       height?: 'Default' | number;
       'max width'?: 'Default' | number;
@@ -101,7 +101,7 @@ export interface styles {
 
     border?: {
       'border color'?: ColorsKey | 'none';
-      'border width'?: 'Default (2px)' | number;
+      'border width'?: 'Default (2px)' | number | 'undefined';
       'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
       'border radius'?: number | 'none';
     } | false;
@@ -114,26 +114,26 @@ export interface styles {
     } | false;
 
     margin?: {
-      'margin top'?: number;
-      'margin bottom'?: number;
-      'margin left'?: number;
-      'margin right'?: number;
+      'margin top'?: number | 'undefined';
+      'margin bottom'?: number | 'undefined';
+      'margin left'?: number | 'undefined';
+      'margin right'?: number | 'undefined';
     } | false;
 
     padding?: {
-      'padding top'?: number;
-      'padding bottom'?: number;
-      'padding left'?: number;
-      'padding right'?: number;
+      'padding top'?: number | 'undefined';
+      'padding bottom'?: number | 'undefined';
+      'padding left'?: number | 'undefined';
+      'padding right'?: number | 'undefined';
     } | false;
 
     shadow?: {
-      'offset x'?: number;
-      'offset y'?: number;
-      'blur radius'?: number;
-      'spread radius'?: number;
-      color?: ColorsKey | false;
-      inset?: boolean;
+      'offset x'?: number | 'undefined';
+      'offset y'?: number | 'undefined';
+      'blur radius'?: number | 'undefined';
+      'spread radius'?: number | 'undefined';
+      color?: ColorsKey | 'undefined';
+      inset?: boolean | 'undefined';
     } | false;
   };
 }

@@ -129,6 +129,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
         let currentKey = current[pathParts[i]];
         if (!currentKey) {
           alert('There was an error while updating your changes.')
+          console.log(currentKey)
           return;
         }
         current = currentKey;

@@ -14,7 +14,7 @@ export interface Navbar {
 
   navLinks?: ButtonBlock[] | false;
   navLinkStyle?: styles | false;
-  navLinksPosition?: 'Left' | 'Center' | 'Right' | false;
+  navLinksPosition?: 'left' | 'center' | 'right' | false;
 
   style: styles
 }

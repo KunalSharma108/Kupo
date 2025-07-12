@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/render.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faImage } from '@fortawesome/free-solid-svg-icons'
 import { StyleDialog } from './styleDialog'
 
 interface RenderSectionProps {
@@ -13,12 +13,13 @@ interface RenderSectionProps {
 
 function RenderSection({ type, data, styleContent, updateData }: RenderSectionProps): React.JSX.Element {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [logoDropdownOpen, setLogoDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(data?.sticky ?? false);
   const [styleWarning, setStyleWarning] = useState<string | null>(null);
   const [dialogData, setDialogData] = useState<null | {
     styleContent: string;
-    styleContentType: string;
+    styleContentType: string[];
     styleType: string;
     type: string;
     subType: string;
@@ -27,7 +28,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
   const openStyleDialog = (
     styleContent: string,
-    styleContentType: string,
+    styleContentType: string[],
     styleType: string,
     type: string,
     subType: string,
@@ -51,7 +52,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
     setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
   };
-  
+
 
   const closeDialog = () => {
     setDialogData(null)
@@ -60,7 +61,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const confirmDialog = (
     updatedData: {
       styleContent: string,
-      styleContentType: string,
+      styleContentType: string[],
       styleType: string,
       type: string,
       subType: string,
@@ -91,7 +92,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const renderNestedDropdown = (obj: Record<string, any>, styleType: string, styleContentType: string) => {
+  const renderNestedDropdown = (obj: Record<string, any>, styleType: string, styleContentType: string[]) => {
     return Object.entries(obj).map(([key, value]) => {
       if (!value || typeof value !== 'object') return null
 
@@ -115,6 +116,25 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         </div>
       )
     })
+  }
+
+  const handleStickyClick = () => {
+    if (!isSticky) {
+      const pathParts = ['sections', 'navbar', 'sticky'];
+      const newValue = true;
+
+      updateData({ pathParts, newValue })
+
+      setIsSticky(true)
+    } else {
+
+      const pathParts = ['sections', 'navbar', 'sticky'];
+      const newValue = false;
+
+      updateData({ pathParts, newValue })
+
+      setIsSticky(false)
+    }
   }
 
   return (
@@ -152,7 +172,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   <input
                     type="checkbox"
                     checked={isSticky}
-                    onChange={() => setIsSticky(!isSticky)}
+                    onChange={handleStickyClick}
                   />
                   <span className="toggle-label">Sticky</span>
                 </label>
@@ -171,14 +191,14 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.styles || {}, 'styles', 'style')}
+                          {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
                         </div>
                       </div>
                       <div className="navbar-dropdown-item has-sub">
                         Hover Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', 'style')}
+                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['style'])}
                         </div>
                       </div>
                     </div>
@@ -188,7 +208,44 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             </div>
 
             <div className="navbar-content">
-              <p>Navbar Section Settings</p>
+              <div className="logo-section">
+                <div className="logo-section-header">
+                  <FontAwesomeIcon icon={faImage} />
+                  Logo
+                </div>
+
+                <div className="logo-section-option">
+                  → Logo URL: <span className="option-value">Not set</span>
+                </div>
+
+                <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
+                  <button
+                    className="navbar-dropdown-toggle"
+                    onClick={() => setLogoDropdownOpen((prev) => !prev)}
+                  >
+                    Logo Style <FontAwesomeIcon icon={faChevronDown} />
+                  </button>
+
+                  {logoDropdownOpen && (
+                    <div className="navbar-logo-dropdown-menu fade-in">
+                      <div className="navbar-dropdown-item has-sub">
+                        Styles
+                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                        <div className="navbar-submenu">
+                          {renderNestedDropdown(data.style?.styles || {}, 'styles', ['logo', 'style'])}
+                        </div>
+                      </div>
+                      <div className="navbar-dropdown-item has-sub">
+                        Hover Styles
+                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                        <div className="navbar-submenu">
+                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['logo', 'style'])}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </>
         )}
@@ -198,3 +255,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 }
 
 export default RenderSection
+
+
+
+// * FIX THE FUCKING LOGO STYLE DROPDOWN STYLING, BETTER HAVE MOBILE AS THE SECOND SCREEN AND DO IT MANUALLY, ALSO CHECK IF THE STYLECONTENTTYPE BEING AN ARRAY OF STRINGS IS WORKING WITH UPDATEDATA LOOP OR NOT, OR FKING FIX IT , I COULD HAVE DONT IT BUT THE FKING CHARGER IS NOT WORKING MAN WHAT THE FUCK 

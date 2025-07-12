@@ -2,10 +2,7 @@ import { styles } from "../../Presets/Style";
 
 export const defaultNavLinkStyle: styles = {
   styles: {
-    background: {
-      type: "color",
-      color: "transparent",
-    },
+    background: false,
 
     layout: {
       "vertical align": "Center",
