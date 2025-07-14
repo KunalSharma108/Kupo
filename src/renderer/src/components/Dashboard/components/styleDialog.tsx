@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/styleDialog.css';
 import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
-
+import { HexColorPicker } from 'react-colorful';
 
 interface StyleDialogProps {
   styleContent: string;
@@ -34,21 +34,29 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   onClose,
   onConfirm
 }) => {
-  const [inputValue, setInputValue] = useState(value);
+  const [inputValue, setInputValue] = useState(value[0] === '#' ? 'custom color' : value);
   const [isClosing, setIsClosing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [canConfirm, setCanConfirm] = useState(false);
+  const [color, setColor] = useState<string>(value[0] === '#' ? value : '#000000ff')
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputValue.toLowerCase() === 'custom color') {
+      const normalizedColor = color.toLowerCase().replace('#', '').slice(0, 6);
+      const normalizedValue = value.toLowerCase().replace('#', '').slice(0, 6);
+      setCanConfirm(normalizedColor !== normalizedValue);
+
+    } else if (inputRef.current) {
       const currentInputValue = inputRef.current.value;
       setCanConfirm(inputValue !== value && inputValue === currentInputValue);
+      
     } else {
-      setCanConfirm(inputValue !== value)
+      setCanConfirm(inputValue !== value);
     }
-  }, [inputValue, value]);
+  }, [inputValue, value, color]);
+
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -78,14 +86,25 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
   const handleConfirm = () => {
     setTimeout(() => {
-      onConfirm({
-        styleContent,
-        styleContentType,
-        styleType,
-        type,
-        subType,
-        newValue: inputValue
-      });
+      if (inputValue.toLowerCase() === 'custom color') {
+        onConfirm({
+          styleContent,
+          styleContentType,
+          styleType,
+          type,
+          subType,
+          newValue: color
+        });
+      } else {
+        onConfirm({
+          styleContent,
+          styleContentType,
+          styleType,
+          type,
+          subType,
+          newValue: inputValue
+        });
+      }
     }, 0);
 
     setIsClosing(true);
@@ -130,47 +149,64 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         );
       } else if (subType.toLowerCase() === "color") {
         return (
-          <div className="style-color-options-dropdown">
-            <div
-              className="dropdown-selected"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              <span className="selected-label">
-                {inputValue || "Select a color"}
-                {ColorOptions[inputValue]?.css && (
-                  <span
-                    className="color-circle"
-                    style={{
-                      backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
-                    }}
-                  />
-                )}
-              </span>
+          <div className='style-dialog-input-wrapper'>
 
-              <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
-            </div>
-            {dropdownOpen && (
-              <div className="dropdown-options">
-                {Object.entries(ColorOptions).map(([key, option]) => (
-                  <div
-                    key={key}
-                    className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
-                    onClick={() => {
-                      setInputValue(option.label);
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                    {option.css && (
-                      <span
-                        className="color-circle"
-                        style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
-                      />
-                    )}
-                  </div>
-                ))}
+            <div className="style-color-options-dropdown">
+              <div
+                className="dropdown-selected"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <span className="selected-label">
+                  {inputValue || "Select a color"}
+                  {ColorOptions[inputValue]?.css && (
+                    <span
+                      className="color-circle"
+                      style={{
+                        backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
+                      }}
+                    />
+                  )}
+                </span>
+
+                <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
               </div>
-            )}
+              {dropdownOpen && (
+                <div className="dropdown-options">
+                  {Object.entries(ColorOptions).map(([key, option]) => (
+                    <div
+                      key={key}
+                      className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                      onClick={() => {
+                        setInputValue(option.label);
+                        setDropdownOpen(false);
+                      }}
+                    >
+                      {option.label}
+                      {option.css && (
+                        <span
+                          className="color-circle"
+                          style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {inputValue.toLowerCase() === 'custom color' ? (
+              <>
+                <div className="color-picker-container">
+                  <HexColorPicker color={color} onChange={setColor} />
+                  <input
+                    className='color-picker-input'
+                    ref={inputRef}
+                    type="text"
+                    value={color}
+                    onChange={(e) => setColor(e.target.value)}
+                  />
+                </div>
+              </>
+            ) : null}
           </div>
         );
       } else {
@@ -210,16 +246,26 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         </p>
 
         <div className="style-dialog-input-row">
-          <span className="style-dialog-subheading-inline">{styleContentType}</span>
-          <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
-          <span className="style-dialog-subheading-inline">{styleType}</span>
+          {styleContentType.map((type) => {
+            return (
+              <>
+                <span className="style-dialog-subheading-inline">{type}</span>
+                <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
+              </>
+            )
+          })}
+          <span className="style-dialog-subheading-inline">{styleType === 'hoverStyles' ? 'hover styles' : styleType}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
           <span className="style-dialog-type">{type}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
           <span className="style-dialog-subtype">{subType}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
+        </div>
+
+        <div className="style-input-wrapper">
           {renderInput(type, subType)}
         </div>
+
 
         <div className="style-dialog-actions">
           <button className="style-dialog-close" onClick={handleClose}>Close</button>

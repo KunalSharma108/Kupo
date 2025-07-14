@@ -245,14 +245,17 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
           </div>
 
         ) : (
-          configData.sectionOrders.map((key) => {
-            const sectionData = configData.sections[key];
-            return (
-              <div className="sections-container">
-                <RenderSection type={key} data={sectionData} styleContent={key} updateData={updateData} />
-              </div>
-            );
-          })
+          <>
+            {configData.sectionOrders.map((key) => {
+              const sectionData = configData.sections[key];
+              return (
+                <div className="sections-container">
+                  <RenderSection type={key} data={sectionData} styleContent={key} updateData={updateData} />
+                </div>
+              );
+            })}
+
+          </>
         )
 
       ) : (

@@ -7,12 +7,13 @@
     align-items: center;
     z-index: 1000;
     font-family: 'Inter', 'Segoe UI', sans-serif;
+    transition-duration: height 200ms ease;
 }
 
 .style-dialog-container {
     background-color: #1e1e1e;
-    width: 100%;
-    max-width: 460px;
+    max-width: fit-content;
+    min-width: 460px;
     border-radius: 16px;
     padding: 28px 30px;
     animation: style-dialog-slide-up 0.35s ease-out forwards;
@@ -44,16 +45,24 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 32px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
+}
+
+.style-input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .style-dialog-subheading-inline,
 .style-dialog-type,
 .style-dialog-subtype {
+    text-align: center;
     font-size: 14px;
     color: #ccc;
-    padding: 6px 10px;
+    padding: 6px 9px;
     background-color: #2a2a2a;
     border-radius: 6px;
 }
@@ -227,4 +236,28 @@
     font-size: 12px;
     color: #aaa;
     margin-left: 12px;
+}
+
+.style-dialog-input-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.color-picker-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top:20px;
+}
+
+.color-picker-input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #1f1f1f;
+    color: #fff;
 }

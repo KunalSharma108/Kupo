@@ -15,6 +15,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoDropdownOpen, setLogoDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const logoDropdownRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(data?.sticky ?? false);
   const [styleWarning, setStyleWarning] = useState<string | null>(null);
   const [dialogData, setDialogData] = useState<null | {
@@ -68,15 +69,23 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       newValue: any
     }) => {
     console.log('inside the confirmDialog', updatedData)
-    const pathParts = [
+    let pathParts = [
       'sections',
       updatedData.styleContent,
-      updatedData.styleContentType,
+    ]
+
+    updatedData.styleContentType.map((val) => {
+      pathParts.push(val)
+    })
+
+    pathParts = [
+      ...pathParts,
       updatedData.styleType,
       updatedData.type,
       updatedData.subType
     ]
 
+    console.log(pathParts);
     const newValue = updatedData.newValue;
 
     updateData({ pathParts, newValue })
@@ -88,9 +97,22 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         setDropdownOpen(false)
       }
     }
+
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [logoDropdownRef])
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (logoDropdownRef.current && !logoDropdownRef.current.contains(event.target as Node)) {
+        setLogoDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [logoDropdownRef])
+
 
   const renderNestedDropdown = (obj: Record<string, any>, styleType: string, styleContentType: string[]) => {
     return Object.entries(obj).map(([key, value]) => {
@@ -142,7 +164,10 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       {styleWarning && (
         <div className="overlay">
           <div className="warning-modal">
-            <p>{styleWarning}</p>
+            <div className="warning-heading">
+              Warning!
+            </div>
+            <p className='warning-text'>{styleWarning}</p>
             <button onClick={() => setStyleWarning(null)}>OK</button>
           </div>
         </div>
@@ -218,7 +243,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   → Logo URL: <span className="option-value">Not set</span>
                 </div>
 
-                <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
+                <div className="navbar-logo-dropdown-wrapper" ref={logoDropdownRef}>
                   <button
                     className="navbar-dropdown-toggle"
                     onClick={() => setLogoDropdownOpen((prev) => !prev)}
@@ -255,7 +280,3 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 }
 
 export default RenderSection
-
-
-
-// * FIX THE FUCKING LOGO STYLE DROPDOWN STYLING, BETTER HAVE MOBILE AS THE SECOND SCREEN AND DO IT MANUALLY, ALSO CHECK IF THE STYLECONTENTTYPE BEING AN ARRAY OF STRINGS IS WORKING WITH UPDATEDATA LOOP OR NOT, OR FKING FIX IT , I COULD HAVE DONT IT BUT THE FKING CHARGER IS NOT WORKING MAN WHAT THE FUCK 
