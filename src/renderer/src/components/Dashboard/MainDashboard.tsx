@@ -151,21 +151,25 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
             current.image = false;
             current.gradient = false;
             current['image + gradient'] = false;
+            if (!(current.color)) current.color = false;
 
           } else if (newValue === 'image') {
             current.color = false;
             current.gradient = false;
             current['image + gradient'] = false;
+            if (!(current.image)) current.image = false;
 
           } else if (newValue === 'gradient') {
             current.color = false;
             current.image = false;
             current['image + gradient'] = false;
+            if (!(current.gradient)) current.gradient = false;
 
           } else if (newValue === 'image + gradient') {
             current.color = false;
             current.image = false;
             current.gradient = false;
+            if (!(current['image + gradient'])) current['image + gradient'] = false;
           }
         }
       }

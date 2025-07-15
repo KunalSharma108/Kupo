@@ -33,3 +33,7 @@ export const fetchConfig = (data: {name: string}) => {
 export const updateConfig = (data: {name:string, data: any}) => {
   return window.electronAPI.updateConfig(data)
 }
+
+export const selectImage = () => {
+  return window.electronAPI.selectImage()
+}

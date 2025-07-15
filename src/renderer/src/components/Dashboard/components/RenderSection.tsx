@@ -35,23 +35,32 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     subType: string,
     value: any
   ) => {
-    const currentType =
-      styleType === 'styles'
-        ? data.style?.styles.background.type
-        : data.style?.hoverStyles.background.type;
 
-    const isBlocked =
-      ['color', 'image', 'gradient', 'image + gradient'].includes(subType) &&
-      currentType !== subType;
+    if (type.toLowerCase() === 'background' && subType.toLowerCase() !== 'type') {
+      const resolvePath = (obj: any, path: string[]) => {
+        return path.reduce((acc, key) => {
+          return acc?.[key] !== undefined ? acc[key] : undefined
+        }, obj);
+      }
+      const PATH = resolvePath(data, styleContentType);
 
-    if (isBlocked) {
-      setStyleWarning(
-        `You cannot change ${subType}, because the background type is "${currentType}". Change it to "${subType}" if you want to edit ${subType}.`
-      );
-      return;
+      const fullPath = PATH[styleType].background.type;
+
+      if (!fullPath) {
+        return setStyleWarning(`You cannot edit ${subType} because the background type is set as False. Set the background type to ${subType} and then you will be able to edit ${subType}`)
+
+      } else if (fullPath.toLowerCase() !== subType.toLowerCase()) {
+        return setStyleWarning(`You cannot edit ${subType} because the background type is set as ${fullPath}. Change the background type to ${subType} and then you will be able to edit ${subType}`)
+
+      } else if (fullPath.toLowerCase() === subType.toLowerCase()) {
+        return setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
+        
+      } else {
+        return setStyleWarning(`There was an unexpcted error while trying to edit ${subType}. We recommend checking background type or reloading the app if this warning keep popping up.`)
+      }
     }
 
-    setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
+    return setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
   };
 
 
@@ -257,14 +266,14 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.styles || {}, 'styles', ['logo', 'style'])}
+                          {renderNestedDropdown(data.logo?.style?.styles || {}, 'styles', ['logo', 'style'])}
                         </div>
                       </div>
                       <div className="navbar-dropdown-item has-sub">
                         Hover Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['logo', 'style'])}
+                          {renderNestedDropdown(data.logo?.style?.hoverStyles || {}, 'hoverStyles', ['logo', 'style'])}
                         </div>
                       </div>
                     </div>

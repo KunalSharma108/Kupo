@@ -5,6 +5,7 @@ import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import '../../styles/styleDialog.css';
 import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 import { HexColorPicker } from 'react-colorful';
+import { selectImage } from '@renderer/lib/ipc';
 
 interface StyleDialogProps {
   styleContent: string;
@@ -41,19 +42,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [canConfirm, setCanConfirm] = useState(false);
   const [color, setColor] = useState<string>(value[0] === '#' ? value : '#000000ff')
+  const hasShownImageDialog = useRef(false)
 
   useEffect(() => {
-    if (inputValue.toLowerCase() === 'custom color') {
-      const normalizedColor = color.toLowerCase().replace('#', '').slice(0, 6);
-      const normalizedValue = value.toLowerCase().replace('#', '').slice(0, 6);
-      setCanConfirm(normalizedColor !== normalizedValue);
-
-    } else if (inputRef.current) {
-      const currentInputValue = inputRef.current.value;
-      setCanConfirm(inputValue !== value && inputValue === currentInputValue);
-      
-    } else {
-      setCanConfirm(inputValue !== value);
+    if (inputValue != value) {
+      setCanConfirm(true)
     }
   }, [inputValue, value, color]);
 
@@ -86,7 +79,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
   const handleConfirm = () => {
     setTimeout(() => {
-      if (inputValue.toLowerCase() === 'custom color') {
+      if (typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color') {
         onConfirm({
           styleContent,
           styleContentType,
@@ -112,6 +105,24 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
       onClose();
     }, 300);
   };
+
+  const showSelectImage = async () => {
+    const response = await selectImage()
+
+    if (!response.canceled && response.filePaths.length === 1) {
+      setInputValue(response.filePaths);
+    } else {
+      alert('An error occured');
+      handleClose();
+    }
+  }
+
+  useEffect(() => {
+    if (subType.toLowerCase() === 'image' && !hasShownImageDialog.current) {
+      hasShownImageDialog.current = true;
+      showSelectImage();
+    }
+  }, [subType])
 
   function renderInput(type: string, subType: string) {
     if (type.toLowerCase() === 'background') {
@@ -193,22 +204,35 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 </div>
               )}
             </div>
-            {inputValue.toLowerCase() === 'custom color' ? (
-              <>
-                <div className="color-picker-container">
-                  <HexColorPicker color={color} onChange={setColor} />
-                  <input
-                    className='color-picker-input'
-                    ref={inputRef}
-                    type="text"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                  />
-                </div>
-              </>
-            ) : null}
+            {
+              typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
+                <>
+                  <div className="color-picker-container">
+                    <HexColorPicker color={color} onChange={setColor} />
+                    <input
+                      className='color-picker-input'
+                      ref={inputRef}
+                      type="text"
+                      value={color}
+                      onChange={(e) => setColor(e.target.value)}
+                    />
+                  </div>
+                </>
+              ) : null
+            }
           </div>
         );
+      } else if (subType.toLowerCase() === 'image') {
+        return (
+          <input
+            ref={inputRef}
+            className="style-dialog-input"
+            value={inputValue !== false ? inputValue : 'Waiting for an Image to be selected'}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus={false}
+            disabled={true}
+          />
+        )
       } else {
         return (
           <input

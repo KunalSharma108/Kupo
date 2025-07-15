@@ -3,7 +3,11 @@ import { styles } from "../../Presets/Style";
 export const defaultNavLogoStyle: styles = {
   styles: {
     background: {
-      type: false
+      type: false,
+      color: false,
+      image: false,
+      gradient: false,
+      "image + gradient": false
     },
 
     layout: {

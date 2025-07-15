@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { dialog, ipcMain } from "electron";
 import { mainWindow } from ".";
 import { addProject, deleteProject, fetchProjects, renameProject } from "./functions/Project";
 import { fetchConfig, updateConfig } from "./functions/config";
@@ -44,5 +44,15 @@ export const setUpIpcHandlers = async () => {
   ipcMain.handle('updateConfig', async (_event, {name, data}) => {
     const response = await updateConfig(name, data)
     return response;
-  })
-} 
+  });
+
+  ipcMain.handle('selectImage', async () => {
+    const result = await dialog.showOpenDialog({
+      title: 'Select an Image',
+      properties: ['openFile'],
+      filters: [{name: 'Images', extensions:['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif']}]
+    });
+
+    return result
+  });
+}
