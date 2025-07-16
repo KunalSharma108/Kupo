@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/styleDialog.css';
 import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 import { HexColorPicker } from 'react-colorful';
 import { selectImage } from '@renderer/lib/ipc';
+import { gradientDirectionValue } from '@renderer/interface/Presets/Background';
 
 interface StyleDialogProps {
   styleContent: string;
@@ -43,13 +44,19 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   const [canConfirm, setCanConfirm] = useState(false);
   const [color, setColor] = useState<string>(value[0] === '#' ? value : '#000000ff')
   const hasShownImageDialog = useRef(false)
+  const [gradientValue, setGradientValue] = useState<string[]>(
+    typeof value === 'string' && value.split(' ').length !== 1 ? value.split(' ') : ['#000000ff', '#000000ff', 'to-right']
+  )
+
+  const [gradientDirection, setGradientDirection] = useState<string>(gradientValue[gradientValue.length - 1])
+
+  const [gradientDirectionOpen, setGradientDirectionOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (inputValue != value) {
       setCanConfirm(true)
     }
   }, [inputValue, value, color]);
-
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -233,6 +240,57 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             disabled={true}
           />
         )
+      } else if (subType.toLowerCase() === 'gradient') {
+
+        const getArrowRotation = (direction: string) => {
+          switch (direction) {
+            case "to top": return "rotate(0deg)";
+            case "to top right": return "rotate(45deg)";
+            case "to right": return "rotate(90deg)";
+            case "to bottom right": return "rotate(135deg)";
+            case "to bottom": return "rotate(180deg)";
+            case "to bottom left": return "rotate(225deg)";
+            case "to left": return "rotate(270deg)";
+            case "to top left": return "rotate(315deg)";
+            default: return "rotate(0deg)";
+          }
+        };
+
+        return (
+          <div className="style-color-options-dropdown">
+            <div
+              className="dropdown-selected"
+              onClick={() => setGradientDirectionOpen(!gradientDirectionOpen)}
+            >
+              <span className="selected-label">
+                {gradientDirection || "Select a type"}
+              </span>
+
+              <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+            </div>
+
+            {gradientDirectionOpen && (
+              <div className="dropdown-options">
+                {gradientDirectionValue.map((option) => (
+                  <div
+                    key={option}
+                    className={`dropdown-option ${gradientDirection === option ? "selected" : ""}`}
+                    onClick={() => {
+                      setGradientDirection(option);
+                      setGradientDirectionOpen(false);
+                    }}
+                  >
+                    {option}
+                    <FontAwesomeIcon
+                      icon={faArrowUp}
+                      style={{ transform: getArrowRotation(option), marginLeft: "8px" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
       } else {
         return (
           <input
@@ -314,3 +372,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
     document.body
   );
 };
+
+
+
+// CONFIRM BUTTON IS NOT APPEARING IN GRADIENT SETTINGS BECAUSE THE INPUTVALUE IS NOT BEING CHANGED, MAY BE RECONSTRUCT THE WHOLE INPUT VALUE ON EVERY CHANGE OR MAY BE MAKE ANOTHER IF ELSE STATEMETN IN THE USESTATE 

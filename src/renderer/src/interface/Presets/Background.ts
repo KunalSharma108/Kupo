@@ -20,7 +20,7 @@ export const customImageBackground: Record<string, dynamicStyleOption<ImageBackg
     label: 'Custom Image',
     value: {
       url: '/images/default.jpg',
-      position:'center',
+      position: 'center',
       repeat: 'no-repeat',
       size: 'cover'
     },
@@ -47,6 +47,7 @@ export interface GradientBackgroundValue {
 
   stops: GradientColorStop[];
 }
+
 
 export const gradientBackground: Record<string, dynamicStyleOption<GradientBackgroundValue>> = {
   gradient: {
@@ -154,3 +155,14 @@ export type imageBackgroundKey = keyof typeof customImageBackground;
 export type gradientBackgroundKey = keyof typeof gradientBackground;
 export type BackgroundTypeMapKey = keyof typeof backgroundTypeMap;
 
+
+export const gradientDirectionValue = [
+  'to top',
+  'to bottom',
+  'to left',
+  'to right',
+  'to top left',
+  'to top right',
+  'to bottom left',
+  'to bottom right'
+]
