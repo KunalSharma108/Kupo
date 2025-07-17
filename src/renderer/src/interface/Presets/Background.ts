@@ -157,12 +157,12 @@ export type BackgroundTypeMapKey = keyof typeof backgroundTypeMap;
 
 
 export const gradientDirectionValue = [
-  'to top',
-  'to bottom',
-  'to left',
-  'to right',
-  'to top left',
-  'to top right',
-  'to bottom left',
-  'to bottom right'
+  'to-top',
+  'to-bottom',
+  'to-left',
+  'to-right',
+  'to-top-left',
+  'to-top-right',
+  'to-bottom-left',
+  'to-bottom-right'
 ]

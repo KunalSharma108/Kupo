@@ -133,15 +133,33 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
           <div className="navbar-submenu-panel">
             {Object.entries(value).map(([innerKey, innerValue]) => {
-              return (
-                <div
-                  className="navbar-submenu-leaf"
-                  key={innerKey}
-                  onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
-                >
-                  {innerKey} : {typeof innerValue === 'object' ? JSON.stringify(innerValue) : String(innerValue)}
-                </div>
-              )
+              if (innerKey.toLowerCase() === 'gradient' && innerValue !== false && typeof innerValue === 'string') {
+                
+                const parts = innerValue.trim().split(/\s+/);
+                const gradientColorsCount = parts.filter(p => p.startsWith('#')).length;
+                
+                let direction: string = innerValue.split(' ')[innerValue.split(' ').length - 1];
+
+                return (
+                  <div
+                    className="navbar-submenu-leaf"
+                    key={innerKey}
+                    onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
+                  >
+                    {innerKey} : {gradientColorsCount} colors, {direction}
+                  </div>
+                )
+              } else  {
+                return (
+                  <div
+                    className="navbar-submenu-leaf"
+                    key={innerKey}
+                    onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
+                  >
+                    {innerKey} : {typeof innerValue === 'object' ? JSON.stringify(innerValue) : String(innerValue)}
+                  </div>
+                )
+              }
             })}
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faChevronDown, faChevronRight, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/styleDialog.css';
 import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 import { HexColorPicker } from 'react-colorful';
@@ -36,7 +36,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   onClose,
   onConfirm
 }) => {
-  const [inputValue, setInputValue] = useState(value[0] === '#' ? 'custom color' : value);
+  const [inputValue, setInputValue] = useState(
+    subType === 'color'
+      ? value[0] === '#' ? 'custom color' : value
+      : value
+  );
   const [isClosing, setIsClosing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,11 +49,9 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   const [color, setColor] = useState<string>(value[0] === '#' ? value : '#000000ff')
   const hasShownImageDialog = useRef(false)
   const [gradientValue, setGradientValue] = useState<string[]>(
-    typeof value === 'string' && value.split(' ').length !== 1 ? value.split(' ') : ['#000000ff', '#000000ff', 'to-right']
+    typeof value === 'string' && value.split(' ').length !== 2 ? value.split(' ') : ['#000000ff', '#000000ff', '#fff000', 'to-right']
   )
-
   const [gradientDirection, setGradientDirection] = useState<string>(gradientValue[gradientValue.length - 1])
-
   const [gradientDirectionOpen, setGradientDirectionOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -135,39 +137,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
     if (type.toLowerCase() === 'background') {
       if (subType.toLowerCase() === 'type') {
         return (
-          <div className="style-color-options-dropdown">
-            <div
-              className="dropdown-selected"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              <span className="selected-label">
-                {inputValue || "Select a type"}
-              </span>
-
-              <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
-            </div>
-
-            {dropdownOpen && (
-              <div className="dropdown-options">
-                {["color", "image", "gradient", "image + gradient"].map((option) => (
-                  <div
-                    key={option}
-                    className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
-                    onClick={() => {
-                      setInputValue(option);
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    {option}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      } else if (subType.toLowerCase() === "color") {
-        return (
-          <div className='style-dialog-input-wrapper'>
+          <div className="style-input-wrapper">
 
             <div className="style-color-options-dropdown">
               <div
@@ -175,58 +145,96 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 <span className="selected-label">
-                  {inputValue || "Select a color"}
-                  {ColorOptions[inputValue]?.css && (
-                    <span
-                      className="color-circle"
-                      style={{
-                        backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
-                      }}
-                    />
-                  )}
+                  {inputValue || "Select a type"}
                 </span>
 
                 <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
               </div>
+
               {dropdownOpen && (
                 <div className="dropdown-options">
-                  {Object.entries(ColorOptions).map(([key, option]) => (
+                  {["color", "image", "gradient", "image + gradient"].map((option) => (
                     <div
-                      key={key}
-                      className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                      key={option}
+                      className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
                       onClick={() => {
-                        setInputValue(option.label);
+                        setInputValue(option);
                         setDropdownOpen(false);
                       }}
                     >
-                      {option.label}
-                      {option.css && (
-                        <span
-                          className="color-circle"
-                          style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
-                        />
-                      )}
+                      {option}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            {
-              typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
-                <>
-                  <div className="color-picker-container">
-                    <HexColorPicker color={color} onChange={setColor} />
-                    <input
-                      className='color-picker-input'
-                      ref={inputRef}
-                      type="text"
-                      value={color}
-                      onChange={(e) => setColor(e.target.value)}
-                    />
+          </div>
+        );
+      } else if (subType.toLowerCase() === "color") {
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a color"}
+                    {ColorOptions[inputValue]?.css && (
+                      <span
+                        className="color-circle"
+                        style={{
+                          backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
+                        }}
+                      />
+                    )}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(ColorOptions).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option.label);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option.label}
+                        {option.css && (
+                          <span
+                            className="color-circle"
+                            style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
+                          />
+                        )}
+                      </div>
+                    ))}
                   </div>
-                </>
-              ) : null
-            }
+                )}
+              </div>
+              {
+                typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
+                  <>
+                    <div className="color-picker-container">
+                      <HexColorPicker color={color} onChange={setColor} />
+                      <input
+                        className='color-picker-input'
+                        ref={inputRef}
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                      />
+                    </div>
+                  </>
+                ) : null
+              }
+            </div>
           </div>
         );
       } else if (subType.toLowerCase() === 'image') {
@@ -241,55 +249,148 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           />
         )
       } else if (subType.toLowerCase() === 'gradient') {
+        const [gradientColorValues, setGradientColorValues] = useState<string[]>(
+          gradientValue.filter((_, idx) => idx !== gradientValue.length - 1)
+        )
+
+        const [selectedGradient, setSelectedGradient] = useState<number>(0);
+        const [selectedGradientValue, setSelectedGradientValue] = useState<string>(gradientColorValues[selectedGradient]);
+
+        const updateInputValue = (gradientColorArray: string[], direction?: string) => {
+          let text = gradientColorArray.join(' ') + ' ' + direction;
+          console.log(text)
+          setInputValue(text);
+        }
+
+        const handleColorChange = (newColor: string) => {
+          setSelectedGradientValue(newColor);
+          const updatedGradient = [...gradientColorValues];
+          updatedGradient[selectedGradient] = newColor;
+          setGradientColorValues(updatedGradient);
+          updateInputValue(updatedGradient, gradientDirection)
+        };
+
+        const handleSelect = (idx: number) => {
+          setSelectedGradient(idx);
+          setSelectedGradientValue(setGradientColorValues[idx]);
+        };
+
+        const handleAddColor = () => {
+          const newGradient = [...gradientColorValues, "#ffffff"];
+          setGradientColorValues(newGradient);
+          setSelectedGradient(newGradient.length - 1);
+          setSelectedGradientValue("#ffffff");
+          updateInputValue(newGradient, gradientDirection);
+        };
+
+        const handleRemoveColor = (idx: number) => {
+          console.log('got')
+          if (gradientColorValues.length <= 2) return;
+          const newGradient = gradientColorValues.filter((_, i) => i !== idx);
+          setGradientColorValues(newGradient);
+          updateInputValue(newGradient, gradientDirection)
+
+          if (selectedGradient >= newGradient.length) {
+            setSelectedGradient(newGradient.length - 1);
+            setSelectedGradientValue(newGradient[newGradient.length - 1]);
+          } else {
+            setSelectedGradientValue(newGradient[selectedGradient]);
+          }
+        };
 
         const getArrowRotation = (direction: string) => {
           switch (direction) {
-            case "to top": return "rotate(0deg)";
-            case "to top right": return "rotate(45deg)";
-            case "to right": return "rotate(90deg)";
-            case "to bottom right": return "rotate(135deg)";
-            case "to bottom": return "rotate(180deg)";
-            case "to bottom left": return "rotate(225deg)";
-            case "to left": return "rotate(270deg)";
-            case "to top left": return "rotate(315deg)";
+            case "to-top": return "rotate(0deg)";
+            case "to-top-right": return "rotate(45deg)";
+            case "to-right": return "rotate(90deg)";
+            case "to-bottom-right": return "rotate(135deg)";
+            case "to-bottom": return "rotate(180deg)";
+            case "to-bottom-left": return "rotate(225deg)";
+            case "to-left": return "rotate(270deg)";
+            case "to-top-left": return "rotate(315deg)";
             default: return "rotate(0deg)";
           }
         };
 
         return (
-          <div className="style-color-options-dropdown">
-            <div
-              className="dropdown-selected"
-              onClick={() => setGradientDirectionOpen(!gradientDirectionOpen)}
-            >
-              <span className="selected-label">
-                {gradientDirection || "Select a type"}
-              </span>
+          <>
+            <div className="gradient-direction-wrapper">
 
-              <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+              <p className='gradient-direction-heading'>Direction: </p>
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setGradientDirectionOpen(!gradientDirectionOpen)}
+                >
+                  <span className="selected-label">
+                    {gradientDirection || "Select a type"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+
+                {gradientDirectionOpen && (
+                  <div className="dropdown-options">
+                    {gradientDirectionValue.map((option) => (
+                      <div
+                        key={option}
+                        className={`dropdown-option ${gradientDirection === option ? "selected" : ""}`}
+                        onClick={() => {
+                          setGradientDirection(option);
+                          setGradientDirectionOpen(false);
+                          updateInputValue(gradientColorValues, option)
+                        }}
+                      >
+                        {option}
+                        <FontAwesomeIcon
+                          icon={faArrowUp}
+                          style={{ transform: getArrowRotation(option), marginLeft: "8px" }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-
-            {gradientDirectionOpen && (
-              <div className="dropdown-options">
-                {gradientDirectionValue.map((option) => (
-                  <div
-                    key={option}
-                    className={`dropdown-option ${gradientDirection === option ? "selected" : ""}`}
-                    onClick={() => {
-                      setGradientDirection(option);
-                      setGradientDirectionOpen(false);
-                    }}
-                  >
-                    {option}
-                    <FontAwesomeIcon
-                      icon={faArrowUp}
-                      style={{ transform: getArrowRotation(option), marginLeft: "8px" }}
-                    />
+            <div className="gradient-color-wrapper">
+              <div className="gradient-color-array">
+                {gradientColorValues.map((val, idx) => (
+                  <div className="gradient-color-row" key={idx}>
+                    <div
+                      className={`gradient-color-holder ${idx === selectedGradient ? 'selected' : ''}`}
+                      onClick={() => handleSelect(idx)}
+                    >
+                      <div className="gradient-color">{val}</div>
+                      <div className="color-circle" style={{ backgroundColor: val }}></div>
+                    </div>
+                    {gradientValue.length > 2 && idx !== 0 && idx !== 1 && (
+                      <div
+                        className="gradient-minus"
+                        onClick={() => handleRemoveColor(idx)}
+                      >
+                        <FontAwesomeIcon icon={faMinus} />
+                      </div>
+                    )}
                   </div>
                 ))}
+
+                <div className="gradient-plus" onClick={handleAddColor}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </div>
               </div>
-            )}
-          </div>
+
+              <div className="gradient-color-picker-wrapper">
+                <HexColorPicker color={selectedGradientValue} onChange={handleColorChange} />
+                <input
+                  className='color-picker-input'
+                  ref={inputRef}
+                  type="text"
+                  value={selectedGradientValue}
+                  onChange={(e) => handleColorChange(e.target.value)}
+                />
+              </div>
+            </div>
+          </>
         )
       } else {
         return (
@@ -344,9 +445,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
         </div>
 
-        <div className="style-input-wrapper">
-          {renderInput(type, subType)}
-        </div>
+        {renderInput(type, subType)}
 
 
         <div className="style-dialog-actions">
@@ -372,7 +471,3 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
     document.body
   );
 };
-
-
-
-// CONFIRM BUTTON IS NOT APPEARING IN GRADIENT SETTINGS BECAUSE THE INPUTVALUE IS NOT BEING CHANGED, MAY BE RECONSTRUCT THE WHOLE INPUT VALUE ON EVERY CHANGE OR MAY BE MAKE ANOTHER IF ELSE STATEMETN IN THE USESTATE 
