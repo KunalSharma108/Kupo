@@ -275,7 +275,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         const [selectedGradientValue, setSelectedGradientValue] = useState<string>(gradientColorValues[selectedGradient]);
 
         const updateInputValue = (gradientColorArray: string[], direction?: string) => {
-          let text = gradientColorArray.join(' ') + ' ' + direction;
+          let text = `${gradientColorArray.join(' ')} ${direction}`;
           console.log(text)
           setInputValue(text);
         }
@@ -414,7 +414,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
         const updateInputValue = (filePath: string | false, gradientColorArray: string[], direction: string) => {
           if (!filePath) return;
-          let text = filePath + ',' + gradientColorArray.join(' ') + ' ' + direction
+          let text = `${filePath},${gradientColorArray.join(' ')} ${direction}`
           console.log(text)
           setInputValue(text);
         }
@@ -628,7 +628,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         );
       }
-
+      
     } else {
       return (
         <input

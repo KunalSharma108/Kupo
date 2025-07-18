@@ -149,6 +149,27 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                     {innerKey} : {gradientColorsCount} colors, {direction}
                   </div>
                 )
+              } else if (innerKey.toLowerCase() === 'image + gradient' && innerValue !== false && typeof innerValue === 'string') {
+                let imagePath = innerValue.trim().split(',')[0];
+
+                let imageName = imagePath.split('\\')[imagePath.split('\\').length - 1];
+
+                let colorArray = innerValue.split(',')[1].trim();
+
+                const parts = colorArray.trim().split(/\s+/);
+                const gradientColorsCount = parts.filter(p => p.startsWith('#')).length;
+
+                let direction: string = innerValue.split(' ')[innerValue.split(' ').length - 1];
+
+                return (
+                  <div
+                    className="navbar-submenu-leaf"
+                    key={innerKey}
+                    onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
+                  >
+                    {innerKey} : {imageName}, {gradientColorsCount} colors, {direction}
+                  </div>
+                )
               } else  {
                 return (
                   <div
