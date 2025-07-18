@@ -390,3 +390,46 @@
     gap: 10px;
     position: relative;
 }
+
+.change-image-btn {
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #f97316, #ec4899);
+    /* orange to pink */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-left: 10px;
+}
+
+.change-image-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.change-image-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.style-dialog-error {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #ffdddd;
+    border: 1px solid #ff5f5f;
+    color: #8b0000;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.style-dialog-error h4 {
+    margin: 0 0 6px;
+    font-weight: bold;
+    font-size: 15px;
+}
