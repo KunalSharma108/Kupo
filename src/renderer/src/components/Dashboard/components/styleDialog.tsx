@@ -1080,6 +1080,17 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             </div>
           </div>
         );
+      } else {
+        return (
+          <div className="style-dialog-error">
+            <h4>⚠️ Technical Error</h4>
+            <p>
+              Something went wrong while loading this input field.
+              <br />
+              Try restarting the program if this keeps happening.
+            </p>
+          </div>
+        );
       }
     } else {
       return (
