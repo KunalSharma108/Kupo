@@ -54,7 +54,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
       } else if (fullPath.toLowerCase() === subType.toLowerCase()) {
         return setDialogData({ styleContent, styleContentType, styleType, type, subType, value });
-        
+
       } else {
         return setStyleWarning(`There was an unexpcted error while trying to edit ${subType}. We recommend checking background type or reloading the app if this warning keep popping up.`)
       }
@@ -134,10 +134,10 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           <div className="navbar-submenu-panel">
             {Object.entries(value).map(([innerKey, innerValue]) => {
               if (innerKey.toLowerCase() === 'gradient' && innerValue !== false && typeof innerValue === 'string') {
-                
+
                 const parts = innerValue.trim().split(/\s+/);
                 const gradientColorsCount = parts.filter(p => p.startsWith('#')).length;
-                
+
                 let direction: string = innerValue.split(' ')[innerValue.split(' ').length - 1];
 
                 return (
@@ -170,7 +170,46 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                     {innerKey} : {imageName}, {gradientColorsCount} colors, {direction}
                   </div>
                 )
-              } else  {
+              } else if (
+                key.toLowerCase() === 'layout' &&
+                typeof innerValue === 'string' &&
+                innerValue.toLowerCase() !== 'fit-content' &&
+                innerValue.toLowerCase() !== 'none'
+              ) {
+                const number = innerValue.split('-')[0];
+                const metric = innerValue.split('-')[1];
+
+                return (
+                  <div
+                    className="navbar-submenu-leaf"
+                    key={innerKey}
+                    onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
+                  >
+                    {innerKey} : {number}{metric}
+                  </div>
+                )
+
+              } else if (
+                (
+                  innerKey.toLowerCase() === 'border width' ||
+                  innerKey.toLowerCase() === 'border radius'
+                ) &&
+                typeof innerValue === 'string' &&
+                innerValue.toLowerCase() !== 'fit-content' &&
+                innerValue.toLowerCase() !== 'none'
+              ) {
+                const [number, metric] = innerValue.split('-');
+
+                return (
+                  <div
+                    className="navbar-submenu-leaf"
+                    key={innerKey}
+                    onClick={() => openStyleDialog(styleContent, styleContentType, styleType, key, innerKey, innerValue)}
+                  >
+                    {innerKey} : {number}{metric}
+                  </div>
+                );
+              } else {
                 return (
                   <div
                     className="navbar-submenu-leaf"

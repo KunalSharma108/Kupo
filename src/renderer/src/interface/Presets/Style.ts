@@ -32,10 +32,10 @@ export interface styles {
     layout?: {
       'vertical align'?: 'Top' | 'Center' | 'Bottom' | 'undefined';
       'horizontal align'?: 'Left' | 'Center' | 'Right' | 'undefined';
-      width?: 'Default' | number;
-      height?: 'Default' | number;
-      'max width'?: 'Default' | number;
-      'max height'?: 'Default' | number;
+      width?: string;
+      height?: string;
+      'max width'?: string;
+      'max height'?: string;
     } | false;
 
     border?: {

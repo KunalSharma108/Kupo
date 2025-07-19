@@ -628,7 +628,459 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         );
       }
-      
+
+    } else if (type.toLowerCase() === 'layout') {
+      const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]))
+      const initialType = isNumberValue ? 'number' : value;
+      const [layoutType, setLayoutType] = useState<
+        'number' | 'fit-content' | 'none'
+      >
+        (initialType === 'number' ?
+          'number' : initialType === 'none' ?
+            'none' : 'fit-content'
+        );
+
+      const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value.split('-')[0]) : 0);
+      const [layoutMetric, setLayoutMetric] = useState<string>(layoutType === 'number' ? value.split('-')[1] : 'px');
+
+      const metricOptions = ['px', '%', 'vh', 'rem'];
+      const typeOptions =
+        subType.toLowerCase() === 'max width' || subType.toLowerCase() === 'max height' ?
+          ['number', 'fit-content', 'none'] :
+          ['number', 'fit-content'];
+
+      const updateInputValue = (val: string) => {
+        setInputValue(val)
+      }
+
+      return (
+        <div className="style-input-wrapper">
+          <select
+            className="style-dialog-dropdown"
+            value={layoutType}
+            onChange={(e) => {
+              const selected = e.target.value as 'number' | 'fit-content' | 'none';
+              setLayoutType(selected);
+              if (selected === 'fit-content') {
+                setLayout(0);
+                setLayoutMetric('');
+                updateInputValue('fit-content')
+              } else if (selected === 'number') {
+                updateInputValue(`$layouth}-${layoutMetric}`)
+              } else {
+                updateInputValue(`none`)
+              }
+            }}
+          >
+            {typeOptions.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+
+          <input
+            ref={inputRef}
+            className="style-dialog-input"
+            type="number"
+            value={layoutType === 'number' ? layout : ''}
+            onChange={(e) => {
+              setLayout(Number(e.target.value))
+              updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+            }}
+            disabled={layoutType !== 'number'}
+            autoFocus
+          />
+
+          <select
+            className="style-dialog-dropdown"
+            value={layoutMetric}
+            onChange={(e) => {
+              setLayoutMetric(e.target.value);
+              updateInputValue(`$layouth}-${e.target.value}`);
+            }}
+            disabled={layoutType !== 'number'}
+          >
+            {metricOptions.map(unit => (
+              <option key={unit} value={unit}>{unit}</option>
+            ))}
+          </select>
+        </div>
+      );
+    } else if (type.toLowerCase() === 'border') {
+      if (subType.toLowerCase() === 'border color') {
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a color"}
+                    {ColorOptions[inputValue]?.css && (
+                      <span
+                        className="color-circle"
+                        style={{
+                          backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
+                        }}
+                      />
+                    )}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(ColorOptions).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option.label);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option.label}
+                        {option.css && (
+                          <span
+                            className="color-circle"
+                            style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {
+                typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
+                  <>
+                    <div className="color-picker-container">
+                      <HexColorPicker color={color} onChange={setColor} />
+                      <input
+                        className='color-picker-input'
+                        ref={inputRef}
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                      />
+                    </div>
+                  </>
+                ) : null
+              }
+            </div>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'border width') {
+        const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]))
+        const initialType = isNumberValue ? 'number' : value;
+        const [layoutType, setLayoutType] = useState<
+          'number' | 'none'
+        >
+          (initialType === 'number' ?
+            'number' : 'none'
+          );
+
+        const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value.split('-')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(layoutType === 'number' ? value.split('-')[1] : 'px');
+
+        const metricOptions = ['px', 'rem'];
+        const typeOptions = ['number', 'none'];
+
+        const updateInputValue = (val: string) => {
+          setInputValue(val)
+        }
+
+        return (
+          <div className="style-input-wrapper">
+            <select
+              className="style-dialog-dropdown"
+              value={layoutType}
+              onChange={(e) => {
+                const selected = e.target.value as 'number' | 'none';
+                setLayoutType(selected);
+                if (selected === 'number') {
+                  updateInputValue(`${layout}-${layoutMetric}`)
+                } else {
+                  updateInputValue(`none`)
+                }
+              }}
+            >
+              {typeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+
+            <input
+              ref={inputRef}
+              className="style-dialog-input"
+              type="number"
+              value={layoutType === 'number' ? layout : ''}
+              onChange={(e) => {
+                setLayout(Number(e.target.value))
+                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+              }}
+              disabled={layoutType !== 'number'}
+              autoFocus
+            />
+
+            <select
+              className="style-dialog-dropdown"
+              value={layoutMetric}
+              onChange={(e) => {
+                setLayoutMetric(e.target.value);
+                updateInputValue(`${layout}-${e.target.value}`);
+              }}
+              disabled={layoutType !== 'number'}
+            >
+              {metricOptions.map(unit => (
+                <option key={unit} value={unit}>{unit}</option>
+              ))}
+            </select>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'border style') {
+        const styleArray = ['solid', 'dashed', 'dotted', 'none'];
+
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(styleArray).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'border radius') {
+        const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]))
+        const initialType = isNumberValue ? 'number' : value;
+        const [layoutType, setLayoutType] = useState<
+          'number' | 'none'
+        >
+          (initialType === 'number' ?
+            'number' : 'none'
+          );
+
+        const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value.split('-')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(layoutType === 'number' ? value.split('-')[1] : 'px');
+
+        const metricOptions = ['px', '%'];
+        const typeOptions = ['number', 'none'];
+
+        const updateInputValue = (val: string) => {
+          setInputValue(val)
+        }
+
+        return (
+          <div className="style-input-wrapper">
+            <select
+              className="style-dialog-dropdown"
+              value={layoutType}
+              onChange={(e) => {
+                const selected = e.target.value as 'number' | 'none';
+                setLayoutType(selected);
+                if (selected === 'number') {
+                  updateInputValue(`${layout}-${layoutMetric}`)
+                } else {
+                  updateInputValue(`none`)
+                }
+              }}
+            >
+              {typeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+
+            <input
+              ref={inputRef}
+              className="style-dialog-input"
+              type="number"
+              value={layoutType === 'number' ? layout : ''}
+              onChange={(e) => {
+                setLayout(Number(e.target.value))
+                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+              }}
+              disabled={layoutType !== 'number'}
+              autoFocus
+            />
+
+            <select
+              className="style-dialog-dropdown"
+              value={layoutMetric}
+              onChange={(e) => {
+                setLayoutMetric(e.target.value);
+                updateInputValue(`${layout}-${e.target.value}`);
+              }}
+              disabled={layoutType !== 'number'}
+            >
+              {metricOptions.map(unit => (
+                <option key={unit} value={unit}>{unit}</option>
+              ))}
+            </select>
+          </div>
+        );
+      } else {
+        return (
+          <div className="style-dialog-error">
+            <h4>⚠️ Technical Error</h4>
+            <p>
+              Something went wrong while loading this input field.
+              <br />
+              Try restarting the program if this keeps happening.
+            </p>
+          </div>
+        );
+      }
+    } else if (type.toLowerCase() === 'transition') {
+      if (subType.toLowerCase() === 'transition duration') {
+        const isNumberValue = typeof value === 'string' && !isNaN(Number(value))
+        const initialType = isNumberValue ? 'number' : value;
+        const [layoutType, setLayoutType] = useState<
+          'number' | 'none'
+        >
+          (initialType === 'number' ?
+            'number' : 'none'
+          );
+
+        const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value) : 0);
+
+        const metricOptions = ['ms'];
+        const typeOptions = ['number', 'none'];
+
+        const updateInputValue = (val: string) => {
+          setInputValue(val);
+        }
+
+        return (
+          <div className="style-input-wrapper">
+            <select
+              className="style-dialog-dropdown"
+              value={layoutType}
+              onChange={(e) => {
+                const selected = e.target.value as 'number' | 'none';
+                setLayoutType(selected);
+                if (selected === 'number') {
+                  updateInputValue(`${layout}`)
+                } else {
+                  updateInputValue(`none`)
+                }
+              }}
+            >
+              {typeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+
+            <input
+              ref={inputRef}
+              className="style-dialog-input"
+              type="number"
+              value={layoutType === 'number' ? layout : ''}
+              step={100}
+              min={0}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                if (val >= 0 && val % 100 === 0) {
+                  setLayout(val)
+                  updateInputValue(e.target.value)
+                };
+              }}
+              disabled={layoutType === 'none'}
+              autoFocus
+            />
+
+
+            <select
+              className="style-dialog-dropdown"
+              value={'ms'}
+              onChange={(_e) => {
+                updateInputValue(`${layout}`);
+              }}
+              disabled={layoutType !== 'number'}
+            >
+              {metricOptions.map(unit => (
+                <option key={unit} value={unit}>{unit}</option>
+              ))}
+            </select>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'transition style') {
+        const styleArray = [
+          'ease',
+          'ease-in',
+          'ease-out',
+          'ease-in-out',
+          'linear',
+          'step-start',
+          'step-end'
+        ];
+
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(styleArray).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
     } else {
       return (
         <input

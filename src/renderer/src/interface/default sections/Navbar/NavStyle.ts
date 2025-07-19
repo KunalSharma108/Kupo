@@ -11,10 +11,10 @@ export const defaultNavStyle: styles = {
     },
 
     layout: {
-      width: 'Default',
-      height: 'Default',
-      'max width': 0,
-      'max height': 0
+      width: '100%',
+      height: 'fit-content',
+      'max width': 'none',
+      'max height': 'none'
     },
 
     border: {
