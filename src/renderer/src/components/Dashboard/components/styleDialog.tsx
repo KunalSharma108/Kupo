@@ -3,10 +3,12 @@ import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faChevronDown, faChevronRight, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/styleDialog.css';
+import '../../styles/fontFamily.css';
 import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 import { HexColorPicker } from 'react-colorful';
 import { selectImage } from '@renderer/lib/ipc';
 import { gradientDirectionValue } from '@renderer/interface/Presets/Background';
+import { fontOptions } from '@renderer/interface/Presets/FontFamily';
 
 interface StyleDialogProps {
   styleContent: string;
@@ -37,7 +39,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
   onConfirm
 }) => {
   const [inputValue, setInputValue] = useState(
-    subType === 'color'
+    subType.split(' ')[subType.split(' ').length - 1] === 'color'
       ? value[0] === '#' ? 'custom color' : value
       : value
   );
@@ -630,81 +632,138 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
       }
 
     } else if (type.toLowerCase() === 'layout') {
-      const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]))
-      const initialType = isNumberValue ? 'number' : value;
-      const [layoutType, setLayoutType] = useState<
-        'number' | 'fit-content' | 'none'
-      >
-        (initialType === 'number' ?
-          'number' : initialType === 'none' ?
-            'none' : 'fit-content'
+      if (subType.toLowerCase() !== 'vertical align' && subType.toLowerCase() !== 'horizontal align') {
+
+        const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]));
+
+        const initialType = isNumberValue ? 'number' : value;
+
+        const [layoutType, setLayoutType] = useState<
+          'number' | 'fit-content' | 'none'
+        >(
+          initialType === 'number'
+            ? 'number'
+            : initialType === 'none'
+              ? 'none'
+              : 'fit-content'
         );
 
-      const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value.split('-')[0]) : 0);
-      const [layoutMetric, setLayoutMetric] = useState<string>(layoutType === 'number' ? value.split('-')[1] : 'px');
+        const [layout, setLayout] = useState<number>(() => {
+          if (layoutType === 'number' && typeof value === 'string') {
+            return Number(value.split('-')[0]);
+          }
+          return 0;
+        });
 
-      const metricOptions = ['px', '%', 'vh', 'rem'];
-      const typeOptions =
-        subType.toLowerCase() === 'max width' || subType.toLowerCase() === 'max height' ?
-          ['number', 'fit-content', 'none'] :
-          ['number', 'fit-content'];
+        const [layoutMetric, setLayoutMetric] = useState<string>(() => {
+          if (layoutType === 'number' && typeof value === 'string') {
+            return value.split('-')[1];
+          }
+          return 'px';
+        });
+  
+        const metricOptions = ['px', '%', 'vh', 'rem'];
+        const typeOptions =
+          subType.toLowerCase() === 'max width' || subType.toLowerCase() === 'max height' ?
+            ['number', 'fit-content', 'none'] :
+            ['number', 'fit-content']; 
+  
+        const updateInputValue = (val: string) => {
+          setInputValue(val)
+        }
+  
+        return (
+          <div className="style-input-wrapper">
+            <select
+              className="style-dialog-dropdown"
+              value={layoutType}
+              onChange={(e) => {
+                const selected = e.target.value as 'number' | 'fit-content' | 'none';
+                setLayoutType(selected);
+                if (selected === 'fit-content') {
+                  setLayout(0);
+                  setLayoutMetric('');
+                  updateInputValue('fit-content')
+                } else if (selected === 'number') {
+                  updateInputValue(`${layout}-${layoutMetric}`)
+                } else {
+                  updateInputValue(`none`)
+                }
+              }}
+            >
+              {typeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+  
+            <input
+              ref={inputRef}
+              className="style-dialog-input"
+              type="number"
+              value={layoutType === 'number' ? layout : ''}
+              onChange={(e) => {
+                setLayout(Number(e.target.value))
+                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+              }}
+              disabled={layoutType !== 'number'}
+              autoFocus
+            />
+  
+            <select
+              className="style-dialog-dropdown"
+              value={layoutMetric}
+              onChange={(e) => {
+                setLayoutMetric(e.target.value);
+                updateInputValue(`${layout}-${e.target.value}`);
+              }}
+              disabled={layoutType !== 'number'}
+            >
+              {metricOptions.map(unit => (
+                <option key={unit} value={unit}>{unit}</option>
+              ))}
+            </select>
+          </div>
+        );
+      } else  {
+        const styleArray = subType.toLowerCase() === 'vertical align' ? ['top', 'center', 'bottom'] : ['left', 'center', 'right']
 
-      const updateInputValue = (val: string) => {
-        setInputValue(val)
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(styleArray).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
       }
-
-      return (
-        <div className="style-input-wrapper">
-          <select
-            className="style-dialog-dropdown"
-            value={layoutType}
-            onChange={(e) => {
-              const selected = e.target.value as 'number' | 'fit-content' | 'none';
-              setLayoutType(selected);
-              if (selected === 'fit-content') {
-                setLayout(0);
-                setLayoutMetric('');
-                updateInputValue('fit-content')
-              } else if (selected === 'number') {
-                updateInputValue(`$layouth}-${layoutMetric}`)
-              } else {
-                updateInputValue(`none`)
-              }
-            }}
-          >
-            {typeOptions.map(opt => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))}
-          </select>
-
-          <input
-            ref={inputRef}
-            className="style-dialog-input"
-            type="number"
-            value={layoutType === 'number' ? layout : ''}
-            onChange={(e) => {
-              setLayout(Number(e.target.value))
-              updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
-            }}
-            disabled={layoutType !== 'number'}
-            autoFocus
-          />
-
-          <select
-            className="style-dialog-dropdown"
-            value={layoutMetric}
-            onChange={(e) => {
-              setLayoutMetric(e.target.value);
-              updateInputValue(`$layouth}-${e.target.value}`);
-            }}
-            disabled={layoutType !== 'number'}
-          >
-            {metricOptions.map(unit => (
-              <option key={unit} value={unit}>{unit}</option>
-            ))}
-          </select>
-        </div>
-      );
     } else if (type.toLowerCase() === 'border') {
       if (subType.toLowerCase() === 'border color') {
         return (
@@ -1089,6 +1148,112 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               <br />
               Try restarting the program if this keeps happening.
             </p>
+          </div>
+        );
+      }
+    } else if (type.toLowerCase() === 'font') {
+      if (subType.toLowerCase() === 'font color') {
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a color"}
+                    {ColorOptions[inputValue]?.css && (
+                      <span
+                        className="color-circle"
+                        style={{
+                          backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
+                        }}
+                      />
+                    )}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(ColorOptions).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option.label);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option.label}
+                        {option.css && (
+                          <span
+                            className="color-circle"
+                            style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {
+                typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
+                  <>
+                    <div className="color-picker-container">
+                      <HexColorPicker color={color} onChange={setColor} />
+                      <input
+                        className='color-picker-input'
+                        ref={inputRef}
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                      />
+                    </div>
+                  </>
+                ) : null
+              }
+            </div>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'font family') {
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(fontOptions).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${key}-font ${inputValue === option.label ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option.label);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         );
       }
