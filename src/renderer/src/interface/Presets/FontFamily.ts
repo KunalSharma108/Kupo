@@ -132,13 +132,13 @@ export const fontOptions: Record<string, {
 };
 
 export const fontSizes: Record<string, styleOption> = {
-  sm: { label: 'Small', css: ' 0.875rem;' },
+  sm: { label: 'Small', css: '0.875rem;' },
   base: { label: 'Normal', css: '1rem;' },
-  lg: { label: 'Large', css: ' 1.125rem;' },
-  xl: { label: 'Extra Large', css: ' 1.25rem;' },
-  '2xl': { label: '2x Large', css: ' 1.5rem;' },
-  '3xl': { label: '3x Large', css: ' 1.875rem;' },
-  '4xl': { label: '4x Large', css: ' 2.25rem;' }
+  lg: { label: 'Large', css: '1.125rem;' },
+  xl: { label: 'Extra Large', css: '1.25rem;' },
+  '2xl': { label: '2x Large', css: '1.5rem;' },
+  '3xl': { label: '3x Large', css: '1.875rem;' },
+  '4xl': { label: '4x Large', css: '2.25rem;' }
 } as const;
 
 export type fontSizesKey = keyof typeof fontSizes;

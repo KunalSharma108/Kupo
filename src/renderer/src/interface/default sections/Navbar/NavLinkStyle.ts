@@ -17,7 +17,7 @@ export const defaultNavLinkStyle: styles = {
       "border color": "white",
       "border width": "Default (2px)",
       "border style": "none",
-      "border radius": 4,
+      "border radius": "4-px",
     },
 
     transition: {
@@ -33,24 +33,24 @@ export const defaultNavLinkStyle: styles = {
     },
 
     margin: {
-      "margin top": 0,
-      "margin bottom": 0,
-      "margin left": 0,
-      "margin right": 0,
+      "margin top": "0-px",
+      "margin bottom": "0-px",
+      "margin left": "0-px",
+      "margin right": "0-px",
     },
 
     padding: {
-      "padding top": 10,
-      "padding bottom": 10,
-      "padding left": 10,
-      "padding right": 10,
+      "padding top": "10-px",
+      "padding bottom": "10-px",
+      "padding left": "10-px",
+      "padding right": "10-px",
     },
 
     shadow: {
-      "offset x": 0,
-      "offset y": 2,
-      "blur radius": 4,
-      "spread radius": 0,
+      "offset x": "0-px",
+      "offset y": "2-px",
+      "blur radius": "4-px",
+      "spread radius": "0-px",
       color: "black",
       inset: false,
     },
@@ -67,43 +67,43 @@ export const defaultNavLinkStyle: styles = {
       "horizontal align": "Right",
       width: "Default",
       height: "Default",
-      "max width": 0,
-      "max height": 0,
+      "max width": "0-px",
+      "max height": "0-px",
     },
 
     border: {
       "border color": "lightBlue",
       "border width": "Default (2px)",
       "border style": "solid",
-      "border radius": 4,
+      "border radius": "4-px",
     },
 
     font: {
       "font color": "lightBlue",
       "font family": 'Default',
-      "font weight": 0,
+      "font weight": "0-px",
       "font size": 'Default',
     },
 
     margin: {
-      "margin top": 0,
-      "margin bottom": 0,
-      "margin left": 0,
-      "margin right": 0,
+      "margin top": "0-px",
+      "margin bottom": "0-px",
+      "margin left": "0-px",
+      "margin right": "0-px",
     },
 
     padding: {
-      "padding top": 0,
-      "padding bottom": 0,
-      "padding left": 0,
-      "padding right": 0,
+      "padding top": "0-px",
+      "padding bottom": "0-px",
+      "padding left": "0-px",
+      "padding right": "0-px",
     },
 
     shadow: {
-      "offset x": 0,
-      "offset y": 2,
-      "blur radius": 6,
-      "spread radius": 0,
+      "offset x": "0-px",
+      "offset y": "2-px",
+      "blur radius": "6-px",
+      "spread radius": "0-px",
       color: "lightBlue",
       inset: false,
     },

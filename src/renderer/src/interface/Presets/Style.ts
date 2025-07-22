@@ -40,9 +40,9 @@ export interface styles {
 
     border?: {
       'border color'?: ColorsKey | 'none';
-      'border width'?: 'Default (2px)' | number | 'undefined';
+      'border width'?: 'Default (2px)' | string | 'undefined';
       'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
-      'border radius'?: number | 'none';
+      'border radius'?: string | 'none';
     } | false;
 
     transition?: {
@@ -58,24 +58,24 @@ export interface styles {
     } | false;
 
     margin?: {
-      'margin top'?: number | 'undefined';
-      'margin bottom'?: number | 'undefined';
-      'margin left'?: number | 'undefined';
-      'margin right'?: number | 'undefined';
+      'margin top'?: string | 'undefined';
+      'margin bottom'?: string | 'undefined';
+      'margin left'?: string | 'undefined';
+      'margin right'?: string | 'undefined';
     } | false;
 
     padding?: {
-      'padding top'?: number | 'undefined';
-      'padding bottom'?: number | 'undefined';
-      'padding left'?: number | 'undefined';
-      'padding right'?: number | 'undefined';
+      'padding top'?: string | 'undefined';
+      'padding bottom'?: string | 'undefined';
+      'padding left'?: string | 'undefined';
+      'padding right'?: string | 'undefined';
     } | false;
 
     shadow?: {
-      'offset x'?: number | 'undefined';
-      'offset y'?: number | 'undefined';
-      'blur radius'?: number | 'undefined';
-      'spread radius'?: number | 'undefined';
+      'offset x'?: string | 'undefined';
+      'offset y'?: string | 'undefined';
+      'blur radius'?: string | 'undefined';
+      'spread radius'?: string | 'undefined';
       color?: ColorsKey | 'undefined';
       inset?: boolean | 'undefined';
     } | false;
@@ -93,45 +93,45 @@ export interface styles {
     layout?: {
       'vertical align'?: 'Top' | 'Center' | 'Bottom' | 'undefined';
       'horizontal align'?: 'Left' | 'Center' | 'Right' | 'undefined';
-      width?: 'Default' | number;
-      height?: 'Default' | number;
-      'max width'?: 'Default' | number;
-      'max height'?: 'Default' | number;
+      width?: 'Default' | string;
+      height?: 'Default' | string;
+      'max width'?: 'Default' | string;
+      'max height'?: 'Default' | string;
     };
 
     border?: {
       'border color'?: ColorsKey | 'none';
-      'border width'?: 'Default (2px)' | number | 'undefined';
+      'border width'?: 'Default (2px)' | string | 'undefined';
       'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
-      'border radius'?: number | 'none';
+      'border radius'?: string | 'none';
     } | false;
 
     font?: {
       'font color'?: ColorsKey | 'Default';
       'font family'?: fontOptionsKey | 'Default';
-      'font weight'?: number | 'Default';
+      'font weight'?: string | 'Default';
       'font size'?: fontSizesKey | 'Default';
     } | false;
 
     margin?: {
-      'margin top'?: number | 'undefined';
-      'margin bottom'?: number | 'undefined';
-      'margin left'?: number | 'undefined';
-      'margin right'?: number | 'undefined';
+      'margin top'?: string | 'undefined';
+      'margin bottom'?: string | 'undefined';
+      'margin left'?: string | 'undefined';
+      'margin right'?: string | 'undefined';
     } | false;
 
     padding?: {
-      'padding top'?: number | 'undefined';
-      'padding bottom'?: number | 'undefined';
-      'padding left'?: number | 'undefined';
-      'padding right'?: number | 'undefined';
+      'padding top'?: string | 'undefined';
+      'padding bottom'?: string | 'undefined';
+      'padding left'?: string | 'undefined';
+      'padding right'?: string | 'undefined';
     } | false;
 
     shadow?: {
-      'offset x'?: number | 'undefined';
-      'offset y'?: number | 'undefined';
-      'blur radius'?: number | 'undefined';
-      'spread radius'?: number | 'undefined';
+      'offset x'?: string | 'undefined';
+      'offset y'?: string | 'undefined';
+      'blur radius'?: string | 'undefined';
+      'spread radius'?: string | 'undefined';
       color?: ColorsKey | 'undefined';
       inset?: boolean | 'undefined';
     } | false;

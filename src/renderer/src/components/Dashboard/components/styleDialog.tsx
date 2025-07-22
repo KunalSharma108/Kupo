@@ -8,7 +8,7 @@ import { ColorOptions } from '@renderer/interface/Presets/uiBlocks';
 import { HexColorPicker } from 'react-colorful';
 import { selectImage } from '@renderer/lib/ipc';
 import { gradientDirectionValue } from '@renderer/interface/Presets/Background';
-import { fontOptions } from '@renderer/interface/Presets/FontFamily';
+import { fontOptions, fontSizes } from '@renderer/interface/Presets/FontFamily';
 
 interface StyleDialogProps {
   styleContent: string;
@@ -661,17 +661,17 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           }
           return 'px';
         });
-  
+
         const metricOptions = ['px', '%', 'vh', 'rem'];
         const typeOptions =
           subType.toLowerCase() === 'max width' || subType.toLowerCase() === 'max height' ?
             ['number', 'fit-content', 'none'] :
-            ['number', 'fit-content']; 
-  
+            ['number', 'fit-content'];
+
         const updateInputValue = (val: string) => {
           setInputValue(val)
         }
-  
+
         return (
           <div className="style-input-wrapper">
             <select
@@ -695,7 +695,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
-  
+
             <input
               ref={inputRef}
               className="style-dialog-input"
@@ -708,7 +708,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               disabled={layoutType !== 'number'}
               autoFocus
             />
-  
+
             <select
               className="style-dialog-dropdown"
               value={layoutMetric}
@@ -724,7 +724,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             </select>
           </div>
         );
-      } else  {
+      } else {
         const styleArray = subType.toLowerCase() === 'vertical align' ? ['top', 'center', 'bottom'] : ['left', 'center', 'right']
 
         return (
@@ -833,17 +833,16 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         );
       } else if (subType.toLowerCase() === 'border width') {
-        const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]))
-        const initialType = isNumberValue ? 'number' : value;
+        const initialType = typeof value === 'string' && value?.split(' ').length === 2 ? 'string' : 'number'
         const [layoutType, setLayoutType] = useState<
           'number' | 'none'
         >
-          (initialType === 'number' ?
+          (initialType === 'string' ?
             'number' : 'none'
           );
 
-        const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value.split('-')[0]) : 0);
-        const [layoutMetric, setLayoutMetric] = useState<string>(layoutType === 'number' ? value.split('-')[1] : 'px');
+        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
 
         const metricOptions = ['px', 'rem'];
         const typeOptions = ['number', 'none'];
@@ -940,17 +939,16 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         );
       } else if (subType.toLowerCase() === 'border radius') {
-        const isNumberValue = typeof value === 'string' && !isNaN(Number(value.split('-')[0]))
-        const initialType = isNumberValue ? 'number' : value;
+        const initialType = typeof value === 'string' && value?.split(' ').length === 2 ? 'string' : 'number'
         const [layoutType, setLayoutType] = useState<
           'number' | 'none'
         >
-          (initialType === 'number' ?
+          (initialType === 'string' ?
             'number' : 'none'
           );
 
-        const [layout, setLayout] = useState<number>(layoutType === 'number' ? Number(value.split('-')[0]) : 0);
-        const [layoutMetric, setLayoutMetric] = useState<string>(layoutType === 'number' ? value.split('-')[1] : 'px');
+        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
 
         const metricOptions = ['px', '%'];
         const typeOptions = ['number', 'none'];
@@ -1254,6 +1252,219 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 )}
               </div>
             </div>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'font weight') {
+
+        const weightArray = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(weightArray).map(([key, option]) => (
+                      <div
+                        key={key}
+                        style={{ fontWeight: `${option}` }}
+                        className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'font size') {
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(fontSizes).map(([key, option]) => (
+                      <div
+                        key={key}
+                        style={{ fontSize: `${option.css.replace(';', '')}` }}
+                        className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option.label);
+                          setDropdownOpen(false);
+                          console.log(option.css.replace(';', ''))
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="style-dialog-error">
+            <h4>⚠️ Technical Error</h4>
+            <p>
+              Something went wrong while loading this input field.
+              <br />
+              Try restarting the program if this keeps happening.
+            </p>
+          </div>
+        );
+      }
+    } else if (type.toLowerCase() === 'margin' || type.toLowerCase() === 'padding') {
+      const initialType = typeof value === 'string' && value?.split(' ')?.length === 2 ? 'string' : 0
+      const [layoutType, setLayoutType] = useState<'number'>('number');
+
+      const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
+      const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
+
+      const metricOptions = ['px', 'rem', '%'];
+      const typeOptions = ['number'];
+
+      const updateInputValue = (val: string) => {
+        setInputValue(val)
+      }
+
+      return (
+        <div className="style-input-wrapper">
+          <select
+            className="style-dialog-dropdown"
+            value={layoutType}
+            onChange={(e) => {
+              const selected = e.target.value as 'number';
+              setLayoutType(selected);
+              if (selected === 'number') {
+                updateInputValue(`${layout}-${layoutMetric}`)
+              }
+            }}
+          >
+            {typeOptions.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+
+          <input
+            ref={inputRef}
+            className="style-dialog-input"
+            type="number"
+            value={layoutType === 'number' ? layout : ''}
+            onChange={(e) => {
+              setLayout(Number(e.target.value))
+              updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+            }}
+            disabled={layoutType !== 'number'}
+            autoFocus
+          />
+
+          <select
+            className="style-dialog-dropdown"
+            value={layoutMetric}
+            onChange={(e) => {
+              setLayoutMetric(e.target.value);
+              updateInputValue(`${layout}-${e.target.value}`);
+            }}
+            disabled={layoutType !== 'number'}
+          >
+            {metricOptions.map(unit => (
+              <option key={unit} value={unit}>{unit}</option>
+            ))}
+          </select>
+        </div>
+      );
+    } else if (type.toLowerCase() === 'shadow') {
+      if (subType.toLowerCase() !== 'color' || subType.toLowerCase() !== 'inset') {
+        const initialType = typeof value === 'string' && value?.split(' ')?.length === 2 ? 'string' : 0
+        const [layoutType, setLayoutType] = useState<'number'>('number');
+
+        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
+
+        const metricOptions = ['px', 'rem'];
+        const typeOptions = ['number'];
+
+        const updateInputValue = (val: string) => {
+          setInputValue(val)
+        }
+
+        return (
+          <div className="style-input-wrapper">
+            <select
+              className="style-dialog-dropdown"
+              value={layoutType}
+              onChange={(e) => {
+                const selected = e.target.value as 'number';
+                setLayoutType(selected);
+                if (selected === 'number') {
+                  updateInputValue(`${layout}-${layoutMetric}`)
+                }
+              }}
+            >
+              {typeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+
+            <input
+              ref={inputRef}
+              className="style-dialog-input"
+              type="number"
+              value={layoutType === 'number' ? layout : ''}
+              onChange={(e) => {
+                setLayout(Number(e.target.value))
+                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+              }}
+              disabled={layoutType !== 'number'}
+              autoFocus
+            />
+
+            <select
+              className="style-dialog-dropdown"
+              value={layoutMetric}
+              onChange={(e) => {
+                setLayoutMetric(e.target.value);
+                updateInputValue(`${layout}-${e.target.value}`);
+              }}
+              disabled={layoutType !== 'number'}
+            >
+              {metricOptions.map(unit => (
+                <option key={unit} value={unit}>{unit}</option>
+              ))}
+            </select>
           </div>
         );
       }

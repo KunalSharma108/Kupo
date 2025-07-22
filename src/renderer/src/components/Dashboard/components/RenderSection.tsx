@@ -192,13 +192,18 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
               } else if (
                 (
                   innerKey.toLowerCase() === 'border width' ||
-                  innerKey.toLowerCase() === 'border radius'
+                  innerKey.toLowerCase() === 'border radius' ||
+                  key.toLowerCase() === 'margin' ||
+                  key.toLowerCase() === 'padding' ||
+                  key.toLowerCase() === 'shadow'
                 ) &&
                 typeof innerValue === 'string' &&
                 innerValue.toLowerCase() !== 'fit-content' &&
-                innerValue.toLowerCase() !== 'none'
+                innerValue.toLowerCase() !== 'none' &&
+                innerValue.toLowerCase() !== 'color' &&
+                innerValue.toLowerCase() !== 'inset'
               ) {
-                const [number, metric] = innerValue.split('-');
+                const [number, metric] = innerValue?.split('-') ? innerValue.split('-') : [0, ''];
 
                 return (
                   <div
