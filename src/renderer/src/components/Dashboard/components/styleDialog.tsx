@@ -1407,7 +1407,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         </div>
       );
     } else if (type.toLowerCase() === 'shadow') {
-      if (subType.toLowerCase() !== 'color' || subType.toLowerCase() !== 'inset') {
+      if (subType.toLowerCase() !== 'color' && subType.toLowerCase() !== 'inset') {
         const initialType = typeof value === 'string' && value?.split(' ')?.length === 2 ? 'string' : 0
         const [layoutType, setLayoutType] = useState<'number'>('number');
 
@@ -1467,7 +1467,125 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             </select>
           </div>
         );
+      } else if (subType.toLowerCase() === 'color') {
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a color"}
+                    {ColorOptions[inputValue]?.css && (
+                      <span
+                        className="color-circle"
+                        style={{
+                          backgroundColor: `#${ColorOptions[inputValue].css.replace(";", "")}`,
+                        }}
+                      />
+                    )}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(ColorOptions).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option.label ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option.label);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option.label}
+                        {option.css && (
+                          <span
+                            className="color-circle"
+                            style={{ backgroundColor: `#${option.css.replace(';', '')}` }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {
+                typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
+                  <>
+                    <div className="color-picker-container">
+                      <HexColorPicker color={color} onChange={setColor} />
+                      <input
+                        className='color-picker-input'
+                        ref={inputRef}
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                      />
+                    </div>
+                  </>
+                ) : null
+              }
+            </div>
+          </div>
+        );
+      } else if (subType.toLowerCase() === 'inset') {
+        const options = ['true', 'false'];
+
+        return (
+          <div className="style-input-wrapper">
+
+            <div className='style-dialog-input-wrapper'>
+
+              <div className="style-color-options-dropdown">
+                <div
+                  className="dropdown-selected"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <span className="selected-label">
+                    {inputValue || "Select a style"}
+                  </span>
+
+                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-options">
+                    {Object.entries(options).map(([key, option]) => (
+                      <div
+                        key={key}
+                        className={`dropdown-option ${inputValue === option ? "selected" : ""}`}
+                        onClick={() => {
+                          setInputValue(option);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="style-dialog-error">
+            <h4>⚠️ Technical Error</h4>
+            <p>
+              Something went wrong while loading this input field.
+              <br />
+              Try restarting the program if this keeps happening.
+            </p>
+          </div>
+        );
       }
+
     } else {
       return (
         <input
