@@ -15,7 +15,7 @@ const NavDashboard = (): React.JSX.Element => {
           <FontAwesomeIcon icon={faBook} /> Documentation
         </a>
 
-        <a href="https://github.com/yourrepo" target="_blank" className="nav-link github-link">
+        <a href="https://github.com/KunalSharma108/Kupo" target="_blank" className="nav-link github-link">
           <FontAwesomeIcon icon={faGithub} className="github-icon" />
           <span className="github-stars">1</span>
         </a>

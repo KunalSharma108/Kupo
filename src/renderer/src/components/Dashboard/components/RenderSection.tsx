@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/render.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faImage } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faChevronDown, faChevronRight, faChevronUp, faImage, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleDialog } from './styleDialog'
+import { selectImage } from '@renderer/lib/ipc'
 
 interface RenderSectionProps {
   type: string
@@ -27,6 +28,8 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     value: any;
   }>(null);
 
+  const [logoURL, setLogoURL] = useState<string>(data?.logo?.logoURL !== false ? data.logo.logoURL : false)
+  
   const openStyleDialog = (
     styleContent: string,
     styleContentType: string[],
@@ -68,6 +71,34 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     setDialogData(null)
   };
 
+  const showSelectImage = async (): Promise<{ success: boolean, data: string }> => {
+    const response = await selectImage();
+
+    if (!response.canceled && response.filePaths.length === 1) {
+      setLogoURL(response.filePaths[0]);
+      return { success: true, data: response.filePaths[0] }
+
+    } else {
+      return { success: false, data: '' }
+    }
+  }
+
+  const handleLogoImgClick = async (styleContent: string, stylePath: string[]) => {
+    const response = await showSelectImage();
+
+    if (response.success) {
+
+      let pathParts = [
+        'sections',
+        styleContent,
+        ...stylePath
+      ]
+      const newValue = response.data;
+
+      updateData({ pathParts, newValue })
+    }
+  }
+
   const confirmDialog = (
     updatedData: {
       styleContent: string,
@@ -77,7 +108,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       subType: string,
       newValue: any
     }) => {
-    console.log('inside the confirmDialog', updatedData)
     let pathParts = [
       'sections',
       updatedData.styleContent,
@@ -94,7 +124,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       updatedData.subType
     ]
 
-    console.log(pathParts);
     const newValue = updatedData.newValue;
 
     updateData({ pathParts, newValue })
@@ -126,7 +155,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const renderNestedDropdown = (obj: Record<string, any>, styleType: string, styleContentType: string[]) => {
     return Object.entries(obj).map(([key, value]) => {
       if (!value || typeof value !== 'object') return null
-
+      
       return (
         <div className="navbar-submenu-item" key={key}>
           <span>{key}</span>
@@ -251,6 +280,101 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     }
   }
 
+  const navbarBlock = () => {
+    return (
+      <>
+        <div className="section-header">
+          <div className="navbar-heading">{type}</div>
+          <div className="navbar-controls">
+            <label className="toggle">
+              <input
+                type="checkbox"
+                checked={isSticky}
+                onChange={handleStickyClick}
+              />
+              <span className="toggle-label">Sticky</span>
+            </label>
+
+            <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
+              <button
+                className="navbar-dropdown-toggle"
+                onClick={() => setDropdownOpen((prev) => !prev)}
+              >
+                Style <FontAwesomeIcon icon={faChevronDown} />
+              </button>
+
+              {dropdownOpen && (
+                <div className="navbar-dropdown-menu fade-in">
+                  <div className="navbar-dropdown-item has-sub">
+                    Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
+                    </div>
+                  </div>
+                  <div className="navbar-dropdown-item has-sub">
+                    Hover Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['style'])}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="navbar-content">
+          <div className="logo-section">
+            <div className="logo-section-header">
+              <FontAwesomeIcon icon={faImage} />
+              Logo
+            </div>
+
+            <div className="logo-section-option" onClick={() => handleLogoImgClick(styleContent, ['logo', 'logoURL'])}>
+              → Logo URL: {logoURL ? (
+                <>
+                  <span className='option-value'> {logoURL} </span>
+                </>
+              ) : (
+                <span className="option-value">Not set</span>
+              )}
+            </div>
+
+            <div className="navbar-logo-dropdown-wrapper" ref={logoDropdownRef}>
+              <button
+                className="navbar-dropdown-toggle"
+                onClick={() => setLogoDropdownOpen((prev) => !prev)}
+              >
+                Logo Style <FontAwesomeIcon icon={faChevronDown} />
+              </button>
+
+              {logoDropdownOpen && (
+                <div className="navbar-logo-dropdown-menu fade-in">
+                  <div className="navbar-dropdown-item has-sub">
+                    Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.logo?.style?.styles || {}, 'styles', ['logo', 'style'])}
+                    </div>
+                  </div>
+                  <div className="navbar-dropdown-item has-sub">
+                    Hover Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.logo?.style?.hoverStyles || {}, 'hoverStyles', ['logo', 'style'])}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </> 
+    )
+  }
+
   return (
     <>
       {styleWarning && (
@@ -281,90 +405,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       )}
       <div className="section-block">
         {data?.type?.toLowerCase() === 'navbar' && (
-          <>
-            <div className="section-header">
-              <div className="navbar-heading">{type}</div>
-              <div className="navbar-controls">
-                <label className="toggle">
-                  <input
-                    type="checkbox"
-                    checked={isSticky}
-                    onChange={handleStickyClick}
-                  />
-                  <span className="toggle-label">Sticky</span>
-                </label>
-
-                <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
-                  <button
-                    className="navbar-dropdown-toggle"
-                    onClick={() => setDropdownOpen((prev) => !prev)}
-                  >
-                    Style <FontAwesomeIcon icon={faChevronDown} />
-                  </button>
-
-                  {dropdownOpen && (
-                    <div className="navbar-dropdown-menu fade-in">
-                      <div className="navbar-dropdown-item has-sub">
-                        Styles
-                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                        <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
-                        </div>
-                      </div>
-                      <div className="navbar-dropdown-item has-sub">
-                        Hover Styles
-                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                        <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['style'])}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="navbar-content">
-              <div className="logo-section">
-                <div className="logo-section-header">
-                  <FontAwesomeIcon icon={faImage} />
-                  Logo
-                </div>
-
-                <div className="logo-section-option">
-                  → Logo URL: <span className="option-value">Not set</span>
-                </div>
-
-                <div className="navbar-logo-dropdown-wrapper" ref={logoDropdownRef}>
-                  <button
-                    className="navbar-dropdown-toggle"
-                    onClick={() => setLogoDropdownOpen((prev) => !prev)}
-                  >
-                    Logo Style <FontAwesomeIcon icon={faChevronDown} />
-                  </button>
-
-                  {logoDropdownOpen && (
-                    <div className="navbar-logo-dropdown-menu fade-in">
-                      <div className="navbar-dropdown-item has-sub">
-                        Styles
-                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                        <div className="navbar-submenu">
-                          {renderNestedDropdown(data.logo?.style?.styles || {}, 'styles', ['logo', 'style'])}
-                        </div>
-                      </div>
-                      <div className="navbar-dropdown-item has-sub">
-                        Hover Styles
-                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                        <div className="navbar-submenu">
-                          {renderNestedDropdown(data.logo?.style?.hoverStyles || {}, 'hoverStyles', ['logo', 'style'])}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
+          navbarBlock()
         )}
       </div>
     </>
