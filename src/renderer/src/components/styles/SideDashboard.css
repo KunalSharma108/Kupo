@@ -1,6 +1,6 @@
 .dashboard-sidebar {
     width: 260px;
-    background-color: #151518;
+    background-color: transparent;
     color: #ffffff;
     padding: 1.5rem;
     flex: 1;
@@ -20,7 +20,7 @@
 .sticky-nav {
     position: sticky;
     top: 0;
-    background-color: #151518;
+    background-color: transparent;
     z-index: 2;
 }
 

@@ -30,6 +30,7 @@
     color: #f5f5f5;
     text-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
     margin-bottom: 4px;
+    text-transform: capitalize;
 }
 
 .style-dialog-description {
@@ -66,6 +67,7 @@
     padding: 6px 9px;
     background-color: #2a2a2a;
     border-radius: 6px;
+    text-transform: capitalize;
 }
 
 .style-dialog-arrow {

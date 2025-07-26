@@ -1606,7 +1606,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         ref={containerRef}
       >
         <h2 className="style-dialog-heading">Styling {styleContent}</h2>
-        <p className="style-dialog-description">
+        <p className="mullish-font style-dialog-description">
           Input the value you want to change for this style option.
         </p>
 
@@ -1619,11 +1619,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               </>
             )
           })}
-          <span className="style-dialog-subheading-inline">{styleType === 'hoverStyles' ? 'hover styles' : styleType}</span>
+          <span className="style-dialog-subheading-inline quicksand-font">{styleType === 'hoverStyles' ? 'hover styles' : styleType}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
-          <span className="style-dialog-type">{type}</span>
+          <span className="style-dialog-type quicksand-font">{type}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
-          <span className="style-dialog-subtype">{subType}</span>
+          <span className="style-dialog-subtype quicksand-font">{subType}</span>
           <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
         </div>
 
