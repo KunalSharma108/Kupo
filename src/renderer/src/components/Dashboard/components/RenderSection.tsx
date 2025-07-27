@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/render.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faImage, faLink, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faImage, faLink, faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleDialog } from './styleDialog'
 import { selectImage } from '@renderer/lib/ipc'
 import '../../styles/fontFamily.css'
+import { NavButton } from '@renderer/interface/default sections/Navbar/NavButtons'
 
 interface RenderSectionProps {
   type: string
@@ -230,7 +231,9 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       style: object;
     }
 
-    const [navLinks, setNavLinks] = useState<buttonBLock[]>(data?.navLinks);
+    const [navLinks, setNavLinks] = useState<buttonBLock[]>(data?.navLinks || []);
+    const [globalLinksDropdown, setGlobalLinksDropdown] = useState<boolean>(false);
+    const globalLinksDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -253,6 +256,17 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [logoDropdownRef])
+
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (globalLinksDropdownRef.current && !globalLinksDropdownRef.current.contains(event.target as Node)) {
+          setGlobalLinksDropdown(false)
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [globalLinksDropdownRef])
 
     const handleStickyClick = () => {
       if (!isSticky) {
@@ -292,6 +306,152 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     const handleLogoImgDelete = (pathParts: string[], newValue: boolean) => {
       updateData({ pathParts, newValue })
       setLogoURL(false)
+    }
+
+    const handleLinkDelete = (idx: number) => {
+      const newValue = navLinks.filter((_, i) => i !== idx);
+
+      const pathParts = ['sections', 'navbar', 'navLinks'];
+
+      updateData({pathParts, newValue})
+      setNavLinks(newValue)
+    }
+
+    interface NavLinkItemProps {
+      index: number;
+      value: buttonBLock;
+    }
+
+    const NavLinkItem: React.FC<NavLinkItemProps> = ({ index, value }) => {
+      const [isLabelEditing, setIsLabelEditing] = useState(false);
+      const [isLinkEditing, setIsLinkEditing] = useState(false);
+      const [label, setLabel] = useState(value.label);
+      const [link, setLink] = useState(value.link);
+      const [navLinkDropdown, setNavLinkDropdown] = useState(false);
+      const navLinkDropdownRef = useRef<HTMLDivElement>(null);
+
+      const applyChange = (val: string, part: 'label' | 'link') => {
+        if (val.trim() !== '') {
+          setNavLinks((prev) => {
+            const updated = [...prev];
+            updated[index][part] = val;
+            return updated;
+          });
+
+          updateData({
+            pathParts: ['sections', 'navbar', 'navLinks', index, part],
+            newValue: val,
+          });
+
+          if (part === 'label') setIsLabelEditing(false);
+          if (part === 'link') setIsLinkEditing(false);
+        }
+      };
+
+      useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+          if (navLinkDropdownRef.current && !navLinkDropdownRef.current.contains(e.target as Node)) {
+            setNavLinkDropdown(false);
+          }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, []);
+
+      return (
+        <div className="button-wrapper">
+          <div className="navbar-links-dropdown-wrapper" ref={navLinkDropdownRef}>
+            <button className="navbar-dropdown-toggle inter-font weight-600" onClick={() => setNavLinkDropdown((prev) => !prev)}>
+              Custom Style <FontAwesomeIcon icon={faChevronDown} />
+            </button>
+            {navLinkDropdown && (
+              <div className="navbar-logo-dropdown-menu fade-in">
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.navLinks[index].style.styles || {},
+                      'styles',
+                      ['navLinks', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Hover Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.navLinks[index].style.hoverStyles || {},
+                      'hoverStyles',
+                      ['navLinks', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-label">
+            Text:{' '}
+            {isLabelEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+                onBlur={() => applyChange(label, 'label')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(label, 'label')}
+              />
+            ) : (
+              <span className="button-label-wrapper quicksand-font" onClick={() => setIsLabelEditing(true)}>
+                {label}
+              </span>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-link">
+            Link:{' '}
+            {isLinkEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                onBlur={() => applyChange(link, 'link')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(link, 'link')}
+              />
+            ) : (
+              <span className="button-link-wrapper quicksand-font" onClick={() => setIsLinkEditing(true)}>
+                {link}
+              </span>
+            )}
+          </div>
+
+          <div className="nav-links-minus" onClick={() => handleLinkDelete(index)}>
+            <FontAwesomeIcon icon={faMinus} />
+          </div>
+        </div>
+      );
+    };
+
+    const handleLinkAdd = () => {
+      let button = NavButton;
+      button.label = `${button.label} ${navLinks.length + 1}`;
+
+      let newValue = structuredClone(navLinks);
+
+      newValue.push(button)
+      const pathParts = ['sections', 'navbar', 'navLinks'];
+
+      updateData({pathParts, newValue});
+
+      setNavLinks(prev => [...prev, button]);      
     }
 
     return (
@@ -396,127 +556,52 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
               <FontAwesomeIcon icon={faLink} />
               Links
             </div>
-            <div className="button-list-section">
-              {navLinks.map((val, idx) => {
-                const [isLabelEditing, setIsLabelEditing] = useState<boolean>(false);
-                const [isLinkEditing, setIsLinkEditing] = useState<boolean>(false);
-                const [label, setLabel] = useState(val.label);
-                const [link, setLink] = useState(val.link);
-                const [navLinkDropdown, setNavLinkDropdown] = useState<boolean>(false);
-                const navLinkDropdownRef = useRef<HTMLDivElement>(null);
 
-                const applyChange = (value: string, part: 'label' | 'link') => {
-                  if (value.trim() !== '') {
-                    setNavLinks(prev => {
-                      let updatedList = [...prev];
-                      updatedList[idx][part] = value;
-                      return updatedList;
-                    });
+            <div className="nav-links-global-style">
+              <div className="navbar-logo-dropdown-wrapper" ref={globalLinksDropdownRef}>
+                <button
+                  className="navbar-dropdown-toggle inter-font weight-600"
+                  onClick={() => setGlobalLinksDropdown((prev) => !prev)}
+                >
+                  All Links Style <FontAwesomeIcon icon={faChevronDown} />
+                </button>
 
-                    const pathParts = ['sections', 'navbar', 'navLinks', idx, part];
-                    const newValue = value;
-
-                    updateData({ pathParts, newValue });
-                    if (part === 'label') setIsLabelEditing(false);
-                    if (part === 'link') setIsLinkEditing(false);
-                  }
-                };
-
-                useEffect(() => {
-                  function handleClickOutside(event: MouseEvent) {
-                    if (navLinkDropdownRef.current && !navLinkDropdownRef.current.contains(event.target as Node)) {
-                      setNavLinkDropdown(false)
-                    }
-                  }
-
-                  document.addEventListener('mousedown', handleClickOutside)
-                  return () => document.removeEventListener('mousedown', handleClickOutside)
-                }, [navLinkDropdownRef])
-
-                console.log(data.navLinks[idx])
-                console.log(data.navLinks[idx].style.styles)
-                console.log(data.navLinks[idx].style.hoverStyles)
-
-                return (
-                  <div className="button-wrapper" key={idx}>
-                    <div className="button-label">
-                      Text: {isLabelEditing ? (
-                        <input
-                          type="text"
-                          autoFocus={true}
-                          value={label}
-                          onChange={(e) => setLabel(e.target.value)}
-                          onBlur={() => applyChange(label, 'label')}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              applyChange(label, 'label');
-                            }
-                          }}
-                        />
-                      ) : (
-                        <span className='button-label-wrapper  quicksand-font' onClick={() => setIsLabelEditing(true)}>{label}</span>
-                      )}
+                {globalLinksDropdown && (
+                  <div className="navbar-logo-dropdown-menu fade-in">
+                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                      Styles
+                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                      <div className="navbar-submenu">
+                        {renderNestedDropdown(data.navLinkStyle?.styles || {}, 'styles', ['navLinkStyle'])}
+                      </div>
                     </div>
-                    <span className="button-separator">|</span>
-                    <div className="button-link">
-                      Link: {isLinkEditing ? (
-                        <input
-                          type="text"
-                          autoFocus={true}
-                          value={link}
-                          onChange={(e) => setLink(e.target.value)}
-                          onBlur={() => applyChange(link, 'link')}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              applyChange(link, 'link');
-                            }
-                          }}
-                        />
-                      ) : (
-                        <span className='button-link-wrapper  quicksand-font' onClick={() => setIsLinkEditing(true)}>
-                          {link}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="navbar-logo-dropdown-wrapper" ref={navLinkDropdownRef}>
-                      <button
-                        className="navbar-dropdown-toggle inter-font weight-600"
-                        onClick={() => setNavLinkDropdown((prev) => !prev)}
-                      >
-                        Custom Style <FontAwesomeIcon icon={faChevronDown} />
-                      </button>
-
-                      {navLinkDropdown && (
-                        <div className="navbar-logo-dropdown-menu fade-in">
-                          <div className="navbar-dropdown-item has-sub inter-font weight-600">
-                            Styles
-                            <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                            <div className="navbar-submenu">
-                              {
-                                renderNestedDropdown(
-                                  data?.navLinks[idx].style.styles || {},
-                                  'styles', ['navLinks', String(idx), 'style']
-                                )}
-                            </div>
-                          </div>
-                          <div className="navbar-dropdown-item has-sub inter-font weight-600">
-                            Hover Styles
-                            <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                            <div className="navbar-submenu">
-                              {
-                                renderNestedDropdown(
-                                  data?.navLinks[idx].style.hoverStyles || {},
-                                  'hoverStyles', ['navLinks', String(idx), 'style']
-                                )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                      Hover Styles
+                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                      <div className="navbar-submenu">
+                        {renderNestedDropdown(data.navLinkStyle?.hoverStyles || {}, 'hoverStyles', ['navLinkStyle'])}
+                      </div>
                     </div>
                   </div>
-                );
-              })}
+                )}
+              </div>
+            </div>
+
+            <div className="button-list-section">
+              {navLinks.map((val, idx) => (
+                <NavLinkItem
+                  key={idx}
+                  index={idx}
+                  value={val}
+                />
+              ))}
+            </div>
+            
+            <div className="button-add-section">
+              <div className="links-add-button" onClick={handleLinkAdd}>
+                <FontAwesomeIcon icon={faPlus} />
+                <span>Add Link</span>
+              </div>
             </div>
           </div>
         </div>

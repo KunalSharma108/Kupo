@@ -3,7 +3,13 @@ import { ButtonBlock } from "@renderer/interface/Presets/uiBlocks";
 
 export const NavButtonStyle: styles = {
   styles: {
-    background: false,
+    background: {
+      type: false,
+      color: false,
+      image: false,
+      gradient: false,
+      "image + gradient": false
+    },
 
     layout: {
       'vertical align': 'undefined',
@@ -106,6 +112,12 @@ export const NavButtonStyle: styles = {
       inset: 'undefined'
     }
   }
+}
+
+export const NavButton: ButtonBlock = {
+  label: 'Link',
+  link: '#',
+  style: NavButtonStyle
 }
 
 export const NavButtons: ButtonBlock[] = [

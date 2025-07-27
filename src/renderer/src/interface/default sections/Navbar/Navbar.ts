@@ -16,7 +16,6 @@ export const defaultNavbar: Navbar = {
 
   navLinks: NavButtons,
   navLinkStyle: defaultNavLinkStyle,
-  navLinksPosition: 'right',
 
   style: defaultNavStyle
 }

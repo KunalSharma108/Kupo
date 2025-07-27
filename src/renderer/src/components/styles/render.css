@@ -436,6 +436,11 @@
     margin-left: 1.2rem;
 }
 
+.navbar-links-dropdown-wrapper {
+    position: relative;
+    margin-left:0.7rem;
+}
+
 .warning-heading {
     font-size: 32px;
     font-weight: bold;
@@ -565,4 +570,74 @@
 
 .weight-600 {
     font-weight: 600;
+}
+
+.nav-links-minus {
+    padding: 6px 10px;
+    background-color: #1e1e1e;
+    border: 1px solid #cc4c4c;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease;
+    color: #cc4c4c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right:5px;
+}
+
+.nav-links-minus:hover {
+    background-color: #2a2a2a;
+    color: #ff5e5e;
+    border-color: #ff5e5e;
+}
+
+.nav-links-minus:active {
+    background-color: #191919;
+    transform: scale(0.95);
+    color: #ff3c3c;
+    border-color: #ff3c3c;
+}
+
+.button-add-section {
+    margin-left: 1.2rem;
+    margin-top: 12px;
+}
+
+.button-add-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.links-add-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #222;
+    border: 1px dashed #666;
+    border-radius: 8px;
+    color: #ccc;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    margin-top:10px;
+}
+
+.links-add-button:hover {
+    background-color: #2d2d2d;
+    color: #fff;
+    border-color: #888;
+}
+
+.links-add-button:active {
+    background-color: #1a1a1a;
+    transform: scale(0.98);
+}
+
+.nav-links-global-style {
+    margin: 10px 0;
 }

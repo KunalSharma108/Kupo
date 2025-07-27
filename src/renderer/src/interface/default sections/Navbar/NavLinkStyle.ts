@@ -2,7 +2,13 @@ import { styles } from "../../Presets/Style";
 
 export const defaultNavLinkStyle: styles = {
   styles: {
-    background: false,
+    background: {
+      type: false,
+      color: false,
+      image: false,
+      gradient: false,
+      "image + gradient": false
+    },
 
     layout: {
       "vertical align": "Center",

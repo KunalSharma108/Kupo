@@ -1614,7 +1614,15 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           {styleContentType.map((type) => {
             return (
               <>
-                <span className="style-dialog-subheading-inline">{type}</span>
+                <span className="style-dialog-subheading-inline">
+                  {
+                    type === 'navLinks'
+                      ? 'Navbar Link'
+                      : !isNaN(Number(type))
+                        ? Number(type) + 1
+                        : type
+                  }
+                </span>
                 <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
               </>
             )
