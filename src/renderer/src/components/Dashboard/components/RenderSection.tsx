@@ -596,7 +596,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 />
               ))}
             </div>
-            
+
             <div className="button-add-section">
               <div className="links-add-button" onClick={handleLinkAdd}>
                 <FontAwesomeIcon icon={faPlus} />
@@ -647,3 +647,5 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 }
 
 export default RenderSection
+
+// bug in link add thing, it adds 1 in every label
