@@ -4,6 +4,7 @@ import {
 import { ButtonBlock } from "../Presets/uiBlocks";
 
 export interface Navbar {
+  id: string;
   type: 'Navbar';
   enabled: boolean;
   sticky: boolean;

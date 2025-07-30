@@ -30,8 +30,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     value: any;
   }>(null);
 
-  const [logoURL, setLogoURL] = useState<string | false>(data?.logo?.logoURL !== false ? data.logo.logoURL : false)
-
   const openStyleDialog = (
     styleContent: string,
     styleContentType: string[],
@@ -72,18 +70,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const closeDialog = () => {
     setDialogData(null)
   };
-
-  const showSelectImage = async (): Promise<{ success: boolean, data: string }> => {
-    const response = await selectImage();
-
-    if (!response.canceled && response.filePaths.length === 1) {
-      setLogoURL(response.filePaths[0]);
-      return { success: true, data: response.filePaths[0] }
-
-    } else {
-      return { success: false, data: '' }
-    }
-  }
 
   const confirmDialog = (
     updatedData: {
@@ -231,6 +217,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       style: object;
     }
 
+    const [logoURL, setLogoURL] = useState<string | false>(data?.logo?.logoURL !== false ? data.logo.logoURL : false)
     const [navLinks, setNavLinks] = useState<buttonBLock[]>(data?.navLinks || []);
     const [globalLinksDropdown, setGlobalLinksDropdown] = useState<boolean>(false);
     const globalLinksDropdownRef = useRef<HTMLDivElement>(null);
@@ -287,6 +274,18 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       }
     }
 
+    const showSelectImage = async (): Promise<{ success: boolean, data: string }> => {
+      const response = await selectImage();
+
+      if (!response.canceled && response.filePaths.length === 1) {
+        setLogoURL(response.filePaths[0]);
+        return { success: true, data: response.filePaths[0] }
+
+      } else {
+        return { success: false, data: '' }
+      }
+    }
+
     const handleLogoImgClick = async (styleContent: string, stylePath: string[]) => {
       const response = await showSelectImage();
 
@@ -313,7 +312,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
       const pathParts = ['sections', 'navbar', 'navLinks'];
 
-      updateData({pathParts, newValue})
+      updateData({ pathParts, newValue })
       setNavLinks(newValue)
     }
 
@@ -441,7 +440,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     };
 
     const handleLinkAdd = () => {
-      let button = NavButton;
+      let button = structuredClone(NavButton);
       button.label = `${button.label} ${navLinks.length + 1}`;
 
       let newValue = structuredClone(navLinks);
@@ -449,9 +448,8 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       newValue.push(button)
       const pathParts = ['sections', 'navbar', 'navLinks'];
 
-      updateData({pathParts, newValue});
-
-      setNavLinks(prev => [...prev, button]);      
+      updateData({ pathParts, newValue });
+      setNavLinks(prev => [...prev, button]);
     }
 
     return (
@@ -560,7 +558,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             <div className="nav-links-global-style">
               <div className="navbar-logo-dropdown-wrapper" ref={globalLinksDropdownRef}>
                 <button
-                  className="navbar-dropdown-toggle inter-font weight-600"
+                  className="all-link-style navbar-dropdown-toggle inter-font weight-600"
                   onClick={() => setGlobalLinksDropdown((prev) => !prev)}
                 >
                   All Links Style <FontAwesomeIcon icon={faChevronDown} />
@@ -609,6 +607,45 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     )
   }
 
+  const heroBlock = () => {
+    return (
+      <>
+        <div className="section-header">
+          <div className="navbar-heading">{type}</div>
+          <div className="navbar-controls">
+            <div className="navbar-dropdown-wrapper" ref={navDropdownRef}>
+              <button
+                className="navbar-dropdown-toggle inter-font weight-600"
+                onClick={() => setDropdownOpen((prev) => !prev)}
+              >
+                Style <FontAwesomeIcon icon={faChevronDown} />
+              </button>
+
+              {dropdownOpen && (
+                <div className="navbar-dropdown-menu fade-in">
+                  <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                    Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
+                    </div>
+                  </div>
+                  <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                    Hover Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['style'])}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       {styleWarning && (
@@ -638,9 +675,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         />
       )}
       <div className="section-block">
-        {data?.type?.toLowerCase() === 'navbar' && (
-          navbarBlock()
-        )}
+        {data.type?.toLowerCase() === 'navbar' ? navbarBlock() : data.type?.toLowerCase() === 'hero' ? heroBlock() : ''}
       </div>
     </>
   )

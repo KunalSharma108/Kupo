@@ -5,6 +5,7 @@ import { defaultNavLogoStyle } from "./NavLogoStyle";
 import { defaultNavStyle } from "./NavStyle";
 
 export const defaultNavbar: Navbar = {
+  id:'navbar',
   type: 'Navbar',
   enabled: true,
   sticky: false,

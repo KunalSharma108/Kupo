@@ -12,8 +12,6 @@ export const NavButtonStyle: styles = {
     },
 
     layout: {
-      'vertical align': 'undefined',
-      'horizontal align': 'undefined',
       width: 'Default',
       height: 'Default',
       'max width': 'Default',
@@ -67,8 +65,6 @@ export const NavButtonStyle: styles = {
     background: false,
 
     layout: {
-      'vertical align': 'undefined',
-      'horizontal align': 'undefined',
       width: 'Default',
       height: 'Default',
       'max width': 'Default',
