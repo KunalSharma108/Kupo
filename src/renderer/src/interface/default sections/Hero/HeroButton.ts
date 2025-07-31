@@ -119,13 +119,19 @@ export const HeroDefaultButtonStyle: styles = {
 
 export const HeroDefaultButtons: ButtonBlock[] = [
   {
-    label: 'Hero Text 1',
+    label: 'Hero button 1',
     link: '#',
     style: HeroDefaultButtonStyle
   },
   {
-    label: 'Hero Text 2',
+    label: 'Hero button 2',
     link: '#',
     style: HeroDefaultButtonStyle
   }
 ]
+
+export const HeroButton: ButtonBlock = {
+  label: 'Hero button',
+  link: '#',
+  style: HeroDefaultButtonStyle
+}

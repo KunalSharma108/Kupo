@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/render.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faImage, faLink, faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faFont, faImage, faLink, faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleDialog } from './styleDialog'
 import { selectImage } from '@renderer/lib/ipc'
 import '../../styles/fontFamily.css'
 import { NavButton } from '@renderer/interface/default sections/Navbar/NavButtons'
+import { ButtonBlock, TextBlock } from '@renderer/interface/Presets/uiBlocks'
+import { HeroButton } from '@renderer/interface/default sections/Hero/HeroButton'
+import { HeroText } from '@renderer/interface/default sections/Hero/HeroText'
 
 interface RenderSectionProps {
   type: string
@@ -211,14 +214,9 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   }
 
   const navbarBlock = () => {
-    interface buttonBLock {
-      label: string;
-      link: string;
-      style: object;
-    }
 
     const [logoURL, setLogoURL] = useState<string | false>(data?.logo?.logoURL !== false ? data.logo.logoURL : false)
-    const [navLinks, setNavLinks] = useState<buttonBLock[]>(data?.navLinks || []);
+    const [navLinks, setNavLinks] = useState<ButtonBlock[]>(data?.navLinks || []);
     const [globalLinksDropdown, setGlobalLinksDropdown] = useState<boolean>(false);
     const globalLinksDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -318,7 +316,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
     interface NavLinkItemProps {
       index: number;
-      value: buttonBLock;
+      value: ButtonBlock;
     }
 
     const NavLinkItem: React.FC<NavLinkItemProps> = ({ index, value }) => {
@@ -496,7 +494,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           </div>
         </div>
 
-        <div className="navbar-content">
+        <div className="section-content">
           <div className="child-section">
             <div className="child-section-header child-content-header logo-section-header">
               <FontAwesomeIcon icon={faImage} />
@@ -608,20 +606,307 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   }
 
   const heroBlock = () => {
+    const [heroDropdownOpen, setHeroDropdownOpen] = useState<boolean>(false);
+    const heroDropdownRef = useRef<HTMLDivElement>(null);
+    
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (heroDropdownRef.current && !heroDropdownRef.current.contains(event.target as Node)) {
+          setHeroDropdownOpen(false)
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [heroDropdownRef])
+    
+    const [heroTexts, setHeroTexts] = useState<TextBlock[]>(data?.texts);
+    const [heroButtons, setHeroButtons] = useState<ButtonBlock[]>(data?.buttons);
+
+    const handleTextAdd = () => {
+      let text = structuredClone(HeroText);
+      text.text = `${text.text} ${heroTexts.length + 1}`;
+
+      let newValue = structuredClone(heroTexts);
+
+      newValue.push(text)
+      const pathParts = ['sections', 'hero', 'texts'];
+
+      updateData({ pathParts, newValue });
+      setHeroTexts(prev => [...prev, text]);
+    }
+
+    const handleButtonAdd = () => {
+      let button = structuredClone(HeroButton);
+      button.label = `${button.label} ${heroButtons.length + 1}`;
+
+      let newValue = structuredClone(heroButtons);
+
+      newValue.push(button)
+      const pathParts = ['sections', 'hero', 'texts'];
+
+      updateData({ pathParts, newValue });
+      setHeroButtons(prev => [...prev, button]);
+    }
+
+    const handleTextDelete = (idx: number) => {
+      const newValue = heroTexts.filter((_, i) => i !== idx);
+
+      const pathParts = ['sections', 'hero', 'texts'];
+
+      updateData({ pathParts, newValue })
+      setHeroTexts(newValue)
+    }
+
+    const handleButtonDelete = (idx: number) => {
+      const newValue = heroButtons.filter((_, i) => i !== idx);
+
+      const pathParts = ['sections', 'hero', 'buttons'];
+
+      updateData({ pathParts, newValue })
+      setHeroButtons(newValue)
+    }
+
+    interface HeroButtonItemsProp {
+      index: number;
+      value: ButtonBlock;
+    }
+
+    const HeroButtonItem: React.FC<HeroButtonItemsProp> = ({ index, value }) => {
+      const [isLabelEditing, setIsLabelEditing] = useState(false);
+      const [isLinkEditing, setIsLinkEditing] = useState(false);
+      const [label, setLabel] = useState(value.label);
+      const [link, setLink] = useState(value.link);
+      const [HeroButtonDropdown, setHeroButtonDropdown] = useState(false);
+      const HeroButtonDropdownRef = useRef<HTMLDivElement>(null);
+
+      const applyChange = (val: string, part: 'label' | 'link') => {
+        if (val.trim() !== '') {
+          setHeroButtons((prev) => {
+            const updated = [...prev];
+            updated[index][part] = val;
+            return updated;
+          });
+
+          updateData({
+            pathParts: ['sections', 'hero', 'buttons', index, part],
+            newValue: val,
+          });
+
+          if (part === 'label') setIsLabelEditing(false);
+          if (part === 'link') setIsLinkEditing(false);
+        }
+      };
+
+      useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+          if (HeroButtonDropdownRef.current && !HeroButtonDropdownRef.current.contains(e.target as Node)) {
+            setHeroButtonDropdown(false);
+          }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, [HeroButtonDropdownRef]);
+
+      return (
+        <div className="button-wrapper">
+          <div className="navbar-links-dropdown-wrapper" ref={HeroButtonDropdownRef}>
+            <button className="navbar-dropdown-toggle inter-font weight-600" onClick={() => setHeroButtonDropdown((prev) => !prev)}>
+              Custom Style <FontAwesomeIcon icon={faChevronDown} />
+            </button>
+            {HeroButtonDropdown && (
+              <div className="navbar-logo-dropdown-menu fade-in">
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.buttons[index].style.styles || {},
+                      'styles',
+                      ['buttons', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Hover Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.buttons[index].style.hoverStyles || {},
+                      'hoverStyles',
+                      ['buttons', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-label">
+            Text:{' '}
+            {isLabelEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+                onBlur={() => applyChange(label, 'label')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(label, 'label')}
+              />
+            ) : (
+              <span className="button-label-wrapper quicksand-font" onClick={() => setIsLabelEditing(true)}>
+                {label}
+              </span>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-link">
+            Link:{' '}
+            {isLinkEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                onBlur={() => applyChange(link, 'link')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(link, 'link')}
+              />
+            ) : (
+              <span className="button-link-wrapper quicksand-font" onClick={() => setIsLinkEditing(true)}>
+                {link}
+              </span>
+            )}
+          </div>
+
+          <div className="nav-links-minus" onClick={() => handleButtonDelete(index)}>
+            <FontAwesomeIcon icon={faMinus} />
+          </div>
+        </div>
+      );
+    };
+
+    interface HeroTextItemsProp {
+      index: number;
+      value: TextBlock;
+    }
+
+    const HeroTextItem: React.FC<HeroTextItemsProp> = ({ index, value }) => {
+      const [isTextEditing, setIsTextEditing] = useState(false);
+      const [text, setText] = useState(value.text);
+      const [heroTextDropdown, setHeroTextDropdown] = useState(false);
+      const heroTextDropdownRef = useRef<HTMLDivElement>(null);
+
+      const applyChange = (val: string, part: 'text') => {
+        if (val.trim() !== '') {
+          setHeroTexts((prev) => {
+            const updated = [...prev];
+            updated[index][part] = val;
+            return updated;
+          });
+
+          updateData({
+            pathParts: ['sections', 'hero', 'texts', index, part],
+            newValue: val,
+          });
+          
+          setIsTextEditing(false);
+        }
+      };
+
+      useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+          if (heroTextDropdownRef.current && !heroTextDropdownRef.current.contains(e.target as Node)) {
+            setHeroTextDropdown(false);
+          }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, [heroTextDropdownRef]);
+
+      return (
+        <div className="button-wrapper">
+          <div className="navbar-links-dropdown-wrapper" ref={heroTextDropdownRef}>
+            <button className="navbar-dropdown-toggle inter-font weight-600" onClick={() => setHeroTextDropdown((prev) => !prev)}>
+              Custom Style <FontAwesomeIcon icon={faChevronDown} />
+            </button>
+            {heroTextDropdown && (
+              <div className="navbar-logo-dropdown-menu fade-in">
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(         
+                      data?.texts[index].style.styles || {},
+                      'styles',
+                      ['buttons', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Hover Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.texts[index].style.hoverStyles || {},
+                      'hoverStyles',
+                      ['buttons', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-label">
+            Text:{' '}
+            {isTextEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                onBlur={() => applyChange(text, 'text')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(text, 'text')}
+              />
+            ) : (
+              <span className="button-label-wrapper quicksand-font" onClick={() => setIsTextEditing(true)}>
+                {text}
+              </span>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="nav-links-minus" onClick={() => handleButtonDelete(index)}>
+            <FontAwesomeIcon icon={faMinus} />
+          </div>
+        </div>
+      );
+    };
+       
+
     return (
       <>
         <div className="section-header">
           <div className="navbar-heading">{type}</div>
           <div className="navbar-controls">
-            <div className="navbar-dropdown-wrapper" ref={navDropdownRef}>
+            <div className="navbar-dropdown-wrapper" ref={heroDropdownRef}>
               <button
                 className="navbar-dropdown-toggle inter-font weight-600"
-                onClick={() => setDropdownOpen((prev) => !prev)}
+                onClick={() => setHeroDropdownOpen((prev) => !prev)}
               >
                 Style <FontAwesomeIcon icon={faChevronDown} />
               </button>
 
-              {dropdownOpen && (
+              {heroDropdownOpen && (
                 <div className="navbar-dropdown-menu fade-in">
                   <div className="navbar-dropdown-item has-sub inter-font weight-600">
                     Styles
@@ -640,6 +925,29 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        <div className="section-content">
+          <div className="child-section">
+            <div className="child-section-header child-content-header">
+              <div className="hero-text-heading-icon">
+                <FontAwesomeIcon icon={faFont} />
+              </div>
+              Texts
+            </div>
+
+            <div className="button-list-section">
+              {heroTexts.map((val, idx) => (
+                <HeroTextItem
+                  key={idx}
+                  index={idx}
+                  value={val}
+                />
+              ))}
+            </div>
+
+
           </div>
         </div>
       </>
@@ -683,4 +991,4 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
 export default RenderSection
 
-// bug in link add thing, it adds 1 in every label
+// ! COMPLETE THE STYLE OF THE HERO TEXT, HOVERSTYLES IS PENDING

@@ -60,7 +60,7 @@ export const HeroDefaultTextStyle: styles = {
       color: 'none',
       'inset': false
     }
-  }
+  },
 }
 
 export const HeroDefaultTexts: TextBlock[] = [
@@ -73,3 +73,8 @@ export const HeroDefaultTexts: TextBlock[] = [
     style: HeroDefaultTextStyle
   }
 ]
+
+export const HeroText: TextBlock = {
+  text: 'Text',
+  style: HeroDefaultTextStyle
+}
