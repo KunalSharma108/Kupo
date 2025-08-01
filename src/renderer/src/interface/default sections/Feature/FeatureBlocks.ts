@@ -1,29 +1,30 @@
+import { FeatureBlock } from "@renderer/interface/Presets/uiBlocks";
+import { defaultFeatureTitle } from "./FeatureTitle";
+import { featureBlockDesc } from "./FeatureDesc";
 import { styles } from "@renderer/interface/Presets/Style";
-import { ButtonBlock } from "@renderer/interface/Presets/uiBlocks";
 
-export const HeroDefaultButtonStyle: styles = {
+export const featureBlockStyle: styles = {
   styles: {
     background: {
       type: 'color',
-      color: 'green',
+      color: 'black',
       image: false,
       gradient: false,
-      "image + gradient": false,
+      "image + gradient": false
     },
 
     layout: {
-      "horizontal align": 'Center',
-      width: 'Default',
-      height: 'Default',
-      "max width": 'Default',
-      "max height": 'Default'
+      width: '100-%',
+      height: 'fit-content',
+      "max height": 'fit-content',
+      'max width': '100-%'
     },
 
     border: {
-      "border color": 'none',
-      "border radius": '0',
-      "border style": 'none',
-      "border width": '0'
+      "border color": 'black',
+      'border radius': '0',
+      'border style': 'solid',
+      'border width': '2-px'
     },
 
     transition: {
@@ -33,32 +34,30 @@ export const HeroDefaultButtonStyle: styles = {
 
     font: {
       "font color": 'white',
-      "font family": 'inter',
-      "font size": 'small',
-      "font weight": 'Default'
+      'font family': 'quicksand',
     },
 
     padding: {
       "padding top": '10-px',
-      "padding bottom": '10-px',
-      "padding left": '5-px',
-      "padding right": '5-px',
+      'padding bottom': '10-px',
+      'padding left': '5-px',
+      'padding right': '5-px'
     },
 
     margin: {
-      "margin top": '0',
-      "margin bottom": '0',
-      "margin left": '0',
-      "margin right": '0'
+      'margin top': '5-px',
+      'margin bottom': '5-px',
+      'margin left': '0',
+      'margin right': '0'
     },
 
     shadow: {
-      'offset x': 'undefined',
-      'offset y': 'undefined',
-      'blur radius': 'undefined',
-      'spread radius': 'undefined',
-      color: 'undefined',
-      inset: false,
+      "offset x": '0',
+      "offset y": '0',
+      'blur radius': '0',
+      'spread radius': '0',
+      color: 'none',
+      inset: false
     }
   },
 
@@ -117,21 +116,12 @@ export const HeroDefaultButtonStyle: styles = {
   }
 }
 
-export const HeroDefaultButtons: ButtonBlock[] = [
+export const defaultFeaturesBlocks: FeatureBlock[] = [
   {
-    label: 'Hero button 1',
-    link: '#',
-    style: HeroDefaultButtonStyle
-  },
-  {
-    label: 'Hero button 2',
-    link: '#',
-    style: HeroDefaultButtonStyle
+    title: defaultFeatureTitle,
+    id: 'featureBlock1',
+    description: featureBlockDesc,
+    style: featureBlockStyle,
+    imageURl: 'false'
   }
 ]
-
-export const HeroButton: ButtonBlock = {
-  label: 'Hero button',
-  link: '#',
-  style: HeroDefaultButtonStyle
-}

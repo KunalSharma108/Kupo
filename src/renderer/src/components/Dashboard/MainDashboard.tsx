@@ -9,6 +9,7 @@ import Tooltip from "./components/CustomTooltip";
 import { defaultNavbar } from "@renderer/interface/default sections/Navbar/Navbar";
 import '../styles/render.css'
 import { defaultHero } from "@renderer/interface/default sections/Hero/Hero";
+import { defaultFeature } from "@renderer/interface/default sections/Feature/Feature";
 
 interface MainDashboardProps {
   selectedProject: string | false;
@@ -20,6 +21,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
   const [configData, setConfigData] = useState<any>();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [styleWarning, setStyleWarning] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -53,6 +55,10 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
   }, [selectedProject]);
 
   const handleAddSection = (type: string) => {
+    if (configData.sectionOrders.includes(type)) {
+      return setStyleWarning('You cannot add the same section twice');
+    }
+
     try {
       if (type.toLowerCase() === 'navbar') {
         setLoading(true);
@@ -76,7 +82,6 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
         setLoading(false)
 
       } else if (type.toLowerCase() === 'hero') {
-
         setLoading(true);
 
         let newData = {
@@ -98,7 +103,25 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
         setLoading(false)
 
       } else if (type.toLowerCase() === 'feature') {
+        setLoading(true);
 
+        let newData = {
+          ...configData,
+          sectionOrders: [...configData.sectionOrders, 'feature'],
+          sections: {
+            ...configData.sections,
+            feature: defaultFeature,
+          }
+        };
+
+        if (typeof selectedProject === 'string') {
+          setConfigData(newData)
+          updateConfig({ name: selectedProject, data: newData })
+        } else {
+          alert('Your changes could not be updated, Please try again later.')
+        }
+
+        setLoading(false)
       } else if (type.toLowerCase() === 'timeline') {
 
       } else {
@@ -204,6 +227,17 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
 
   return (
     <>
+      {styleWarning && (
+        <div className="overlay">
+          <div className="warning-modal">
+            <div className="warning-heading">
+              Warning!
+            </div>
+            <p className='warning-text'>{styleWarning}</p>
+            <button onClick={() => setStyleWarning(null)}>OK</button>
+          </div>
+        </div>
+      )}
       {loading ? (
         <LoadingOverlay />
       ) : project === false ? (
@@ -242,7 +276,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                       </Tooltip>
                     </li>
 
-                    <li onClick={() => handleComponentSelect('features')}>
+                    <li onClick={() => handleComponentSelect('feature')}>
                       <Tooltip text="A section that shows what you offer, with each feature explained using an image and a short message — the layout switches sides as you scroll to keep it visually engaging.">
                         <span>Features</span>
                       </Tooltip>
@@ -300,7 +334,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                         { }
                       </li>
 
-                      <li onClick={() => handleComponentSelect('features')}>
+                      <li onClick={() => handleComponentSelect('feature')}>
                         <Tooltip text="A section that shows what you offer, with each feature explained using an image and a short message — the layout switches sides as you scroll to keep it visually engaging.">
                           <span>Features</span>
                         </Tooltip>

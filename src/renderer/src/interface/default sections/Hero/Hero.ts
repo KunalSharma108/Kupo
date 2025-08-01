@@ -35,7 +35,7 @@ export const HeroDefaultStyle: styles = {
     font: {
       "font color": 'white',
       "font family": 'poppins',
-      'font size': 'sm',
+      'font size': 'small',
       'font weight': 'Default'
     },
 

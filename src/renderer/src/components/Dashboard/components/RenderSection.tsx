@@ -983,6 +983,53 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     )
   }
 
+  const featureBlock = () => {
+    const [featureDropdownOpen, setFeatureDropdownOpen] = useState<boolean>(false);
+    const featureDropdownRef = useRef<HTMLDivElement>(null);
+
+
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (featureDropdownRef.current && !featureDropdownRef.current.contains(event.target as Node)) {
+          setFeatureDropdownOpen(false)
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [featureDropdownRef])
+
+    return (
+      <>
+        <div className="section-header">
+          <div className="navbar-heading">{type}</div>
+          <div className="navbar-controls">
+            <div className="navbar-dropdown-wrapper" ref={featureDropdownRef}>
+              <button
+                className="navbar-dropdown-toggle inter-font weight-600"
+                onClick={() => setFeatureDropdownOpen((prev) => !prev)}
+              >
+                Style <FontAwesomeIcon icon={faChevronDown} />
+              </button>
+
+              {featureDropdownOpen && (
+                <div className="navbar-dropdown-menu fade-in">
+                  <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                    Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       {styleWarning && (
@@ -1017,7 +1064,9 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           data.type?.toLowerCase() === 'navbar' ?
             navbarBlock() :
             data.type?.toLowerCase() === 'hero' ?
-              heroBlock() : ''
+              heroBlock() :
+              data.type?.toLowerCase() === 'feature' ?
+                featureBlock() : ''
         }
       </div>
     </>
@@ -1025,4 +1074,3 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 }
 
 export default RenderSection
-
