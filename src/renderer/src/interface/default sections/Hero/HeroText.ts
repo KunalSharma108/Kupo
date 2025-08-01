@@ -61,6 +61,61 @@ export const HeroDefaultTextStyle: styles = {
       'inset': false
     }
   },
+
+  hoverStyles: {
+    background: {
+      type: false,
+      color: false,
+      image: false,
+      gradient: false,
+      "image + gradient": false
+    },
+
+    layout: {
+      "horizontal align": 'undefined',
+      width: 'undefined',
+      height: 'undefined',
+      "max width": 'undefined',
+      "max height": 'undefined'
+    },
+
+    border: {
+      "border color": 'undefined',
+      "border radius": 'undefined',
+      "border style": 'undefined',
+      "border width": 'undefined'
+    },
+
+    font: {
+      "font color": 'undefined',
+      "font family": 'undefined',
+      'font size': 'undefined',
+      "font weight": 'undefined'
+    },
+
+    padding: {
+      "padding top": 'undefined',
+      'padding bottom': 'undefined',
+      'padding left': 'undefined',
+      'padding right': 'undefined'
+    },
+
+    margin: {
+      "margin top": 'undefined',
+      'margin bottom': 'undefined',
+      'margin left': 'undefined',
+      "margin right": 'undefined'
+    },
+
+    shadow: {
+      "offset x": 'undefined',
+      'offset y': 'undefined',
+      'blur radius': 'undefined',
+      "spread radius": 'undefined',
+      color: 'undefined',
+      'inset': false
+    }
+  }
 }
 
 export const HeroDefaultTexts: TextBlock[] = [

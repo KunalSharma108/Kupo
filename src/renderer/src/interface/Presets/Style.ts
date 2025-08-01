@@ -41,7 +41,7 @@ export interface styles {
     border?: {
       'border color'?: ColorsKey | 'none';
       'border width'?: 'Default (2px)' | string | 'undefined';
-      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
+      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none' | 'undefined';
       'border radius'?: string | 'none';
     } | false;
 
@@ -102,7 +102,7 @@ export interface styles {
     border?: {
       'border color'?: ColorsKey | 'none';
       'border width'?: 'Default (2px)' | string | 'undefined';
-      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none';
+      'border style'?: 'solid' | 'dashed' | 'dotted' | 'none' | 'undefined';
       'border radius'?: string | 'none';
     } | false;
 

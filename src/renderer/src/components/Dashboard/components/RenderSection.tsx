@@ -214,7 +214,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   }
 
   const navbarBlock = () => {
-
     const [logoURL, setLogoURL] = useState<string | false>(data?.logo?.logoURL !== false ? data.logo.logoURL : false)
     const [navLinks, setNavLinks] = useState<ButtonBlock[]>(data?.navLinks || []);
     const [globalLinksDropdown, setGlobalLinksDropdown] = useState<boolean>(false);
@@ -402,6 +401,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 onChange={(e) => setLabel(e.target.value)}
                 onBlur={() => applyChange(label, 'label')}
                 onKeyDown={(e) => e.key === 'Enter' && applyChange(label, 'label')}
+                className='mozilla-text-font'
               />
             ) : (
               <span className="button-label-wrapper quicksand-font" onClick={() => setIsLabelEditing(true)}>
@@ -594,7 +594,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             </div>
 
             <div className="button-add-section">
-              <div className="links-add-button" onClick={handleLinkAdd}>
+              <div className="links-add-button poppins-font" onClick={handleLinkAdd}>
                 <FontAwesomeIcon icon={faPlus} />
                 <span>Add Link</span>
               </div>
@@ -608,7 +608,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const heroBlock = () => {
     const [heroDropdownOpen, setHeroDropdownOpen] = useState<boolean>(false);
     const heroDropdownRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         if (heroDropdownRef.current && !heroDropdownRef.current.contains(event.target as Node)) {
@@ -619,7 +619,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [heroDropdownRef])
-    
+
     const [heroTexts, setHeroTexts] = useState<TextBlock[]>(data?.texts);
     const [heroButtons, setHeroButtons] = useState<ButtonBlock[]>(data?.buttons);
 
@@ -643,7 +643,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       let newValue = structuredClone(heroButtons);
 
       newValue.push(button)
-      const pathParts = ['sections', 'hero', 'texts'];
+      const pathParts = ['sections', 'hero', 'buttons'];
 
       updateData({ pathParts, newValue });
       setHeroButtons(prev => [...prev, button]);
@@ -755,6 +755,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 onChange={(e) => setLabel(e.target.value)}
                 onBlur={() => applyChange(label, 'label')}
                 onKeyDown={(e) => e.key === 'Enter' && applyChange(label, 'label')}
+                className='mozilla-text-font'
               />
             ) : (
               <span className="button-label-wrapper quicksand-font" onClick={() => setIsLabelEditing(true)}>
@@ -775,6 +776,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 onChange={(e) => setLink(e.target.value)}
                 onBlur={() => applyChange(link, 'link')}
                 onKeyDown={(e) => e.key === 'Enter' && applyChange(link, 'link')}
+                className='mozilla-text-font'
               />
             ) : (
               <span className="button-link-wrapper quicksand-font" onClick={() => setIsLinkEditing(true)}>
@@ -813,7 +815,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             pathParts: ['sections', 'hero', 'texts', index, part],
             newValue: val,
           });
-          
+
           setIsTextEditing(false);
         }
       };
@@ -841,10 +843,10 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   Styles
                   <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                   <div className="navbar-submenu">
-                    {renderNestedDropdown(         
+                    {renderNestedDropdown(
                       data?.texts[index].style.styles || {},
                       'styles',
-                      ['buttons', String(index), 'style']
+                      ['texts', String(index), 'style']
                     )}
                   </div>
                 </div>
@@ -855,7 +857,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                     {renderNestedDropdown(
                       data?.texts[index].style.hoverStyles || {},
                       'hoverStyles',
-                      ['buttons', String(index), 'style']
+                      ['texts', String(index), 'style']
                     )}
                   </div>
                 </div>
@@ -875,6 +877,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 onChange={(e) => setText(e.target.value)}
                 onBlur={() => applyChange(text, 'text')}
                 onKeyDown={(e) => e.key === 'Enter' && applyChange(text, 'text')}
+                className='mozilla-text-font'
               />
             ) : (
               <span className="button-label-wrapper quicksand-font" onClick={() => setIsTextEditing(true)}>
@@ -883,15 +886,12 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             )}
           </div>
 
-          <span className="button-separator">|</span>
-
-          <div className="nav-links-minus" onClick={() => handleButtonDelete(index)}>
+          <div className="nav-links-minus" onClick={() => handleTextDelete(index)}>
             <FontAwesomeIcon icon={faMinus} />
           </div>
         </div>
       );
     };
-       
 
     return (
       <>
@@ -947,7 +947,36 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
               ))}
             </div>
 
+            <div className="button-add-section">
+              <div className="links-add-button poppins-font" onClick={handleTextAdd}>
+                <FontAwesomeIcon icon={faPlus} />
+                <span>Add Text</span>
+              </div>
+            </div>
 
+            <div className="child-section-header child-content-header">
+              <div className="hero-text-heading-icon">
+                <FontAwesomeIcon icon={faLink} />
+              </div>
+              Buttons
+            </div>
+
+            <div className="button-list-section">
+              {heroButtons.map((val, idx) => (
+                <HeroButtonItem
+                  key={idx}
+                  index={idx}
+                  value={val}
+                />
+              ))}
+            </div>
+
+            <div className="button-add-section">
+              <div className="links-add-button poppins-font" onClick={handleButtonAdd}>
+                <FontAwesomeIcon icon={faPlus} />
+                <span>Add Button</span>
+              </div>
+            </div>
           </div>
         </div>
       </>
@@ -982,8 +1011,14 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           }}
         />
       )}
+
       <div className="section-block">
-        {data.type?.toLowerCase() === 'navbar' ? navbarBlock() : data.type?.toLowerCase() === 'hero' ? heroBlock() : ''}
+        {
+          data.type?.toLowerCase() === 'navbar' ?
+            navbarBlock() :
+            data.type?.toLowerCase() === 'hero' ?
+              heroBlock() : ''
+        }
       </div>
     </>
   )
@@ -991,4 +1026,3 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
 export default RenderSection
 
-// ! COMPLETE THE STYLE OF THE HERO TEXT, HOVERSTYLES IS PENDING
