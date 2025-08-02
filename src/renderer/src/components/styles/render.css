@@ -438,7 +438,7 @@
 
 .navbar-links-dropdown-wrapper {
     position: relative;
-    margin-left:0.7rem;
+    margin-left: 0.7rem;
 }
 
 .warning-heading {
@@ -584,7 +584,7 @@
     align-items: center;
     justify-content: center;
     margin-left: auto;
-    margin-right:5px;
+    margin-right: 5px;
 }
 
 .nav-links-minus:hover {
@@ -624,7 +624,7 @@
     font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
 .links-add-button:hover {
@@ -657,4 +657,44 @@
     margin-right: 8px;
     color: #ccc;
     font-size: 1rem;
+}
+
+.feature-start-wrapper {
+    margin-left:20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-start-text {
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.feature-start-options-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.feature-start-options {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: rgba(25, 25, 25, 1);
+    padding: 2px;
+}
+
+.feature-start-options:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.feature-start-options.selected {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.feature-start-options img {
+    width: 100px;
+    height: auto;
+    display: block;
 }

@@ -9,6 +9,9 @@ import { NavButton } from '@renderer/interface/default sections/Navbar/NavButton
 import { ButtonBlock, TextBlock } from '@renderer/interface/Presets/uiBlocks'
 import { HeroButton } from '@renderer/interface/default sections/Hero/HeroButton'
 import { HeroText } from '@renderer/interface/default sections/Hero/HeroText'
+import FeatureFrameOne from '../../assets/FeatureFrame1.png'
+import FeatureFrameTwo from '../../assets/FeatureFrame2.png'
+
 
 interface RenderSectionProps {
   type: string
@@ -987,7 +990,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     const [featureDropdownOpen, setFeatureDropdownOpen] = useState<boolean>(false);
     const featureDropdownRef = useRef<HTMLDivElement>(null);
 
-
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         if (featureDropdownRef.current && !featureDropdownRef.current.contains(event.target as Node)) {
@@ -998,6 +1000,19 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [featureDropdownRef])
+
+    const [startWith, setStartwith] = useState<'left' | 'right'>(
+      data?.startWith?.split('-')[1].toLowerCase()
+    );
+
+    const handleStartWithChange = (value: 'left' | 'right') => {
+      const pathParts = ['sections', 'feature', 'startWith']
+
+      setStartwith(value)
+
+      const newValue = `text-${value}-aligned`
+      updateData({pathParts, newValue})
+    }
 
     return (
       <>
@@ -1023,6 +1038,27 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="feature-start-wrapper">
+              <div className="feature-start-text poppins-font">
+                Start with :
+              </div>
+              <div className={`feature-start-options-wrapper`}>
+                <div
+                  className={`feature-start-options ${startWith === 'left' ? 'selected' : ''}`}
+                  onClick={() => handleStartWithChange('left')}
+                >
+                  <img src={FeatureFrameOne} alt="Image on the left, Text on the right" title='Image on the left, Text on the right' />
+                </div>
+
+                <div
+                  className={`feature-start-options ${startWith === 'right' ? 'selected' : ''}`}
+                  onClick={() => handleStartWithChange('right')}
+                >
+                  <img src={FeatureFrameTwo} alt="Text on the left, Image on the right" title='Text on the left, Image on the right' />
+                </div>
+              </div>
             </div>
           </div>
         </div>

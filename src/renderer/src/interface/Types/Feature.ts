@@ -11,7 +11,7 @@ export interface Feature {
   heading?: string;
   blocks: FeatureBlock[];
 
-  startWith: 'desc-left-aligned' | 'desc-right-aligned'
+  startWith: 'text-left-aligned' | 'text-right-aligned'
 
   style:styles;
 }

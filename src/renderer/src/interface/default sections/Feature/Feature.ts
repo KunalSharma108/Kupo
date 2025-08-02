@@ -65,7 +65,7 @@ export const defaultFeature: Feature = {
   heading: 'Feature Heading!',
   blocks: defaultFeaturesBlocks,
 
-  startWith: 'desc-left-aligned',
+  startWith: 'text-left-aligned',
 
   style: defaultFeatureStyle
 }
