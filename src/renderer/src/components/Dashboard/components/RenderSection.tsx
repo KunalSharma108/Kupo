@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import '../../styles/render.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faFont, faImage, faLink, faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faFont, faImage, faLink, faMinus, faPlus, faTableColumns, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleDialog } from './styleDialog'
 import { selectImage } from '@renderer/lib/ipc'
 import '../../styles/fontFamily.css'
@@ -989,6 +989,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   const featureBlock = () => {
     const [featureDropdownOpen, setFeatureDropdownOpen] = useState<boolean>(false);
     const featureDropdownRef = useRef<HTMLDivElement>(null);
+    const [featureBlocks, setFeatureBlocks] = useState<Object[]>(data?.blocks)
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -1011,7 +1012,103 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       setStartwith(value)
 
       const newValue = `text-${value}-aligned`
-      updateData({pathParts, newValue})
+      updateData({ pathParts, newValue })
+    }
+
+    interface forBlockProps {
+      idx: number;
+      data: any;
+    }
+
+    const Blocks: React.FC<forBlockProps> = ({ idx, data }) => {
+      console.log(data, idx)
+      const [title, setTitle] = useState<string>(data.title.text);
+      const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false)
+
+      const [description, setDescription] = useState<string>(data.description.text);
+      const [isDescEditing, setIsDescEditing] = useState<boolean>(false);
+
+      const [blockDropdownOpen, setBlockDropdownOpen] = useState<boolean>(false);
+      const blockDropdownRef = useRef<HTMLDivElement>(null)
+
+      const [titleDropdownOpen, setTitleDropdownOpen] = useState<boolean>(false);
+      const titleDropdownRef = useRef<HTMLDivElement>(null);
+
+      const [descDropdownOpen, setDescDropdownOpen] = useState<boolean>(false)
+      const descDropdownRef = useRef<HTMLDivElement>(null);
+
+      useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+          if (blockDropdownRef.current && !blockDropdownRef.current.contains(event.target as Node)) {
+            setFeatureDropdownOpen(false)
+          }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+      }, [blockDropdownRef])
+
+      useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+          if (titleDropdownRef.current && !titleDropdownRef.current.contains(event.target as Node)) {
+            setFeatureDropdownOpen(false)
+          }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+      }, [titleDropdownRef])
+
+      useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+          if (descDropdownRef.current && !descDropdownRef.current.contains(event.target as Node)) {
+            setFeatureDropdownOpen(false)
+          }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+      }, [descDropdownRef])
+
+
+      return (
+        <>
+          <div className="feature-block-wrapper">
+            <div className="feature-block-top">
+              {idx + 1}. Feature Block
+              <span className="button-separator">|</span>
+              <div className="navbar-dropdown-wrapper" ref={blockDropdownRef}>
+                <button
+                  className="navbar-dropdown-toggle inter-font weight-600"
+                  onClick={() => setFeatureDropdownOpen((prev) => !prev)}
+                >
+                  Style <FontAwesomeIcon icon={faChevronDown} />
+                </button>
+
+                {blockDropdownOpen && (
+                  <div className="navbar-dropdown-menu fade-in">
+                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                      Styles
+                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                      <div className="navbar-submenu">
+                        {renderNestedDropdown(data.style.styles || {}, 'styles', ['blocks', String(idx), 'style'])}
+                      </div>
+                    </div>
+
+                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                      Hover Styles
+                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                      <div className="navbar-submenu">
+                        {renderNestedDropdown(data.style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'hoverStyles'])}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )
     }
 
     return (
@@ -1059,6 +1156,23 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   <img src={FeatureFrameTwo} alt="Text on the left, Image on the right" title='Text on the left, Image on the right' />
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="section-content">
+          <div className="child-section">
+            <div className="child-section-header child-content-header">
+              <div className="hero-text-heading-icon">
+                <FontAwesomeIcon icon={faTableColumns} />
+              </div>
+              Feature Blocks
+            </div>
+
+            <div className="feature-blocks">
+              {featureBlocks.map((data, idx) => (
+                <Blocks idx={idx} data={data} />
+              ))}
             </div>
           </div>
         </div>

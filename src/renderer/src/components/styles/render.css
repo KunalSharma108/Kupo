@@ -698,3 +698,47 @@
     height: auto;
     display: block;
 }
+.arrow-buttons {
+    display: inline-flex;
+    gap: 10px;
+    margin-left: auto;
+    margin-right:30px;
+}
+
+.arrow-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+
+    background: transparent;
+    color: #fff;
+    border: 1px solid #7a7a7aaa;
+    border-radius: 8px;
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.arrow-btn:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.arrow-btn:active:not(.disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.95);
+}
+
+.arrow-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.feature-dropdown-wrapper {
+    margin-left:50px;
+    position: relative;
+}
