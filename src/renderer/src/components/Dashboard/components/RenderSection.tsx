@@ -1040,7 +1040,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
           if (blockDropdownRef.current && !blockDropdownRef.current.contains(event.target as Node)) {
-            setFeatureDropdownOpen(false)
+            setBlockDropdownOpen(false)
           }
         }
 
@@ -1051,7 +1051,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
           if (titleDropdownRef.current && !titleDropdownRef.current.contains(event.target as Node)) {
-            setFeatureDropdownOpen(false)
+            setTitleDropdownOpen(false)
           }
         }
 
@@ -1062,7 +1062,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
           if (descDropdownRef.current && !descDropdownRef.current.contains(event.target as Node)) {
-            setFeatureDropdownOpen(false)
+            setDescDropdownOpen(false)
           }
         }
 
@@ -1070,41 +1070,66 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         return () => document.removeEventListener('mousedown', handleClickOutside)
       }, [descDropdownRef])
 
-
       return (
         <>
           <div className="feature-block-wrapper">
             <div className="feature-block-top">
-              {idx + 1}. Feature Block
-              <span className="button-separator">|</span>
-              <div className="navbar-dropdown-wrapper" ref={blockDropdownRef}>
-                <button
-                  className="navbar-dropdown-toggle inter-font weight-600"
-                  onClick={() => setFeatureDropdownOpen((prev) => !prev)}
-                >
-                  Style <FontAwesomeIcon icon={faChevronDown} />
-                </button>
-
-                {blockDropdownOpen && (
-                  <div className="navbar-dropdown-menu fade-in">
-                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
-                      Styles
-                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                      <div className="navbar-submenu">
-                        {renderNestedDropdown(data.style.styles || {}, 'styles', ['blocks', String(idx), 'style'])}
-                      </div>
-                    </div>
-
-                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
-                      Hover Styles
-                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                      <div className="navbar-submenu">
-                        {renderNestedDropdown(data.style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'hoverStyles'])}
-                      </div>
-                    </div>
-                  </div>
-                )}
+              <div className="feature-count-block">
+                {idx + 1}. Feature Block
               </div>
+              <div className="feature-style-block">
+                <div className="navbar-dropdown-wrapper" ref={blockDropdownRef}>
+                  <button
+                    className="navbar-dropdown-toggle inter-font weight-600"
+                    onClick={() => setBlockDropdownOpen((prev) => !prev)}
+                  >
+                    Style <FontAwesomeIcon icon={faChevronDown} />
+                  </button>
+
+                  {blockDropdownOpen && (
+                    <div className="navbar-dropdown-menu fade-in">
+                      <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                        Styles
+                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                        <div className="navbar-submenu">
+                          {renderNestedDropdown(data.style.styles || {}, 'styles', ['blocks', String(idx), 'style'])}
+                        </div>
+                      </div>
+
+                      <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                        Hover Styles
+                        <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                        <div className="navbar-submenu">
+                          {renderNestedDropdown(data.style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'hoverStyles'])}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="feature-block-content">
+              {startWith === 'right' ? (
+                <>
+
+                  <div className="feature-block-image-wrapper">
+                    IMAGE
+                  </div>
+                  <div className="feature-block-content-wrapper">
+                    CONTENT
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="feature-block-content-wrapper">
+                    CONTENT
+                  </div>
+                  <div className="feature-block-image-wrapper">
+                    IMAGE
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </>
@@ -1143,15 +1168,15 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
               </div>
               <div className={`feature-start-options-wrapper`}>
                 <div
-                  className={`feature-start-options ${startWith === 'left' ? 'selected' : ''}`}
-                  onClick={() => handleStartWithChange('left')}
+                  className={`feature-start-options ${startWith === 'right' ? 'selected' : ''}`}
+                  onClick={() => handleStartWithChange('right')}
                 >
                   <img src={FeatureFrameOne} alt="Image on the left, Text on the right" title='Image on the left, Text on the right' />
                 </div>
 
                 <div
-                  className={`feature-start-options ${startWith === 'right' ? 'selected' : ''}`}
-                  onClick={() => handleStartWithChange('right')}
+                  className={`feature-start-options ${startWith === 'left' ? 'selected' : ''}`}
+                  onClick={() => handleStartWithChange('left')}
                 >
                   <img src={FeatureFrameTwo} alt="Text on the left, Image on the right" title='Text on the left, Image on the right' />
                 </div>
