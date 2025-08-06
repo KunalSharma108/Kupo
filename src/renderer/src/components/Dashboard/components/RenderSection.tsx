@@ -1021,7 +1021,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     }
 
     const Blocks: React.FC<forBlockProps> = ({ idx, data }) => {
-      console.log(data, idx)
       const [title, setTitle] = useState<string>(data.title.text);
       const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false)
 
@@ -1036,6 +1035,8 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
       const [descDropdownOpen, setDescDropdownOpen] = useState<boolean>(false)
       const descDropdownRef = useRef<HTMLDivElement>(null);
+
+      const [imageURL, setImageURL] = useState<string | false>(data.imageURL !== "false" ? data.imageURL : false)
 
       useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -1068,7 +1069,75 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
         document.addEventListener('mousedown', handleClickOutside)
         return () => document.removeEventListener('mousedown', handleClickOutside)
-      }, [descDropdownRef])
+      }, [descDropdownRef]);
+
+      const showSelectImage = async (): Promise<{ success: boolean, data: string }> => {
+        const response = await selectImage();
+
+        if (!response.canceled && response.filePaths.length === 1) {
+          console.log('inside the if blockkkk')
+          console.log(response.filePaths[0])
+          setImageURL(response.filePaths[0]);
+          data.imageURL = response.filePaths[0]
+          return { success: true, data: response.filePaths[0] }
+
+        } else {
+          return { success: false, data: '' }
+        }
+      }
+
+      const handleLogoImgClick = async (styleContent: string, stylePath: string[]) => {
+        const response = await showSelectImage();
+
+        try {
+          if (response.success) {
+            let pathParts = [
+              'sections',
+              styleContent,
+              ...stylePath
+            ]
+
+            const newValue = response.data;
+
+            updateData({ pathParts, newValue })
+
+            setFeatureBlocks(prev => {
+              const updated = [...prev];
+              updated[idx]['imageURL'] = newValue;
+              return updated;
+            });
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      const handleLogoImgDelete = (pathParts: string[], newValue: boolean) => {
+        updateData({ pathParts, newValue })
+        setImageURL(false)
+      }
+
+      useEffect(() => {
+        setImageURL(data.imageURL !== "false" ? data.imageURL : false);
+      }, [data.imageURL]);
+
+      const applyChange = (val: string, part: 'title' | 'description') => {
+        if (val.trim() !== '') {
+          setFeatureBlocks((prev) => {
+            const updated = [...prev];
+            updated[idx][part]['text'] = val;
+            return updated;
+          });
+
+          updateData({
+            pathParts: ['sections', 'feature', 'blocks', idx, part, 'text'],
+            newValue: val,
+          });
+
+          if (part === 'title') setIsTitleEditing(false);
+          if (part === 'description') setIsDescEditing(false);
+        }
+      };
 
       return (
         <>
@@ -1107,17 +1176,127 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   )}
                 </div>
               </div>
+
+              <div className="nav-links-minus">
+                <FontAwesomeIcon icon={faMinus} />
+              </div>
             </div>
 
             <div className="feature-block-content">
               {startWith === 'right' ? (
                 <>
-
                   <div className="feature-block-image-wrapper">
-                    IMAGE
+                    <div className={`${imageURL ? 'logo-section' : ''}`}>
+                      <div
+                        className="image-feature-option"
+                        onClick={() => handleLogoImgClick(styleContent, ['blocks', String(idx), 'imageURL'])}
+                      >
+                        → Image URL: {imageURL ? (
+                          <>
+                            <span className='option-value'> {imageURL} </span>
+                          </>
+                        ) : (
+                          <span className="option-value">Not set</span>
+                        )}
+                      </div>
+                      {imageURL ? (
+                        <div className="logo-trash-icon">
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
+                          />
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
                   <div className="feature-block-content-wrapper">
-                    CONTENT
+                    <div className="feature-block-row">
+                      <div className="navbar-links-dropdown-wrapper" ref={titleDropdownRef}>
+                        <button className="navbar-dropdown-toggle inter-font weight-600" onClick={() => setTitleDropdownOpen(prev => !prev)}>
+                          Title Style <FontAwesomeIcon icon={faChevronDown} />
+                        </button>
+                        {titleDropdownOpen && (
+                          <div className="navbar-logo-dropdown-menu fade-in">
+                            <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                              Styles
+                              <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                              <div className="navbar-submenu">
+                                {renderNestedDropdown(data?.title.style.styles || {}, 'styles', ['title', 'style'])}
+                              </div>
+                            </div>
+                            <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                              Hover Styles
+                              <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                              <div className="navbar-submenu">
+                                {renderNestedDropdown(data?.title.style.hoverStyles || {}, 'hoverStyles', ['title', 'style'])}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="button-label">
+                        Title:{' '}
+                        {isTitleEditing ? (
+                          <input
+                            type="text"
+                            autoFocus
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={() => applyChange(title, 'title')}
+                            onKeyDown={(e) => e.key === 'Enter' && applyChange(title, 'title')}
+                            className='mozilla-text-font resizable-textarea'
+                          />
+                        ) : (
+                          <span className="button-label-wrapper quicksand-font" onClick={() => setIsTitleEditing(true)}>
+                            {title}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="feature-block-row">
+                      <div className="navbar-links-dropdown-wrapper" ref={descDropdownRef}>
+                        <button className="navbar-dropdown-toggle inter-font weight-600" onClick={() => setDescDropdownOpen(prev => !prev)}>
+                          Desc Style <FontAwesomeIcon icon={faChevronDown} />
+                        </button>
+                        {descDropdownOpen && (
+                          <div className="navbar-logo-dropdown-menu fade-in">
+                            <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                              Styles
+                              <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                              <div className="navbar-submenu">
+                                {renderNestedDropdown(data?.description.style.styles || {}, 'styles', ['description', 'style'])}
+                              </div>
+                            </div>
+                            <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                              Hover Styles
+                              <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                              <div className="navbar-submenu">
+                                {renderNestedDropdown(data?.description.style.hoverStyles || {}, 'hoverStyles', ['description', 'style'])}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="button-label">
+                        Description:{' '}
+                        {isDescEditing ? (
+                          <textarea
+                            autoFocus
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            onBlur={() => applyChange(description, 'description')}
+                            className='mozilla-text-font resizable-textarea'
+                          />
+                        ) : (
+                          <span className="button-label-wrapper quicksand-font" onClick={() => setIsDescEditing(true)}>
+                            {description}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </>
               ) : (
@@ -1126,7 +1305,28 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                     CONTENT
                   </div>
                   <div className="feature-block-image-wrapper">
-                    IMAGE
+                    <div className={`${imageURL ? 'logo-section' : ''}`}>
+                      <div
+                        className="logo-section-option"
+                        onClick={() => handleLogoImgClick(styleContent, ['blocks', String(idx), 'imageURL'])}
+                      >
+                        → Image URL: {imageURL ? (
+                          <>
+                            <span className='option-value'> {imageURL} </span>
+                          </>
+                        ) : (
+                          <span className="option-value">Not set</span>
+                        )}
+                      </div>
+                      {imageURL ? (
+                        <div className="logo-trash-icon">
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
+                          />
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
                 </>
               )}
@@ -1196,7 +1396,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
             <div className="feature-blocks">
               {featureBlocks.map((data, idx) => (
-                <Blocks idx={idx} data={data} />
+                <Blocks idx={idx} data={data} key={idx} />
               ))}
             </div>
           </div>
