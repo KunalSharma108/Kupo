@@ -105,6 +105,6 @@ export const featureDescStyle: styles = {
 }
 
 export const featureBlockDesc: FeatureBlockDesc = {
-  text: 'Feature Description 1',
+  text: 'Feature Description',
   style: featureDescStyle
 }

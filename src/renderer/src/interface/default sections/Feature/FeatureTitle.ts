@@ -105,6 +105,6 @@ export const defaultFeatureTitleStyle: styles = {
 }
 
 export const defaultFeatureTitle: FeatureBlockTitle = {
-  text: 'Feature title 1',
+  text: 'Feature title',
   style: defaultFeatureTitleStyle
 }

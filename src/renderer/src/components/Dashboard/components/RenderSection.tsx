@@ -6,11 +6,12 @@ import { StyleDialog } from './styleDialog'
 import { selectImage } from '@renderer/lib/ipc'
 import '../../styles/fontFamily.css'
 import { NavButton } from '@renderer/interface/default sections/Navbar/NavButtons'
-import { ButtonBlock, TextBlock } from '@renderer/interface/Presets/uiBlocks'
+import { ButtonBlock, FeatureBlock, TextBlock } from '@renderer/interface/Presets/uiBlocks'
 import { HeroButton } from '@renderer/interface/default sections/Hero/HeroButton'
 import { HeroText } from '@renderer/interface/default sections/Hero/HeroText'
 import FeatureFrameOne from '../../assets/FeatureFrame1.png'
 import FeatureFrameTwo from '../../assets/FeatureFrame2.png'
+import { defaultFeaturesBlocks, featureBlockStyle, singleFeatureBlock } from '@renderer/interface/default sections/Feature/FeatureBlocks'
 
 
 interface RenderSectionProps {
@@ -1115,6 +1116,12 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       const handleLogoImgDelete = (pathParts: string[], newValue: boolean) => {
         updateData({ pathParts, newValue })
         setImageURL(false)
+
+        setFeatureBlocks(prev => {
+          const updated = [...prev];
+          updated[idx]['imageURL'] = newValue;
+          return updated;
+        });
       }
 
       useEffect(() => {
@@ -1138,6 +1145,14 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           if (part === 'description') setIsDescEditing(false);
         }
       };
+
+      const handleFeatureDelete = () => {
+        const pathParts = ['sections', 'feature', 'blocks']
+        const newValue = featureBlocks.filter((_val, index) => index !== idx);;
+
+        updateData({ pathParts, newValue });
+        setFeatureBlocks(newValue);
+      }
 
       return (
         <>
@@ -1169,7 +1184,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         Hover Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'hoverStyles'])}
+                          {renderNestedDropdown(data.style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'style'])}
                         </div>
                       </div>
                     </div>
@@ -1177,16 +1192,16 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                 </div>
               </div>
 
-              <div className="nav-links-minus">
+              <div className="nav-links-minus" onClick={handleFeatureDelete}>
                 <FontAwesomeIcon icon={faMinus} />
               </div>
             </div>
 
             <div className="feature-block-content">
-              {startWith === 'right' ? (
+              {startWith === 'right' && idx % 2 === 0 ? (
                 <>
                   <div className="feature-block-image-wrapper">
-                    <div className={`${imageURL ? 'logo-section' : ''}`}>
+                    <div className={`${imageURL ? 'logo-section' : ''} feature-block-image`}>
                       <div
                         className="image-feature-option"
                         onClick={() => handleLogoImgClick(styleContent, ['blocks', String(idx), 'imageURL'])}
@@ -1200,11 +1215,13 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         )}
                       </div>
                       {imageURL ? (
-                        <div className="logo-trash-icon">
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
-                          />
+                        <div className="feature-trash-icon">
+                          <div className="logo-trash-icon feature">
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
+                            />
+                          </div>
                         </div>
                       ) : null}
                     </div>
@@ -1212,9 +1229,11 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                   <div className="feature-block-content-wrapper">
                     <div className="feature-block-row">
                       <div className="feature-block-top-row">
-
                         <div className="navbar-links-dropdown-wrapper" ref={titleDropdownRef}>
-                          <button className="navbar-dropdown-toggle inter-font weight-600" onClick={() => setTitleDropdownOpen(prev => !prev)}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setTitleDropdownOpen(prev => !prev)}
+                          >
                             Title Style <FontAwesomeIcon icon={faChevronDown} />
                           </button>
                           {titleDropdownOpen && (
@@ -1223,14 +1242,19 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.title.style.styles || {}, 'styles', ['title', 'style'])}
+                                  {renderNestedDropdown(
+                                    data?.title.style.styles || {}, 'styles',
+                                    ['blocks', String(idx), 'title', 'style']
+                                  )}
                                 </div>
                               </div>
                               <div className="navbar-dropdown-item has-sub inter-font weight-600">
                                 Hover Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.title.style.hoverStyles || {}, 'hoverStyles', ['title', 'style'])}
+                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                    'hoverStyles', ['blocks', String(idx), 'title', 'style']
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -1239,7 +1263,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         <div className="button-label feature-block-label">Title:</div>
                       </div>
 
-                      <div className="button-label feature-block-bottom-row center-align">
+                      <div className="center-align button-label feature-block-bottom-row">
                         {isTitleEditing ? (
                           <input
                             type="text"
@@ -1276,14 +1300,20 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.description.style.styles || {}, 'styles', ['description', 'style'])}
+                                  {renderNestedDropdown(
+                                    data?.description.style.styles || {},
+                                    'styles', ['blocks', String(idx), 'description', 'style']
+                                  )}
                                 </div>
                               </div>
                               <div className="navbar-dropdown-item has-sub inter-font weight-600">
                                 Hover Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.description.style.hoverStyles || {}, 'hoverStyles', ['description', 'style'])}
+                                  {renderNestedDropdown(
+                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    ['blocks', String(idx), 'description', 'style']
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -1298,14 +1328,30 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                           <textarea
                             autoFocus
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            onBlur={() => applyChange(description, 'description')}
-                            className='mozilla-text-font resizable-textarea feature-block-textarea'
+                            onFocus={(e) => {
+                              e.target.style.height = "auto";
+                              e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && e.shiftKey) {
+                                e.preventDefault();
+                                applyChange(description, "description");
+                              }
+                            }}
+                            onBlur={() => applyChange(description, "description")}
+                            className="mozilla-text-font resizable-textarea feature-block-textarea"
                           />
+
                         ) : (
                           <div className="desc-span-wrapper">
 
-                            <span className="button-label-wrapper quicksand-font" onClick={() => setIsDescEditing(true)}>
+                            <span
+                              className="button-label-wrapper quicksand-font"
+                              onClick={() => setIsDescEditing(true)}
+                            >
                               {description}
                             </span>
                           </div>
@@ -1314,15 +1360,145 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                     </div>
                   </div>
                 </>
-              ) : (
+              ) : startWith === 'right' && idx % 2 !== 0 ? (
                 <>
                   <div className="feature-block-content-wrapper">
-                    CONTENT
+                    <div className="feature-block-row">
+                      <div className="feature-block-top-row">
+                        <div className="navbar-links-dropdown-wrapper" ref={titleDropdownRef}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setTitleDropdownOpen(prev => !prev)}
+                          >
+                            Title Style <FontAwesomeIcon icon={faChevronDown} />
+                          </button>
+                          {titleDropdownOpen && (
+                            <div className="navbar-logo-dropdown-menu fade-in">
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.title.style.styles || {}, 'styles',
+                                    ['blocks', String(idx), 'title', 'style']
+                                  )}
+                                </div>
+                              </div>
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Hover Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                    'hoverStyles', ['blocks', String(idx), 'title', 'style']
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="button-label feature-block-label">Title:</div>
+                      </div>
+
+                      <div className="center-align button-label feature-block-bottom-row">
+                        {isTitleEditing ? (
+                          <input
+                            type="text"
+                            autoFocus
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={() => applyChange(title, 'title')}
+                            onKeyDown={(e) => e.key === 'Enter' && applyChange(title, 'title')}
+                            className='mozilla-text-font'
+                          />
+                        ) : (
+                          <div className="desc-span-wrapper">
+                            <span className="button-label-wrapper quicksand-font" onClick={() => setIsTitleEditing(true)}>
+                              {title}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="feature-block-row">
+                      <div className="feature-block-top-row">
+
+                        <div className="navbar-links-dropdown-wrapper" ref={descDropdownRef}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setDescDropdownOpen(prev => !prev)}
+                          >
+                            Desc Style <FontAwesomeIcon icon={faChevronDown} />
+                          </button>
+                          {descDropdownOpen && (
+                            <div className="navbar-logo-dropdown-menu fade-in">
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.description.style.styles || {},
+                                    'styles', ['blocks', String(idx), 'description', 'style']
+                                  )}
+                                </div>
+                              </div>
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Hover Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    ['blocks', String(idx), 'description', 'style']
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="button-label feature-block-label">Description:</div>
+                      </div>
+
+                      <div className="feature-block-bottom-row left-align">
+                        {isDescEditing ? (
+                          <textarea
+                            autoFocus
+                            value={description}
+                            onFocus={(e) => {
+                              e.target.style.height = "auto";
+                              e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && e.shiftKey) {
+                                e.preventDefault();
+                                applyChange(description, "description");
+                              }
+                            }}
+                            onBlur={() => applyChange(description, "description")}
+                            className="mozilla-text-font resizable-textarea feature-block-textarea"
+                          />
+
+                        ) : (
+                          <div className="desc-span-wrapper">
+
+                            <span
+                              className="button-label-wrapper quicksand-font"
+                              onClick={() => setIsDescEditing(true)}
+                            >
+                              {description}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                   <div className="feature-block-image-wrapper">
-                    <div className={`${imageURL ? 'logo-section' : ''}`}>
+                    <div className={`${imageURL ? 'logo-section' : ''} feature-block-image`}>
                       <div
-                        className="logo-section-option"
+                        className="image-feature-option"
                         onClick={() => handleLogoImgClick(styleContent, ['blocks', String(idx), 'imageURL'])}
                       >
                         → Image URL: {imageURL ? (
@@ -1334,21 +1510,362 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         )}
                       </div>
                       {imageURL ? (
-                        <div className="logo-trash-icon">
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
-                          />
+                        <div className="feature-trash-icon">
+                          <div className="logo-trash-icon feature">
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
+                            />
+                          </div>
                         </div>
                       ) : null}
                     </div>
                   </div>
                 </>
-              )}
+              ) : startWith === 'left' && idx % 2 === 0 ? (
+                <>
+                  <div className="feature-block-content-wrapper">
+                    <div className="feature-block-row">
+                      <div className="feature-block-top-row">
+                        <div className="navbar-links-dropdown-wrapper" ref={titleDropdownRef}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setTitleDropdownOpen(prev => !prev)}
+                          >
+                            Title Style <FontAwesomeIcon icon={faChevronDown} />
+                          </button>
+                          {titleDropdownOpen && (
+                            <div className="navbar-logo-dropdown-menu fade-in">
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.title.style.styles || {}, 'styles',
+                                    ['blocks', String(idx), 'title', 'style']
+                                  )}
+                                </div>
+                              </div>
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Hover Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                    'hoverStyles', ['blocks', String(idx), 'title', 'style']
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="button-label feature-block-label">Title:</div>
+                      </div>
+
+                      <div className="center-align button-label feature-block-bottom-row">
+                        {isTitleEditing ? (
+                          <input
+                            type="text"
+                            autoFocus
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={() => applyChange(title, 'title')}
+                            onKeyDown={(e) => e.key === 'Enter' && applyChange(title, 'title')}
+                            className='mozilla-text-font'
+                          />
+                        ) : (
+                          <div className="desc-span-wrapper">
+                            <span className="button-label-wrapper quicksand-font" onClick={() => setIsTitleEditing(true)}>
+                              {title}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="feature-block-row">
+                      <div className="feature-block-top-row">
+
+                        <div className="navbar-links-dropdown-wrapper" ref={descDropdownRef}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setDescDropdownOpen(prev => !prev)}
+                          >
+                            Desc Style <FontAwesomeIcon icon={faChevronDown} />
+                          </button>
+                          {descDropdownOpen && (
+                            <div className="navbar-logo-dropdown-menu fade-in">
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.description.style.styles || {},
+                                    'styles', ['blocks', String(idx), 'description', 'style']
+                                  )}
+                                </div>
+                              </div>
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Hover Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    ['blocks', String(idx), 'description', 'style']
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="button-label feature-block-label">Description:</div>
+                      </div>
+
+                      <div className="feature-block-bottom-row left-align">
+                        {isDescEditing ? (
+                          <textarea
+                            autoFocus
+                            value={description}
+                            onFocus={(e) => {
+                              e.target.style.height = "auto";
+                              e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && e.shiftKey) {
+                                e.preventDefault();
+                                applyChange(description, "description");
+                              }
+                            }}
+                            onBlur={() => applyChange(description, "description")}
+                            className="mozilla-text-font resizable-textarea feature-block-textarea"
+                          />
+
+                        ) : (
+                          <div className="desc-span-wrapper">
+
+                            <span
+                              className="button-label-wrapper quicksand-font"
+                              onClick={() => setIsDescEditing(true)}
+                            >
+                              {description}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="feature-block-image-wrapper">
+                    <div className={`${imageURL ? 'logo-section' : ''} feature-block-image`}>
+                      <div
+                        className="image-feature-option"
+                        onClick={() => handleLogoImgClick(styleContent, ['blocks', String(idx), 'imageURL'])}
+                      >
+                        → Image URL: {imageURL ? (
+                          <>
+                            <span className='option-value'> {imageURL} </span>
+                          </>
+                        ) : (
+                          <span className="option-value">Not set</span>
+                        )}
+                      </div>
+                      {imageURL ? (
+                        <div className="feature-trash-icon">
+                          <div className="logo-trash-icon feature">
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
+                            />
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </>
+              ) :
+                <>
+                  <div className="feature-block-image-wrapper">
+                    <div className={`${imageURL ? 'logo-section' : ''} feature-block-image`}>
+                      <div
+                        className="image-feature-option"
+                        onClick={() => handleLogoImgClick(styleContent, ['blocks', String(idx), 'imageURL'])}
+                      >
+                        → Image URL: {imageURL ? (
+                          <>
+                            <span className='option-value'> {imageURL} </span>
+                          </>
+                        ) : (
+                          <span className="option-value">Not set</span>
+                        )}
+                      </div>
+                      {imageURL ? (
+                        <div className="feature-trash-icon">
+                          <div className="logo-trash-icon feature">
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              onClick={() => handleLogoImgDelete(['sections', 'feature', 'blocks', String(idx), 'imageURL'], false)}
+                            />
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="feature-block-content-wrapper">
+                    <div className="feature-block-row">
+                      <div className="feature-block-top-row">
+                        <div className="navbar-links-dropdown-wrapper" ref={titleDropdownRef}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setTitleDropdownOpen(prev => !prev)}
+                          >
+                            Title Style <FontAwesomeIcon icon={faChevronDown} />
+                          </button>
+                          {titleDropdownOpen && (
+                            <div className="navbar-logo-dropdown-menu fade-in">
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.title.style.styles || {}, 'styles',
+                                    ['blocks', String(idx), 'title', 'style']
+                                  )}
+                                </div>
+                              </div>
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Hover Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                    'hoverStyles', ['blocks', String(idx), 'title', 'style']
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="button-label feature-block-label">Title:</div>
+                      </div>
+
+                      <div className="center-align button-label feature-block-bottom-row">
+                        {isTitleEditing ? (
+                          <input
+                            type="text"
+                            autoFocus
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={() => applyChange(title, 'title')}
+                            onKeyDown={(e) => e.key === 'Enter' && applyChange(title, 'title')}
+                            className='mozilla-text-font'
+                          />
+                        ) : (
+                          <div className="desc-span-wrapper">
+                            <span className="button-label-wrapper quicksand-font" onClick={() => setIsTitleEditing(true)}>
+                              {title}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="feature-block-row">
+                      <div className="feature-block-top-row">
+
+                        <div className="navbar-links-dropdown-wrapper" ref={descDropdownRef}>
+                          <button
+                            className="navbar-dropdown-toggle inter-font weight-600"
+                            onClick={() => setDescDropdownOpen(prev => !prev)}
+                          >
+                            Desc Style <FontAwesomeIcon icon={faChevronDown} />
+                          </button>
+                          {descDropdownOpen && (
+                            <div className="navbar-logo-dropdown-menu fade-in">
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.description.style.styles || {},
+                                    'styles', ['blocks', String(idx), 'description', 'style']
+                                  )}
+                                </div>
+                              </div>
+                              <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                                Hover Styles
+                                <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                                <div className="navbar-submenu">
+                                  {renderNestedDropdown(
+                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    ['blocks', String(idx), 'description', 'style']
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="button-label feature-block-label">Description:</div>
+                      </div>
+
+                      <div className="feature-block-bottom-row left-align">
+                        {isDescEditing ? (
+                          <textarea
+                            autoFocus
+                            value={description}
+                            onFocus={(e) => {
+                              e.target.style.height = "auto";
+                              e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && e.shiftKey) {
+                                e.preventDefault();
+                                applyChange(description, "description");
+                              }
+                            }}
+                            onBlur={() => applyChange(description, "description")}
+                            className="mozilla-text-font resizable-textarea feature-block-textarea"
+                          />
+
+                        ) : (
+                          <div className="desc-span-wrapper">
+
+                            <span
+                              className="button-label-wrapper quicksand-font"
+                              onClick={() => setIsDescEditing(true)}
+                            >
+                              {description}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              }
             </div>
           </div>
         </>
       )
+    }
+
+    const handleAddFeatureBlock = () => {
+      let featureBlock: FeatureBlock = structuredClone(singleFeatureBlock);
+      featureBlock.title.text = `${featureBlock.title.text} ${featureBlocks.length + 1}`;
+      featureBlock.description.text = `${featureBlock.description.text} ${featureBlocks.length + 1}`;
+      featureBlock.id = `${featureBlock.id}${featureBlocks.length + 1}`;
+
+      let newValue = structuredClone(featureBlocks);
+
+      newValue.push(featureBlock)
+      const pathParts = ['sections', 'feature', 'blocks'];
+
+      updateData({ pathParts, newValue });
+      setFeatureBlocks(prev => [...prev, featureBlock]);
     }
 
     return (
@@ -1413,6 +1930,13 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
               {featureBlocks.map((data, idx) => (
                 <Blocks idx={idx} data={data} key={idx} />
               ))}
+            </div>
+
+            <div className="add-feature-block-wrapper">
+              <div className="dmSans-font links-add-button" onClick={handleAddFeatureBlock}>
+                <FontAwesomeIcon icon={faPlus} />
+                Add Feature Block
+              </div>
             </div>
           </div>
         </div>

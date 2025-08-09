@@ -125,3 +125,11 @@ export const defaultFeaturesBlocks: FeatureBlock[] = [
     imageURl: 'false'
   }
 ]
+
+export const singleFeatureBlock: FeatureBlock = {
+  title: defaultFeatureTitle,
+  id: 'featureBlock',
+  description: featureBlockDesc,
+  style: featureBlockStyle,
+  imageURl: 'false'
+}
