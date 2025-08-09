@@ -11,7 +11,7 @@ import { HeroButton } from '@renderer/interface/default sections/Hero/HeroButton
 import { HeroText } from '@renderer/interface/default sections/Hero/HeroText'
 import FeatureFrameOne from '../../assets/FeatureFrame1.png'
 import FeatureFrameTwo from '../../assets/FeatureFrame2.png'
-import { defaultFeaturesBlocks, featureBlockStyle, singleFeatureBlock } from '@renderer/interface/default sections/Feature/FeatureBlocks'
+import { singleFeatureBlock } from '@renderer/interface/default sections/Feature/FeatureBlocks'
 
 
 interface RenderSectionProps {

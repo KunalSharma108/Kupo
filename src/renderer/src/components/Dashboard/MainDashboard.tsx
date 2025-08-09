@@ -122,7 +122,7 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
         }
 
         setLoading(false)
-      } else if (type.toLowerCase() === 'timeline') {
+      } else if (type.toLowerCase() === 'footer') {
 
       } else {
         return
@@ -341,9 +341,9 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                         </Tooltip>
                       </li>
 
-                      <li onClick={() => handleComponentSelect('timeline')}>
-                        <Tooltip text="A vertical list that shows your journey or progress over time — like milestones, work history, or project phases, in the order they happened.">
-                          <span>Timeline</span>
+                      <li onClick={() => handleComponentSelect('footer')}>
+                        <Tooltip text="The footer is the bottom section of a website that usually contains extra info like copyright, links, and contact details.">
+                          <span>Footer</span>
                         </Tooltip>
                       </li>
                     </ul>
