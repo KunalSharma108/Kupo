@@ -278,7 +278,6 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
         const updateInputValue = (gradientColorArray: string[], direction?: string) => {
           let text = `${gradientColorArray.join(' ')} ${direction}`;
-          console.log(text)
           setInputValue(text);
         }
 

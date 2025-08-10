@@ -12,6 +12,7 @@ import { HeroText } from '@renderer/interface/default sections/Hero/HeroText'
 import FeatureFrameOne from '../../assets/FeatureFrame1.png'
 import FeatureFrameTwo from '../../assets/FeatureFrame2.png'
 import { singleFeatureBlock } from '@renderer/interface/default sections/Feature/FeatureBlocks'
+import { defaultFooterButton } from '@renderer/interface/default sections/Footer/FooterButton'
 
 
 interface RenderSectionProps {
@@ -45,6 +46,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     subType: string,
     value: any
   ) => {
+
 
     if (type.toLowerCase() === 'background' && subType.toLowerCase() !== 'type') {
       const resolvePath = (obj: any, path: string[]) => {
@@ -1944,6 +1946,287 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     )
   }
 
+  const footerBlock = () => {
+    const [footerLinks, setFooterLinks] = useState(data?.buttons || {});
+
+    const [footerDropdownOpen, setFooterDropdownOpen] = useState(false);
+    const footerDropdownRef = useRef<HTMLDivElement>(null);
+
+    const [globalLinksDropdownOpen, setGlobalLinksDropdownOpen] = useState<boolean>(false);
+    const globalLinksDropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (footerDropdownRef.current && !footerDropdownRef.current.contains(event.target as Node)) {
+          setFooterDropdownOpen(false)
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [footerDropdownRef]);
+
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (globalLinksDropdownRef.current && !globalLinksDropdownRef.current.contains(event.target as Node)) {
+          setGlobalLinksDropdownOpen(false)
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [globalLinksDropdownRef]);
+
+    interface FooterLinkItemsProp {
+      index: number;
+      value: ButtonBlock;
+    }
+
+    const FooterLinksItem: React.FC<FooterLinkItemsProp> = ({ index, value }) => {
+      const [isLabelEditing, setIsLabelEditing] = useState(false);
+      const [isLinkEditing, setIsLinkEditing] = useState(false);
+      const [label, setLabel] = useState(value.label);
+      const [link, setLink] = useState(value.link);
+      const [footerLinkDropdownOpen, setFooterLinkDropdownOpen] = useState<boolean>(false);
+      const footerLinkDropdownRef = useRef<HTMLDivElement>(null);
+
+      const applyChange = (val: string, part: 'label' | 'link') => {
+        if (val.trim() !== '') {
+          setFooterLinks((prev) => {
+            const updated = [...prev];
+            updated[index][part] = val;
+            return updated;
+          });
+
+          updateData({
+            pathParts: ['sections', 'footer', 'buttons', index, part],
+            newValue: val,
+          });
+
+          if (part === 'label') setIsLabelEditing(false);
+          if (part === 'link') setIsLinkEditing(false);
+        }
+      };
+
+      useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+          if (footerLinkDropdownRef.current && !footerLinkDropdownRef.current.contains(e.target as Node)) {
+            setFooterLinkDropdownOpen(false);
+          }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, [footerLinkDropdownRef]);
+
+      const handleLinkDelete = () => {
+        const pathParts = ['sections', 'footer', 'buttons']
+        const newValue = footerLinks.filter((_val, idx) => idx !== index);;
+
+        updateData({ pathParts, newValue });
+        setFooterLinks(newValue);
+      }
+
+      return (
+        <div className="button-wrapper">
+          <div className="navbar-links-dropdown-wrapper" ref={footerLinkDropdownRef}>
+            <button
+              className="navbar-dropdown-toggle inter-font weight-600"
+              onClick={() => setFooterLinkDropdownOpen((prev) => !prev)}>
+              Custom Style <FontAwesomeIcon icon={faChevronDown} />
+            </button>
+
+            {footerLinkDropdownOpen && (
+              <div className="navbar-logo-dropdown-menu fade-in">
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.buttons[index].style.styles || {},
+                      'styles',
+                      ['buttons', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+                <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                  Hover Styles
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                  <div className="navbar-submenu">
+                    {renderNestedDropdown(
+                      data?.buttons[index].style.hoverStyles || {},
+                      'hoverStyles',
+                      ['buttons', String(index), 'style']
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-label">
+            Text:{' '}
+            {isLabelEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+                onBlur={() => applyChange(label, 'label')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(label, 'label')}
+                className='mozilla-text-font'
+              />
+            ) : (
+              <span className="button-label-wrapper quicksand-font" onClick={() => setIsLabelEditing(true)}>
+                {label}
+              </span>
+            )}
+          </div>
+
+          <span className="button-separator">|</span>
+
+          <div className="button-link">
+            Link:{' '}
+            {isLinkEditing ? (
+              <input
+                type="text"
+                autoFocus
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                onBlur={() => applyChange(link, 'link')}
+                onKeyDown={(e) => e.key === 'Enter' && applyChange(link, 'link')}
+                className='mozilla-text-font'
+              />
+            ) : (
+              <span className="button-link-wrapper quicksand-font" onClick={() => setIsLinkEditing(true)}>
+                {link}
+              </span>
+            )}
+          </div>
+
+          <div className="nav-links-minus" onClick={handleLinkDelete}>
+            <FontAwesomeIcon icon={faMinus} />
+          </div>
+        </div>
+      );
+    };
+
+    const handleLinkAdd = () => {
+      const Link = structuredClone(defaultFooterButton);
+      Link.label = `${Link.label} ${footerLinks.length + 1}`;
+
+      let newValue = structuredClone(footerLinks);
+
+      newValue.push(Link)
+      const pathParts = ['sections', 'footer', 'buttons'];
+
+      updateData({ pathParts, newValue });
+      setFooterLinks(prev => [...prev, Link]);
+    }
+
+    return (
+      <>
+        <div className="section-header">
+          <div className="navbar-heading">{type}</div>
+          <div className="navbar-controls">
+
+            <div className="navbar-dropdown-wrapper" ref={footerDropdownRef}>
+              <button
+                className="navbar-dropdown-toggle inter-font weight-600"
+                onClick={() => setFooterDropdownOpen((prev) => !prev)}
+              >
+                Style <FontAwesomeIcon icon={faChevronDown} />
+              </button>
+
+              {footerDropdownOpen && (
+                <div className="navbar-dropdown-menu fade-in">
+                  <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                    Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
+                    </div>
+                  </div>
+                  <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                    Hover Styles
+                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                    <div className="navbar-submenu">
+                      {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['style'])}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="section-content">
+          <div className="child-section">
+            <div className="child-section-header child-content-header">
+              <div className="hero-text-heading-icon">
+                <FontAwesomeIcon icon={faLink} />
+              </div>
+              Links
+            </div>
+
+            <div className="nav-links-global-style">
+              <div className="navbar-logo-dropdown-wrapper" ref={globalLinksDropdownRef}>
+                <button
+                  className="all-link-style navbar-dropdown-toggle inter-font weight-600"
+                  onClick={() => setGlobalLinksDropdownOpen((prev) => !prev)}
+                >
+                  All Links Style <FontAwesomeIcon icon={faChevronDown} />
+                </button>
+
+                {globalLinksDropdownOpen && (
+                  <div className="navbar-logo-dropdown-menu fade-in">
+                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                      Styles
+                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                      <div className="navbar-submenu">
+                        {renderNestedDropdown(
+                          data.globalDefaultButtonStyle?.styles || {},
+                          'styles', ['globalDefaultButtonStyle'])}
+                      </div>
+                    </div>
+                    <div className="navbar-dropdown-item has-sub inter-font weight-600">
+                      Hover Styles
+                      <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
+                      <div className="navbar-submenu">
+                        {renderNestedDropdown(
+                          data.globalDefaultButtonStyle?.hoverStyles || {},
+                          'hoverStyles', ['globalDefaultButtonStyle'])}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="button-list-section">
+              {footerLinks.map((val, idx) => (
+                <FooterLinksItem
+                  key={idx}
+                  index={idx}
+                  value={val}
+                />
+              ))}
+            </div>
+
+            <div className="button-add-section">
+              <div className="links-add-button poppins-font" onClick={handleLinkAdd}>
+                <FontAwesomeIcon icon={faPlus} />
+                <span>Add Link</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       {styleWarning && (
@@ -1980,7 +2263,9 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             data.type?.toLowerCase() === 'hero' ?
               heroBlock() :
               data.type?.toLowerCase() === 'feature' ?
-                featureBlock() : ''
+                featureBlock() :
+                data.type?.toLowerCase() === 'footer' ?
+                  footerBlock() : null
         }
       </div>
     </>

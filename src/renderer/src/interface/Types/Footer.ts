@@ -6,6 +6,7 @@ export interface Footer {
   desc: 'The footer is the bottom section of a website that usually contains extra info like copyright, links, and contact details.';
   id: string;
   enabled: boolean;
-  styles?: styles;
+  style: styles;
   buttons: ButtonBlock[];
+  globalDefaultButtonStyle: styles;
 }

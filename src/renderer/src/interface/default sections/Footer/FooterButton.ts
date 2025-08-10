@@ -4,35 +4,35 @@ import { ButtonBlock } from "@renderer/interface/Presets/uiBlocks";
 export const defaultFooterButtonStyle: styles = {
   styles: {
     background: {
-      type: 'color',
-      color: '#2d2d2d',
+      type: false,
+      color: false,
       image: false,
       gradient: false,
       'image + gradient': false
     },
     layout: {
-      'vertical align': 'Center',
-      'horizontal align': 'Center',
-      width: 'auto',
-      height: 'auto',
+      'vertical align': 'undefined',
+      'horizontal align': 'undefined',
+      width: 'undefined',
+      height: 'undefined',
       'max width': 'undefined',
       'max height': 'undefined'
     },
     border: {
-      'border color': '#444444',
-      'border width': '1px',
-      'border style': 'solid',
-      'border radius': '4px'
+      'border color': 'none',
+      'border width': 'undefined',
+      'border style': 'undefined',
+      'border radius': 'none'
     },
     transition: {
-      'transition duration': 200,
-      'transition style': 'ease-in-out'
+      'transition duration': 'undefined',
+      'transition style': 'undefined'
     },
     font: {
-      'font color': '#f5f5f5',
+      'font color': 'Default',
       'font family': 'Default',
-      'font weight': 500,
-      'font size': 'Medium'
+      'font weight': 'Default',
+      'font size': 'Default'
     },
     margin: {
       'margin top': 'undefined',
@@ -41,40 +41,47 @@ export const defaultFooterButtonStyle: styles = {
       'margin right': 'undefined'
     },
     padding: {
-      'padding top': '8px',
-      'padding bottom': '8px',
-      'padding left': '16px',
-      'padding right': '16px'
+      'padding top': 'undefined',
+      'padding bottom': 'undefined',
+      'padding left': 'undefined',
+      'padding right': 'undefined'
     },
-    shadow: false
+    shadow: {
+      'offset x': 'undefined',
+      'offset y': 'undefined',
+      'blur radius': 'undefined',
+      'spread radius': 'undefined',
+      color: 'undefined',
+      inset: 'undefined'
+    }
   },
   hoverStyles: {
     background: {
-      type: 'color',
-      color: '#3a3a3a',
+      type: false,
+      color: false,
       image: false,
       gradient: false,
       'image + gradient': false
     },
     layout: {
-      'vertical align': 'Center',
-      'horizontal align': 'Center',
-      width: 'auto',
-      height: 'auto',
+      'vertical align': 'undefined',
+      'horizontal align': 'undefined',
+      width: 'undefined',
+      height: 'undefined',
       'max width': 'undefined',
       'max height': 'undefined'
     },
     border: {
-      'border color': '#555555',
-      'border width': '1px',
-      'border style': 'solid',
-      'border radius': '4px'
+      'border color': 'none',
+      'border width': 'undefined',
+      'border style': 'undefined',
+      'border radius': 'none'
     },
     font: {
-      'font color': '#ffffff',
+      'font color': 'Default',
       'font family': 'Default',
-      'font weight': '500',
-      'font size': 'Medium'
+      'font weight': 'Default',
+      'font size': 'Default'
     },
     margin: {
       'margin top': 'undefined',
@@ -83,23 +90,22 @@ export const defaultFooterButtonStyle: styles = {
       'margin right': 'undefined'
     },
     padding: {
-      'padding top': '8px',
-      'padding bottom': '8px',
-      'padding left': '16px',
-      'padding right': '16px'
+      'padding top': 'undefined',
+      'padding bottom': 'undefined',
+      'padding left': 'undefined',
+      'padding right': 'undefined'
     },
     shadow: {
-      "offset x": 'undefined',
+      'offset x': 'undefined',
       'offset y': 'undefined',
       'blur radius': 'undefined',
-      "spread radius": 'undefined',
-      color: 'none',
-      inset: false,
+      'spread radius': 'undefined',
+      color: 'undefined',
+      inset: 'undefined'
     }
+
   }
 };
-
-
 
 export const defaultFooterButtons: ButtonBlock[] = [
   {
@@ -108,3 +114,9 @@ export const defaultFooterButtons: ButtonBlock[] = [
     style: defaultFooterButtonStyle
   }
 ]
+
+export const defaultFooterButton: ButtonBlock = {
+  label: 'Footer Link',
+  link: '#',
+  style: defaultFooterButtonStyle
+}

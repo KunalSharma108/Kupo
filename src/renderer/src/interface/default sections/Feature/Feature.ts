@@ -60,6 +60,7 @@ export const defaultFeature: Feature = {
   name:'feature',
   type: 'Feature',
   id: 'feature',
+  desc: 'A section that shows what you offer, with each feature explained using an image and a short message — the layout switches sides as you scroll to keep it visually engaging.',
   enabled: true,
 
   blocks: defaultFeaturesBlocks,

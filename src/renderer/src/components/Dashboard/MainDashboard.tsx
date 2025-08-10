@@ -10,6 +10,7 @@ import { defaultNavbar } from "@renderer/interface/default sections/Navbar/Navba
 import '../styles/render.css'
 import { defaultHero } from "@renderer/interface/default sections/Hero/Hero";
 import { defaultFeature } from "@renderer/interface/default sections/Feature/Feature";
+import { defaultFooter } from "@renderer/interface/default sections/Footer/footer";
 
 interface MainDashboardProps {
   selectedProject: string | false;
@@ -123,7 +124,25 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
 
         setLoading(false)
       } else if (type.toLowerCase() === 'footer') {
+        setLoading(true);
 
+        let newData = {
+          ...configData,
+          sectionOrders: [...configData.sectionOrders, 'footer'],
+          sections: {
+            ...configData.sections,
+            footer: defaultFooter,
+          }
+        };
+
+        if (typeof selectedProject === 'string') {
+          setConfigData(newData)
+          updateConfig({ name: selectedProject, data: newData })
+        } else {
+          alert('Your changes could not be updated, Please try again later.')
+        }
+
+        setLoading(false)
       } else {
         return
       }
@@ -264,27 +283,27 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                   <div className="dropdown-header">Choose a section to add</div>
                   <ul className="dropdown-list">
                     <li onClick={() => handleComponentSelect('navbar')}>
-                      <Tooltip text="A menu bar at the top of the site that helps visitors navigate between different pages or sections">
+                      <Tooltip text={defaultFooter.desc}>
                         <span>Navbar</span>
                       </Tooltip>
                       <span className="badge raleway">Recommended</span>
                     </li>
 
                     <li onClick={() => handleComponentSelect('hero')}>
-                      <Tooltip text="The big intro area you see first, it usually contains a catchy headline, a short message, and maybe a button or image to grab attention">
+                      <Tooltip text={defaultHero.desc}>
                         <span>Hero</span>
                       </Tooltip>
                     </li>
 
                     <li onClick={() => handleComponentSelect('feature')}>
-                      <Tooltip text="A section that shows what you offer, with each feature explained using an image and a short message — the layout switches sides as you scroll to keep it visually engaging.">
+                      <Tooltip text={defaultFeature.desc}>
                         <span>Features</span>
                       </Tooltip>
                     </li>
 
-                    <li onClick={() => handleComponentSelect('timeline')}>
-                      <Tooltip text="A vertical list that shows your journey or progress over time — like milestones, work history, or project phases, in the order they happened.">
-                        <span>Timeline</span>
+                    <li onClick={() => handleComponentSelect('footer')}>
+                      <Tooltip text={defaultFooter.desc}>
+                        <span>footer</span>
                       </Tooltip>
                     </li>
                   </ul>
@@ -323,27 +342,27 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                     <div className="dropdown-header">Choose a section to add</div>
                     <ul className="dropdown-list">
                       <li onClick={() => handleComponentSelect('navbar')}>
-                        <Tooltip text="A menu bar at the top of the site that helps visitors navigate between different pages or sections">
+                        <Tooltip text={defaultFooter.desc}>
                           <span>Navbar</span>
                         </Tooltip>
+                        <span className="badge raleway">Recommended</span>
                       </li>
 
                       <li onClick={() => handleComponentSelect('hero')}>
-                        <Tooltip text="The big intro area you see first, it usually contains a catchy headline, a short message, and maybe a button or image to grab attention">
+                        <Tooltip text={defaultHero.desc}>
                           <span>Hero</span>
                         </Tooltip>
-                        { }
                       </li>
 
                       <li onClick={() => handleComponentSelect('feature')}>
-                        <Tooltip text="A section that shows what you offer, with each feature explained using an image and a short message — the layout switches sides as you scroll to keep it visually engaging.">
+                        <Tooltip text={defaultFeature.desc}>
                           <span>Features</span>
                         </Tooltip>
                       </li>
 
                       <li onClick={() => handleComponentSelect('footer')}>
-                        <Tooltip text="The footer is the bottom section of a website that usually contains extra info like copyright, links, and contact details.">
-                          <span>Footer</span>
+                        <Tooltip text={defaultFooter.desc}>
+                          <span>footer</span>
                         </Tooltip>
                       </li>
                     </ul>
