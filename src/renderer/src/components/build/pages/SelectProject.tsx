@@ -1,5 +1,8 @@
 import React from 'react'
 import '../../styles/buildCss/project.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCogs, faExclamationCircle, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import '../../styles/fontFamily.css'
 
 interface selectProjectProps {
   setProject: any;
@@ -7,25 +10,32 @@ interface selectProjectProps {
   projects: string[];
 }
 
-function SelectProject({setProject, selectedProject, projects }: selectProjectProps): React.JSX.Element {
+function SelectProject({ setProject, selectedProject, projects }: selectProjectProps): React.JSX.Element {
   return (
-    <>
-      <div className="projects-list">
-        {projects.map((project, idx) => (
-          <div
-            key={idx}
-            className={`project-option ${selectedProject === project ? 'selected' : ''}`}
-            onClick={() => {
-              setProject(project)
-            }}
-          >
-            <i className="fas fa-folder"></i>
-            <span>{project}</span>
-          </div>
-        ))}
-      </div>
+    <div className='project-select-wrapper'>
+      <h2 className="projects-heading">
+        <FontAwesomeIcon icon={faCogs} /> Select the project you want to build
+      </h2>
 
-    </>
+      <div className="projects-list">
+        {projects.length > 0 ? (
+          projects.map((project, idx) => (
+            <div
+              key={idx}
+              className={`quicksand-font project-option ${selectedProject === project ? "selected" : ""}`}
+              onClick={() => setProject(project)}
+            >
+              <FontAwesomeIcon icon={faFolderOpen} />
+              <span>{project}</span>
+            </div>
+          ))
+        ) : (
+          <div className="no-projects">
+            <FontAwesomeIcon icon={faExclamationCircle} /> No projects found
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

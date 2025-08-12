@@ -1,40 +1,83 @@
+.project-select-wrapper {
+    padding: 0 5px;
+}
+
+.projects-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #18d87f, #1ac666);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    text-transform: capitalize;
+}
+
+.projects-heading svg {
+    color: #18d87f;
+    font-size: 1.2rem;
+}
+
 .projects-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-    height: 100%;
+    gap: 0.85rem;
+    margin-top: 1rem;
 }
 
 .project-option {
-    background: #2a2a2a;
-    color: #ccc;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
+    background: linear-gradient(135deg, #2a2a2a, #202020);
+    color: #ddd;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.1s ease;
-    border: 1px solid transparent;
+    transition: background 0.18s ease, transform 0.1s ease, border 0.18s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.project-option svg {
+    color: #ffcc66;
+    font-size: 1.2rem;
+    min-width: 20px;
 }
 
 .project-option:hover {
-    background: #333;
-    transform: translateY(-1px);
-}
-
-.project-option i {
-    color: #ffcc66;
-    font-size: 1.1rem;
+    background: linear-gradient(135deg, #333, #262626);
+    transform: translateY(-2px);
 }
 
 .project-option.selected {
-    background: #104a2f;
+    background: linear-gradient(135deg, #0b2e25, #0f5b3d);
     border-color: #18d87f;
     color: #fff;
 }
-
-.project-option.selected i {
+.project-option.selected svg {
     color: #18d87f;
+}
+
+.no-projects {
+    color: #999;
+    font-size: 1rem;
+    text-align: center;
+    padding: 1rem;
+    background: #1b1b1b;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.no-projects svg {
+    color: #999;
 }

@@ -18,6 +18,7 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
   const [disabling, setDisabling] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [projects, setProjects] = useState<string[]>([])
+  const [pageNextPerm, setPageNextPerm] = useState<boolean[]>([false, false])
 
   useEffect(() => {
     const FetchProjects = async () => {
@@ -28,7 +29,15 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
     FetchProjects()
   }, []);
 
-  const setProject = (project: string) => setSelectedProject(project)
+  const setProject = (project: string) => {
+    setSelectedProject(project)
+    setPageNextPerm((prev) => {
+      let updated = prev
+      updated[page] = true
+
+      return updated
+    });
+  }
 
   const changePage = (newPage: number) => {
     setPrevPage(page);
@@ -63,10 +72,10 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
 
   return (
     <>
-      <div className={`overlay ${disabling ? "fade-out" : "fade-in"}`}></div>
+      <div className={`build-overlay ${disabling ? "fade-out" : "fade-in"}`}></div>
 
-      <div className={`dialog fade-in ${disabling ? "fade-out" : ""}`}>
-        <div className="page-heading">
+      <div className={`build-dialog fade-in ${disabling ? "fade-out" : ""}`}>
+        <div className="dialog-heading">
           Build a project!
         </div>
         <div className="page-container">
@@ -87,7 +96,6 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
           </div>
         </div>
 
-        {/* Footer buttons */}
         <div className="dialog-footer">
           <button className="cancel-btn inter-font" onClick={callDisable}>
             <FontAwesomeIcon icon={faTimes} /> Cancel
@@ -97,7 +105,7 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
             <button onClick={goPrev} disabled={page === 0} className=' inter-font'>
               <FontAwesomeIcon icon={faArrowLeft} /> Previous
             </button>
-            <button onClick={goNext} disabled={page === pages.length - 1}  className=' inter-font'>
+            <button onClick={goNext} disabled={page === pages.length - 1 || !pageNextPerm[page]} className=' inter-font'>
               Next <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
