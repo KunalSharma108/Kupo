@@ -22,16 +22,15 @@ function Dashboard(): React.JSX.Element {
     setTimeout(() => {
       setLoading(false)
     }, 1000)
-  }, [])
+  }, []);
 
   const toggleSelectedProject = (name: string | false) => {
     setSelectedProject(name)
-
-  }
+  };
 
   return (
     <div className="dashboard-container">
-      <NavDashboard />
+      <NavDashboard/>
       {loading && <LoadingOverlay />}
       <div className="dashboard-body">
         <div className="side-dashboard">

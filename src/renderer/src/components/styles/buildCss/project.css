@@ -1,0 +1,40 @@
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    height: 100%;
+}
+
+.project-option {
+    background: #2a2a2a;
+    color: #ccc;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    border: 1px solid transparent;
+}
+
+.project-option:hover {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+.project-option i {
+    color: #ffcc66;
+    font-size: 1.1rem;
+}
+
+.project-option.selected {
+    background: #104a2f;
+    border-color: #18d87f;
+    color: #fff;
+}
+
+.project-option.selected i {
+    color: #18d87f;
+}

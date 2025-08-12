@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/NavDashboard.css';
 import icon from '../assets/icon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowMinimize, faWindowMaximize, faTimes, faRocket, faBook } from '@fortawesome/free-solid-svg-icons';
 import { closeWindow, maximizeWindow, minimizeWindow } from '@renderer/lib/ipc';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import BuildDialog from '../build/buildDialog';
 
 const NavDashboard = (): React.JSX.Element => {
+  const [showBuild, setShowBuild] = useState<boolean>(false);
+
+  const disableBuild = () => setShowBuild(false)
+
   return (
     <nav className="dashboard-navbar">
       {/* Left: Docs & GitHub */}
@@ -29,7 +34,7 @@ const NavDashboard = (): React.JSX.Element => {
 
       {/* Right: Build + Window Buttons */}
       <div className="nav-section nav-right">
-        <button className="dashboard-btn build-btn">
+        <button className="dashboard-btn build-btn" onClick={() => setShowBuild(true)}>
           <FontAwesomeIcon icon={faRocket} /> Build
         </button>
         <div className="vertical-separator"></div>
@@ -39,6 +44,10 @@ const NavDashboard = (): React.JSX.Element => {
           <button onClick={() => closeWindow()} ><FontAwesomeIcon icon={faTimes} /></button>
         </div>
       </div>
+
+      {showBuild && (
+        <BuildDialog disableBuild={disableBuild} />
+      )}
     </nav>
   );
 };
