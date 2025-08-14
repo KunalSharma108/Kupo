@@ -19,7 +19,7 @@ export const AddProject = (data: {name: string}) => {
 }
 
 export const renameProject = (data: {prevName: string, newName: string}) => {
-  return window.electronAPI.renameProject(data)
+  return window.electronAPI.renameProject(data);
 }
 
 export const deleteProject = (data: {name: string}) => {
@@ -31,9 +31,13 @@ export const fetchConfig = (data: {name: string}) => {
 }
 
 export const updateConfig = (data: {name:string, data: any}) => {
-  return window.electronAPI.updateConfig(data)
+  return window.electronAPI.updateConfig(data);
 }
 
 export const selectImage = () => {
-  return window.electronAPI.selectImage()
+  return window.electronAPI.selectImage();
+}
+
+export const selectDir = () => {
+  return window.electronAPI.selectDir();
 }

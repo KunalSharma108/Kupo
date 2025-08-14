@@ -1,7 +1,8 @@
-import { dialog, ipcMain } from "electron";
+import { BrowserWindow, dialog, ipcMain } from "electron";
 import { mainWindow } from ".";
 import { addProject, deleteProject, fetchProjects, renameProject } from "./functions/Project";
 import { fetchConfig, updateConfig } from "./functions/config";
+import { buildMain } from "./functions/Build/main";
 
 export const setUpIpcHandlers = async () => {
   ipcMain.on('window-minimize', () => {
@@ -36,12 +37,12 @@ export const setUpIpcHandlers = async () => {
     return response;
   });
 
-  ipcMain.handle('fetchConfig', async (_event, {name}) => {
+  ipcMain.handle('fetchConfig', async (_event, { name }) => {
     const response = await fetchConfig(name);
     return response;
   });
 
-  ipcMain.handle('updateConfig', async (_event, {name, data}) => {
+  ipcMain.handle('updateConfig', async (_event, { name, data }) => {
     const response = await updateConfig(name, data)
     return response;
   });
@@ -50,9 +51,29 @@ export const setUpIpcHandlers = async () => {
     const result = await dialog.showOpenDialog({
       title: 'Select an Image',
       properties: ['openFile'],
-      filters: [{name: 'Images', extensions:['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif']}]
+      filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif'] }]
     });
 
     return result
   });
+
+  ipcMain.handle('selectDir', async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    });
+    if (!result.canceled && result.filePaths.length > 0) {
+      return result.filePaths[0];
+    }
+    return null;
+  });
+
+  ipcMain.handle('build-log', async (event, { project }) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win !== null) {
+      const result = await buildMain({ project, win })
+      console.log(result)
+    }
+  })
 }
+
+// CONNECT THIS TO RENDERER WITH PRELOAD AND DO THE REMAINING THINGS....

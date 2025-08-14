@@ -345,7 +345,6 @@ const MainDashboard = ({ selectedProject }: MainDashboardProps): React.JSX.Eleme
                         <Tooltip text={defaultFooter.desc}>
                           <span>Navbar</span>
                         </Tooltip>
-                        <span className="badge raleway">Recommended</span>
                       </li>
 
                       <li onClick={() => handleComponentSelect('hero')}>

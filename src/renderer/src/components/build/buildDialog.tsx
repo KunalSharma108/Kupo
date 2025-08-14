@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../styles/buildCss/build.css'
 import SelectProject from './pages/SelectProject';
 import SelectDir from './pages/SelectDir';
@@ -6,6 +6,7 @@ import { faArrowLeft, faArrowRight, faTimes } from '@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fetchProjects } from '@renderer/lib/ipc';
 import '../styles/fontFamily.css'
+import Build from './pages/Build';
 
 interface buildDialogProp {
   disableBuild: any;
@@ -17,8 +18,10 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
   const [disabling, setDisabling] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [projects, setProjects] = useState<string[]>([])
-  const [pageNextPerm, setPageNextPerm] = useState<boolean[]>([false, false])
+  const [projects, setProjects] = useState<string[]>([]);
+  const [pageNextPerm, setPageNextPerm] = useState<[false | true, false | true, null]>([false, false, null]);
+  const [selectedDir, setSelectedDir] = useState<string>('');
+  const [building, setBuilding] = useState<boolean>(false)
 
   useEffect(() => {
     const FetchProjects = async () => {
@@ -51,9 +54,20 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
     }
   };
 
+  const changeDir = (dir: string) => {
+    setSelectedDir(dir);
+    setPageNextPerm((prev) => {
+      let updated = prev
+      updated[page] = true
+
+      return updated
+    });
+  }
+
   const pages = [
     <SelectProject setProject={setProject} selectedProject={String(selectedProject)} projects={projects} />,
-    <SelectDir triggerNext={goNext} />
+    <SelectDir selectedDir={selectedDir} changeDir={changeDir} />,
+    <Build />
   ];
 
   const goPrev = () => {
@@ -81,16 +95,16 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
         <div className="page-container">
           {prevPage !== null && (
             <div
-              key={`prev-${prevPage}`}
               className={`dialog-page ${direction === "next" ? "slide-out-left" : "slide-out-right"}`}
+              style={{ position: "absolute" }}
             >
               {pages[prevPage]}
             </div>
           )}
 
           <div
-            key={`current-${page}`}
-            className={`dialog-page ${direction === "next" ? "slide-in-right" : direction === "prev" ? "slide-in-left" : ""}`}
+            className={`dialog-page active ${direction === "next" ? "slide-in-right" : "slide-in-left"}`}
+            style={{ position: "relative" }}
           >
             {pages[page]}
           </div>
@@ -102,11 +116,14 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
           </button>
 
           <div className="nav-buttons">
-            <button onClick={goPrev} disabled={page === 0} className=' inter-font'>
+            <button onClick={goPrev} disabled={page === 0 || page === 2 || building} className=' inter-font'>
               <FontAwesomeIcon icon={faArrowLeft} /> Previous
             </button>
-            <button onClick={goNext} disabled={page === pages.length - 1 || !pageNextPerm[page]} className=' inter-font'>
-              Next <FontAwesomeIcon icon={faArrowRight} />
+            <button onClick={goNext} disabled={page === pages.length - 1 || !pageNextPerm[page] || building} className=' inter-font'>
+              {
+                page === 1 ? 'Start Building' : page === 2 ? 'Close' : 'Next'
+              }
+              <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
         </div>

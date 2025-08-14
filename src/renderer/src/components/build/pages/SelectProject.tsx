@@ -30,7 +30,7 @@ function SelectProject({ setProject, selectedProject, projects }: selectProjectP
             </div>
           ))
         ) : (
-          <div className="no-projects">
+          <div className="no-select-projects">
             <FontAwesomeIcon icon={faExclamationCircle} /> No projects found
           </div>
         )}

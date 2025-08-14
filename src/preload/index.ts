@@ -21,6 +21,8 @@ if (process.contextIsolated) {
       fetchConfig: (data: {name: string}) => ipcRenderer.invoke('fetchConfig', data),
       updateConfig: (data: {name: string, data: any}) => ipcRenderer.invoke('updateConfig', data),
       selectImage: () => ipcRenderer.invoke('selectImage'),
+      selectDir: () => ipcRenderer.invoke('selectDir'),
+     
     });
 
     contextBridge.exposeInMainWorld('electron', electronAPI)

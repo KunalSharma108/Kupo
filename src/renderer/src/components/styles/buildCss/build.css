@@ -152,8 +152,14 @@
 
 .page-container {
     position: relative;
-    height: fit-content;
     overflow: hidden;
+}
+
+.dialog-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 @keyframes slideOutLeft {
