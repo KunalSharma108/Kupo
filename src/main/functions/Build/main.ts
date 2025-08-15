@@ -2,25 +2,42 @@ import { BrowserWindow } from "electron";
 import { sendLog } from "./sendLog";
 import { fetchConfig } from "../config";
 import { buildNavbar } from "./components/BuildNavbar";
+import { buildHero } from "./components/BuildHero";
+import { fullHTML } from "./lib/template/HTML";
 
 interface buildMainProps {
   project: string;
-  win: BrowserWindow
+  directory: string;
+  win: BrowserWindow;
 }
 
-export async function buildMain({project, win}: buildMainProps) {
+export async function buildMain({ project, directory, win }: buildMainProps) {
   const data = await fetchConfig(project);
 
-  sendLog({message: 'Fetching Project Data...', type:'normal'}, win)
+  console.log(directory)
 
-  data.data.sectionOrders.map(async (val, _idx) => {
-    console.log(val)
+  sendLog({ message: 'Fetching Project Data...', type: 'normal' }, win);
 
+  let html = ``;
+  let css = ``;
+
+  for (const val of data.data.sectionOrders) {
     if (val.trim() === 'navbar') {
-      console.log(data)
-      const {htmlBlock, cssBlock} = await buildNavbar({data: data.data.sections[val.trim()], win});
 
-      console.log(htmlBlock, cssBlock)
+      sendLog({ message: 'processing navbar...', type: 'normal' }, win);
+      const res = await buildNavbar({ data: data.data.sections[val.trim()], win, directory});
+      html += ` ${res.htmlBlock}`;
+      css += ` ${res.cssBlock}`;
+
+    } else if (val.trim() === 'hero') {
+
+      sendLog({ message: 'processing hero', type: 'normal' }, win);
+      const res = await buildHero({ data: data.data.sections[val.trim()], win });
+      html += ` ${res.htmlBlock}`;
+      css += ` ${res.cssBlock}`;
     }
-  })
+  }
+
+  const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
+
 }

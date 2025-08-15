@@ -42,6 +42,6 @@ export const selectDir = () => {
   return window.electronAPI.selectDir();
 }
 
-export const startBuild = (data: {project: string}) => {
+export const startBuild = (data: {project: string, directory: string}) => {
   return window.electronAPI.startBuild(data);
 }

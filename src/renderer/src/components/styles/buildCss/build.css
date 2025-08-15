@@ -32,7 +32,8 @@
 }
 
 .kupo-build-log-normal {
-    color: #ccc;
+    color: #8dc891;
+    /* soft green */
 }
 
 .kupo-build-log-warning {
@@ -113,7 +114,9 @@
     width: 100%;
 }
 
-
 .kupo-console-pointer {
-    font-size: 16px;
+    color: rgba(255, 255, 255, 0.25);
+    font-weight: bold;
+    margin-right: 0.5em;
+    font-size:14px;
 }

@@ -22,7 +22,7 @@ if (process.contextIsolated) {
       updateConfig: (data: {name: string, data: any}) => ipcRenderer.invoke('updateConfig', data),
       selectImage: () => ipcRenderer.invoke('selectImage'),
       selectDir: () => ipcRenderer.invoke('selectDir'),
-      startBuild: (data: {project: string}) => ipcRenderer.invoke('startBuild', data),
+      startBuild: (data: {project: string, directory: string}) => ipcRenderer.invoke('startBuild', data),
       onBuildLog: (callback: (log: any) => void) => {
         ipcRenderer.on('build-log', (_event, log) => callback(log));
       },

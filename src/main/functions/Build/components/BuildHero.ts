@@ -1,4 +1,5 @@
 import { BrowserWindow } from "electron";
+import { sendLog } from "../sendLog";
 
 interface returnProps {
   htmlBlock: string;
@@ -11,8 +12,8 @@ interface HeroProps {
 }
 
 export async function buildHero({ data, win }: HeroProps): Promise<returnProps> {
+  sendLog({ message: 'Building Hero...', type: 'normal' }, win)
 
-  console.log(data)
-
-  return { htmlBlock: '', cssBlock: '' }
+  return { htmlBlock: `<div class='hero'></div>`, cssBlock: `.hero  {font-size: ${data.style.styles.font['font size']}}`
+  }
 }

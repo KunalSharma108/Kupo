@@ -20,7 +20,7 @@ function Build({ project, directory }: buildProps): React.JSX.Element {
   const buildDone = useRef(false);
 
   if (project !== null && directory.trim() !== "" && hasStarted.current === false) {
-    startBuild({ project });
+    startBuild({ project, directory });
     hasStarted.current = true;
   }
 
