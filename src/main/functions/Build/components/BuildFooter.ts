@@ -1,13 +1,18 @@
 import { BrowserWindow } from "electron";
-import { sendLog } from "../sendLog";
 
-interface buildFooterProps {
+interface returnProps {
+  htmlBlock: string;
+  cssBlock: string;
+}
+
+interface footerProps {
   data: any;
   win: BrowserWindow;
 }
 
-export async function buildFooter({ data, win }: buildFooterProps) {
+export async function buildNavbar({ data, win }: footerProps): Promise<returnProps> {
+
   console.log(data)
 
-  sendLog({message:'YOO YOUR FOOTER IS UNDERWAY', type: 'normal'}, win)
+  return { htmlBlock: '', cssBlock: '' }
 }

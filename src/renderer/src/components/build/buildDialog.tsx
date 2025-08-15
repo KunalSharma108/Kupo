@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import '../styles/buildCss/build.css'
+import React, { useEffect, useState } from 'react'
+import '../styles/buildCss/buildDialog.css'
 import SelectProject from './pages/SelectProject';
 import SelectDir from './pages/SelectDir';
 import { faArrowLeft, faArrowRight, faTimes } from '@fortawesome/free-solid-svg-icons';
