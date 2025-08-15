@@ -41,3 +41,7 @@ export const selectImage = () => {
 export const selectDir = () => {
   return window.electronAPI.selectDir();
 }
+
+export const startBuild = (data: {project: string}) => {
+  return window.electronAPI.startBuild(data);
+}

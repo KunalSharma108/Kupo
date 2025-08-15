@@ -67,13 +67,10 @@ export const setUpIpcHandlers = async () => {
     return null;
   });
 
-  ipcMain.handle('build-log', async (event, { project }) => {
+  ipcMain.handle('startBuild', async (event, { project }) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     if (win !== null) {
       const result = await buildMain({ project, win })
-      console.log(result)
     }
-  })
+  });
 }
-
-// CONNECT THIS TO RENDERER WITH PRELOAD AND DO THE REMAINING THINGS....

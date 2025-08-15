@@ -67,7 +67,7 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
   const pages = [
     <SelectProject setProject={setProject} selectedProject={String(selectedProject)} projects={projects} />,
     <SelectDir selectedDir={selectedDir} changeDir={changeDir} />,
-    <Build />
+    <Build project={selectedProject} directory={selectedDir}  />
   ];
 
   const goPrev = () => {
