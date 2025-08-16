@@ -25,17 +25,19 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
     if (val.trim() === 'navbar') {
 
       sendLog({ message: 'processing navbar...', type: 'normal' }, win);
-      const res = await buildNavbar({ data: data.data.sections[val.trim()], win, directory});
+      const res = await buildNavbar({ data: data.data.sections[val.trim()], win, directory });
       html += ` ${res.htmlBlock}`;
       css += ` ${res.cssBlock}`;
 
-    } else if (val.trim() === 'hero') {
-
-      sendLog({ message: 'processing hero', type: 'normal' }, win);
-      const res = await buildHero({ data: data.data.sections[val.trim()], win });
-      html += ` ${res.htmlBlock}`;
-      css += ` ${res.cssBlock}`;
     }
+
+    // } else if (val.trim() === 'hero') {
+
+    //   sendLog({ message: 'processing hero', type: 'normal' }, win);
+    //   const res = await buildHero({ data: data.data.sections[val.trim()], win });
+    //   html += ` ${res.htmlBlock}`;
+    //   css += ` ${res.cssBlock}`;
+    // }
   }
 
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
