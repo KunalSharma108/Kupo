@@ -1,6 +1,7 @@
 import { BrowserWindow } from "electron";
 import { sendLog } from "../sendLog";
 import { getBgCSS } from "../lib/styles/background";
+import { getLayoutCss } from "../lib/styles/layout";
 
 interface returnProps {
   htmlBlock: string;
@@ -22,14 +23,6 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
   if (data.style) {
     if (data.style.styles) {
       let styleCss: string = ``;
-      if (data.style.styles.background) {
-
-      } else if (data.style.styles.layout) {
-        sendLog({ message: `processing Navbar's layout css`, type: 'normal' }, win);
-
-      } else {
-        sendLog({ message: `Navbar's background style data doesn't exist`, type: 'error' }, win)
-      }
 
       for (const key in data.style.styles) {
         if (key.toLowerCase() === 'background') {
@@ -51,8 +44,31 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
 
         } else if (key.toLowerCase() === 'layout') {
           sendLog({ message: `Processing navbar's layout`, type: 'normal' }, win)
+
+          const layout = {
+            width: data.style.styles.layout.width as 'fit-content' | 'string',
+            height: data.style.styles.layout.height as 'fit-content' | 'string',
+            'max width': data.style.styles.layout['max width'] as 'fit-content' | 'string' | 'none',
+            'max height': data.style.styles.layout['max height'] as 'fit-content' | 'string' | 'none'
+          }
+
+          if (data.style.styles.layout['vertical align'] || data.style.styles.layout['horizontal align']) {
+            sendLog(
+              {
+                message: 'Navbar Styling will skip vertical and horizontal align because its a child property and navbar is a parent component.',
+
+                type: 'warning'
+              },
+              win)
+          }
+
+          const res = await getLayoutCss({ layout: layout, win });
+
+          sendLog({ message: res.msg, type: res.type }, win);
+
+          console.log(res)
         } else {
-          sendLog({message: `Couldn't recognize navbar's ${key} style attribute`, type: 'error'}, win)
+          sendLog({ message: `Couldn't recognize navbar's ${key} style attribute`, type: 'error' }, win)
         }
       }
     } else {
