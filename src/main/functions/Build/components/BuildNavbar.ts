@@ -2,6 +2,7 @@ import { BrowserWindow } from "electron";
 import { sendLog } from "../sendLog";
 import { getBgCSS } from "../lib/styles/background";
 import { getLayoutCss } from "../lib/styles/layout";
+import { getBorderCSS } from "../lib/styles/border";
 
 interface returnProps {
   htmlBlock: string;
@@ -24,6 +25,8 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
     if (data.style.styles) {
       let styleCss: string = ``;
 
+      sendLog({message: 'Processing Navbar Styling....', type:'normal'}, win)
+
       for (const key in data.style.styles) {
         if (key.toLowerCase() === 'background') {
           sendLog({ message: `Processing Navbar's style background`, type: 'normal' }, win);
@@ -40,7 +43,7 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
 
           sendLog({ message: `Navbar's style ${res.msg}`, type: res.type }, win)
 
-          styleCss += res.code;
+          styleCss += res.code + ' ';
 
         } else if (key.toLowerCase() === 'layout') {
           sendLog({ message: `Processing navbar's layout`, type: 'normal' }, win)
@@ -66,11 +69,29 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
 
           sendLog({ message: res.msg, type: res.type }, win);
 
-          console.log(res)
+          if (res.success) styleCss += res.code + ' ';
+
+        } else if (key.toLowerCase() === 'border') {
+          sendLog({message: `processing Navbar's border styling`, type: 'normal'}, win);
+
+          const border = {
+            'border color': data.style.styles.border['border color'] as string,
+            'border width': data.style.styles.border['border width'] as string,
+            'border style': data.style.styles.border['border style'] as 'none' | 'dotted' | 'dashed' | 'solid',
+            'border radius': data.style.styles.border['border radius'] as string, 
+          }
+
+          const res = await getBorderCSS({border, win});
+
+          sendLog({message: res.msg, type: res.type}, win);
+
+          if (res.success) styleCss += ` ${res.code}`;
         } else {
           sendLog({ message: `Couldn't recognize navbar's ${key} style attribute`, type: 'error' }, win)
         }
       }
+
+      console.log(styleCss)
     } else {
       sendLog({ message: `Navbar's Styling data doesn't exist`, type: 'error' }, win)
     }

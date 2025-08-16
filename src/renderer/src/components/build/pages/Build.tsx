@@ -18,6 +18,8 @@ function Build({ project, directory }: buildProps): React.JSX.Element {
   const [logs, setLogs] = useState<logsProps[]>([]);
   const progressTimer = useRef<NodeJS.Timeout | null>(null);
   const buildDone = useRef(false);
+  const consoleRef = useRef<HTMLDivElement>(null);
+
 
   if (project !== null && directory.trim() !== "" && hasStarted.current === false) {
     startBuild({ project, directory });
@@ -39,10 +41,18 @@ function Build({ project, directory }: buildProps): React.JSX.Element {
     };
   }, []);
 
+
+  useEffect(() => {
+    if (consoleRef.current) {
+      consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
+    }
+  }, [logs]); 
+
+
   return (
     <div className="kupo-build-container">
       <div className="kupo-build-console-wrapper">
-        <div className="kupo-build-console">
+        <div className="kupo-build-console" ref={consoleRef}>
           {logs.map((val, idx) => (
             <p key={idx} className={`kupo-build-log`}>
               <span className="kupo-console-pointer">{'>'}</span>
