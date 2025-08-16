@@ -42,7 +42,12 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
     }, win)
   }
 
-  css += ` border-radius: ${border["border radius"]}`;
+
+  let radiusNumber = border["border radius"].split('-')[0];
+  let radiusMetric = border["border radius"].split('-')[1];
+
+  
+  css += ` border-radius: ${radiusNumber}${radiusMetric}`;
 
   return { success: true, msg: 'Border styling is done.', type: 'normal', code: css }
 }
