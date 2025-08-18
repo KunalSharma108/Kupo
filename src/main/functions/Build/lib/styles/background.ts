@@ -17,7 +17,7 @@ interface bgProps {
 export async function getBgCSS({ background, directory }: bgProps): Promise<cssReturnProps> {
   if (background.type === false) return { success: false, msg: 'Background type is false', type: 'warning' }
 
-  if (background.type === 'color') {
+  if (background.type === 'color' && background.color !== false) {
     if (background.color[0] === '#') {
       return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
     } else {
@@ -27,23 +27,18 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
         return { success: false, msg: 'Color background failed.', type: 'error' }
       }
     }
-  } else if (background.type === 'image') {
+  } else if (background.type === 'image' && background.image !== false) {
     const res = await copyImg({ imgPath: String(background.image), destPath: directory });
 
     if (res.success && res.baseName !== undefined) {
-      const css = `
-        background-image: url('${res.baseName}');
-        background-position: center;
-        background-size: fit;
-        background-repeat:no-repeat;
-      `;
+      const css = `background-image: url('${res.baseName}'); background-position: center; background-size: fit; background-repeat:no-repeat;`;
 
       return { success: true, msg: 'Background image is done. ✅', type: 'normal', code: css }
     } else {
       return { success: false, msg: res.msg, type: res.type }
     }
 
-  } else if (background.type === 'gradient') {
+  } else if (background.type === 'gradient' && background.gradient !== false) {
     const gradientDirection = background.gradient.split(' ')[background.gradient.split(' ').length - 1];
     const gradientColors = background.gradient.split(' ').filter((_, idx) => idx !== background.gradient.split(' ').length - 1);
 
@@ -54,7 +49,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       code: `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")});`
     }
 
-  } else if (background.type === 'image + gradient') {
+  } else if (background.type === 'image + gradient' && background["image + gradient"] !== false) {
     const imgPath: string = background["image + gradient"].split(',')[0];
     const gradientValues: string = background["image + gradient"].split(',')[1];
 
@@ -64,18 +59,13 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       const gradientDirection = gradientValues.split(' ')[gradientValues.split(' ').length - 1];
       const gradientColors = gradientValues.split(' ').filter((_, idx) => idx !== gradientValues.split(' ').length - 1);
 
-      const css = `
-      background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}');
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-    `;
+      const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat;`;
 
       return { success: true, msg: 'Image + gradient background done. ✅', type: 'normal', code: css }
     } else {
       return { success: false, msg: res.msg, type: res.type }
     }
   } else {
-    return { success: false, msg: `Background type is invalid.`, type: 'error' }
+    return { success: false, msg: `Background type is invalid or background type selected is false.`, type: 'error' }
   }
 }

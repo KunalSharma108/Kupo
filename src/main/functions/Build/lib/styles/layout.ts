@@ -17,7 +17,6 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
   let css = '';
 
   for (const val in layout) {
-
     if (val === 'width' || val === 'height') {
       if (layout[val] === 'fit-content') {
         css += ` ${val}: fit-content;`
