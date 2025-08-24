@@ -25,9 +25,7 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
     if (data.style.styles) {
       let navbarStyleCSS = await getCSS({styleContent: 'navbar', styleType: 'styles', style: data.style.styles, win, directory});
 
-      console.log(navbarStyleCSS)
-
-      css += `${navbarStyleCSS.code}`;
+      css += `.navbar {\n${navbarStyleCSS.code}\n}`;
     } else {
       sendLog({ message: `Navbar's Styling data doesn't exist`, type: 'error' }, win)
     }

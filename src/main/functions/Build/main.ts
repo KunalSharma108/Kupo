@@ -21,8 +21,6 @@ interface buildMainProps {
 export async function buildMain({ project, directory, win }: buildMainProps) {
   const data = await fetchConfig(project);
 
-  console.log(directory)
-
   sendLog({ message: 'Fetching Project Data...', type: 'normal' }, win);
 
   let html = ``;
@@ -41,6 +39,7 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
       const res = await buildNavbar({ data: data.data.sections[val.trim()], win, directory });
       html += ` ${res.htmlBlock}`;
       css += ` ${res.cssBlock}`;
+
     }
     // } else if (val.trim() === 'hero') {
 
@@ -51,5 +50,11 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
     // }
   }
 
+  css = `${fontFamilyImports}\n${formatText(css)}`;
+
+  console.log(css)
+
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
+
+
 }

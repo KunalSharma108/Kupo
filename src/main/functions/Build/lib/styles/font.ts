@@ -8,7 +8,7 @@ interface fontProps {
   font: {
     "font color": string;
     "font family": string;
-    "font weight": number;
+    "font weight": number | 'default';
     "font size": string;
   },
 
@@ -27,20 +27,26 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
       sendLog({ message: 'Invalid color type of font.', type: 'error' }, win)
     }
 
-    Object.entries(fontOptions).map((val) => {
-      if (val[1].label.toLowerCase() === font["font family"].toLowerCase()) {
-        css += `font-family: ${val[1].fontFamily} `;
-      }
-    });
+    if (font["font family"].toLowerCase() !== 'default') {
+      Object.entries(fontOptions).map((val) => {
+        if (val[1].label.toLowerCase() === font["font family"].toLowerCase()) {
+          css += `font-family: ${val[1].fontFamily} `;
+        }
+      });
+    }
 
-    css += `font-weight: ${font["font weight"]}; `;
+    if (font["font weight"] !== 'default') {
+      css += `font-weight: ${font["font weight"]}; `;
+    }
 
-    Object.entries(fontSizes).map((val) => {
-      if (val[1].label.toLowerCase() === font["font size"].toLowerCase()) {
-        css += `font-size: ${val[1].css} `;
-      }
-    })
-
+    if (font["font size"].toLowerCase() !== 'default') {
+      Object.entries(fontSizes).map((val) => {
+        if (val[1].label.toLowerCase() === font["font size"].toLowerCase()) {
+          css += `font-size: ${val[1].css} `;
+        }
+      })
+    }
+    
     return { success: true, msg: 'font is done', type: 'normal', code: css }
   } catch (error) {
     sendLog({ message: ' an error occured while generating font css', type: 'error' }, win)

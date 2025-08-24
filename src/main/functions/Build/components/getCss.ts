@@ -5,6 +5,9 @@ import { getLayoutCss } from "../lib/styles/layout";
 import { getBorderCSS } from "../lib/styles/border";
 import { getTransition } from "../lib/styles/Transition";
 import { getFont } from "../lib/styles/font";
+import { getMargin } from "../lib/styles/margin";
+import { getPadding } from "../lib/styles/padding";
+import { getShadow } from "../lib/styles/shadow";
 
 interface getCssProps {
   styleContent: 'navbar' | 'hero' | 'feature' | 'feature';
@@ -98,10 +101,10 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           'transition duration': style.transition['transition duration'] as number,
           'transition style': style.transition['transition style'] as 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'undefined'
         }
-        const res = await getTransition({transition, win});
+        const res = await getTransition({ transition, win });
 
         if (res.success) {
-          sendLog({message: `${styleContent}'s ${res.msg}`, type:'normal'}, win);
+          sendLog({ message: `${styleContent}'s ${res.msg}`, type: 'normal' }, win);
           styleCss += res.code + ' ';
         }
       } else if (key.toLowerCase() === 'font') {
@@ -114,14 +117,73 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           'font size': style.font['font size'] as string
         }
 
-        const res = await getFont({font, win});
+        const res = await getFont({ font, win });
 
         if (res.success) {
           styleCss += `${res.code} `;
+          sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
         } else {
           console.log(res)
         }
-        
+
+      } else if (key.toLowerCase() === 'margin') {
+        sendLog({ message: `processing ${styleContent}'s margin ${writtenStyleType} property`, type: 'normal' }, win);
+
+        const margin = {
+          'margin top': style.margin['margin top'],
+          'margin bottom': style.margin['margin bottom'],
+          'margin right': style.margin['margin right'],
+          'margin left': style.margin['margin left']
+        }
+
+        const res = await getMargin({ margin, win });
+
+        if (res.success) {
+          styleCss += `${res.code} `;
+          sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
+        } else {
+          console.log(res)
+        }
+
+      } else if (key.toLowerCase() === 'padding') {
+        sendLog({ message: `processing ${styleContent}'s padding ${writtenStyleType} property`, type: 'normal' }, win);
+
+        const padding = {
+          'padding top': style.padding['padding top'],
+          'padding bottom': style.padding['padding bottom'],
+          'padding right': style.padding['padding right'],
+          'padding left': style.padding['padding left']
+        }
+
+        const res = await getPadding({ padding, win });
+
+        if (res.success) {
+          styleCss += `${res.code} `;
+          sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
+        } else {
+          console.log(res)
+        }
+
+      } else if (key.toLowerCase() === 'shadow') {
+        sendLog({ message: `processing ${styleContent}'s shadow ${writtenStyleType} property`, type: 'normal' }, win);
+
+        const shadow = {
+          'offset x': style.shadow['offset x'],
+          'offset y': style.shadow['offset y'],
+          'blur radius': style.shadow['blur radius'],
+          'spread radius': style.shadow['spread radius'],
+          color: style.shadow.color,
+          inset: style.shadow.inset,
+        }
+
+        const res = await getShadow({ shadow, win });
+
+        if (res.success) {
+          styleCss += `${res.code} `;
+          sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
+        } else {
+          console.log(res)
+        }
       } else {
         sendLog({
           message: `Couldn't recognize ${styleContent}'s ${key} ${writtenStyleType} attribute`,

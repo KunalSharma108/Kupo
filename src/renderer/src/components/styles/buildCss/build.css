@@ -99,7 +99,7 @@
     height: 100%;
     background: linear-gradient(90deg, #21abe5e2, #1464ef);
     transition: width 0.3s ease;
-    animation: increaseWidth 150s ease-in-out;
+    animation: increaseWidth 15s ease-in-out;
     width: 0;
 }
 
