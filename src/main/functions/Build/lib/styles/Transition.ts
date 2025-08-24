@@ -19,12 +19,12 @@ export async function getTransition({ transition, win }: getTranstionProps): Pro
       transition["transition duration"] !== 'undefined' &&
       transition["transition style"] === 'undefined'
     ) {
-      css += `transition-duration: ${transition["transition duration"]}ms`
+      css += `transition-duration: ${transition["transition duration"]}ms; `
     } else if (transition["transition duration"] !== undefined &&
       transition["transition duration"] !== 'undefined' &&
       transition["transition style"] !== 'undefined'
     ) {
-      css += `transition: all ${transition["transition duration"]}ms ${transition["transition style"]}`
+      css += `transition: all ${transition["transition duration"]}ms ${transition["transition style"]}; `
     } else {
       sendLog({ message: `transition duration has an unexpected value of ${transition["transition duration"]}`, type: 'error' }, win);
     }

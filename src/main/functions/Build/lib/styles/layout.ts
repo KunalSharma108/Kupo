@@ -25,7 +25,7 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
         const numValue = layout[val].split('-')[0];
         const metric = layout[val].split('-')[1];
 
-        css += ` ${val}: ${numValue}${metric};`
+        css += ` ${val}: ${numValue}${metric}; `
       } else {
 
         sendLog({ message: `the layout property ${val} carries an unexpected value: ${layout[val]}`, type: 'error' }, win)
@@ -41,7 +41,7 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
         const numValue = layout[val].split('-')[0];
         const metric = layout[val].split('-')[1];
 
-        css += ` ${newValue}: ${numValue}${metric};`
+        css += ` ${newValue}: ${numValue}${metric}; `
       } else {
         sendLog({ message: `the layout property ${val} carries an unexpected value: ${layout[val]}`, type: 'error' }, win)
       }

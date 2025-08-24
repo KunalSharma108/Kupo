@@ -4,6 +4,13 @@ import { fetchConfig } from "../config";
 import { buildNavbar } from "./components/BuildNavbar";
 import { buildHero } from "./components/BuildHero";
 import { fullHTML } from "./lib/template/HTML";
+import { fontOptions } from "./lib/presets/fonts";
+
+function formatText(text: string): string {
+  let result = text.replace(/ {2,}/g, " ");
+  result = result.replace(/;/g, ";\n");
+  return result.trim();
+}
 
 interface buildMainProps {
   project: string;
@@ -21,6 +28,12 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
   let html = ``;
   let css = ``;
 
+  let fontFamilyImports = '';
+
+  Object.values(fontOptions).map((val) => {
+    fontFamilyImports += `${val.import}\n`
+  });
+
   for (const val of data.data.sectionOrders) {
     if (val.trim() === 'navbar') {
 
@@ -28,9 +41,7 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
       const res = await buildNavbar({ data: data.data.sections[val.trim()], win, directory });
       html += ` ${res.htmlBlock}`;
       css += ` ${res.cssBlock}`;
-
     }
-
     // } else if (val.trim() === 'hero') {
 
     //   sendLog({ message: 'processing hero', type: 'normal' }, win);
@@ -41,5 +52,4 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
   }
 
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
-
 }

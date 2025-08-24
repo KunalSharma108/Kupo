@@ -1,8 +1,5 @@
 import { BrowserWindow } from "electron";
 import { sendLog } from "../sendLog";
-import { getBgCSS } from "../lib/styles/background";
-import { getLayoutCss } from "../lib/styles/layout";
-import { getBorderCSS } from "../lib/styles/border";
 import { getCSS } from "./getCss";
 
 interface returnProps {
@@ -29,6 +26,8 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
       let navbarStyleCSS = await getCSS({styleContent: 'navbar', styleType: 'styles', style: data.style.styles, win, directory});
 
       console.log(navbarStyleCSS)
+
+      css += `${navbarStyleCSS.code}`;
     } else {
       sendLog({ message: `Navbar's Styling data doesn't exist`, type: 'error' }, win)
     }

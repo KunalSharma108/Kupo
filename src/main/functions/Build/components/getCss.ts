@@ -3,7 +3,8 @@ import { sendLog } from "../sendLog";
 import { getBgCSS } from "../lib/styles/background";
 import { getLayoutCss } from "../lib/styles/layout";
 import { getBorderCSS } from "../lib/styles/border";
-import { getTransition } from "../lib/styles/getTransition";
+import { getTransition } from "../lib/styles/Transition";
+import { getFont } from "../lib/styles/font";
 
 interface getCssProps {
   styleContent: 'navbar' | 'hero' | 'feature' | 'feature';
@@ -104,7 +105,23 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           styleCss += res.code + ' ';
         }
       } else if (key.toLowerCase() === 'font') {
-        //! COMPLETEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+        sendLog({ message: `processing ${styleContent}'s font ${writtenStyleType} property`, type: 'normal' }, win);
+
+        const font = {
+          'font color': style.font['font color'] as string,
+          'font family': style.font['font family'] as string,
+          'font weight': style.font['font weight'] as number,
+          'font size': style.font['font size'] as string
+        }
+
+        const res = await getFont({font, win});
+
+        if (res.success) {
+          styleCss += `${res.code} `;
+        } else {
+          console.log(res)
+        }
+        
       } else {
         sendLog({
           message: `Couldn't recognize ${styleContent}'s ${key} ${writtenStyleType} attribute`,

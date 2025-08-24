@@ -36,7 +36,7 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
     let widthMetric = border["border width"].split('-')[1];
     let style = border["border style"];
 
-    let color = border["border color"][0] === '#' ? border["border color"] : colors[border["border color"]];
+    let color = border["border color"][0] === '#' ? border["border color"] : `#${colors[border["border color"]]}`;
 
     if (color === undefined) {
       sendLog({
@@ -60,7 +60,7 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
   let radiusNumber = border["border radius"].split('-')[0];
   let radiusMetric = border["border radius"].split('-')[1];
 
-  css += ` border-radius: ${radiusNumber}${radiusMetric}`;
+  css += ` border-radius: ${radiusNumber}${radiusMetric} `;
 
   return { success: true, msg: 'Border styling is done.', type: 'normal', code: css }
 }
