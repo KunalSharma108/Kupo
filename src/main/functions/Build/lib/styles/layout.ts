@@ -18,15 +18,15 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
   let css = '';
 
   for (const val in layout) {
-    if (layout[val] === 'undefined' || layout[val] === undefined || layout[val] === 'Default') continue;
+    if (layout[val] === 'undefined' || layout[val] === undefined || layout[val] === 'Default' || layout[val] === 'none') continue;
 
-    // if (layout[val] === 'vertical align' && layout["vertical align"] !== 'undefined' && layout["vertical align"] !== null) {
-    //   css += ` display: flex; flex-direction: column; `;
+    if (val === 'vertical align' && layout["vertical align"] !== 'undefined' && layout["vertical align"] !== null) {
+      css += ` display: flex; flex-direction: column; `;
 
-    //   let flexValue = layout["vertical align"] === 'top' ? 'flex-start' : layout["vertical align"] === 'center' ? 'center' : 'flex-end';
+      let flexValue = layout["vertical align"] === 'top' ? 'flex-start' : layout["vertical align"] === 'center' ? 'center' : 'flex-end';
 
-    //   css += ` justify-content: ${flexValue}; `;
-    // }
+      css += ` justify-content: ${flexValue}; `;
+    }
 
     if (val === 'width' || val === 'height') {
       if (layout[val] === 'fit-content') {
@@ -38,12 +38,10 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
 
         css += ` ${val}: ${numValue}${metric}; `
       } else {
-
         sendLog({ message: `the layout property ${val} carries an unexpected value: ${layout[val]}`, type: 'error' }, win)
       }
     } else if (val === 'max width' || val === 'max height') {
       const newValue = val.replace(' ', '-')
-
 
       if (layout[val] === 'fit-content') {
         css += ` ${newValue}: fit-content;`

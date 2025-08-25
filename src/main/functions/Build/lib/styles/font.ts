@@ -8,7 +8,7 @@ interface fontProps {
   font: {
     "font color": string;
     "font family": string;
-    "font weight": number | 'default' | 'Default';
+    "font weight": number | 'default' | 'Default' | 'undefined';
     "font size": string;
   },
 
@@ -35,7 +35,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
       });
     }
 
-    if (font["font weight"] !== 'default' && font["font weight"] !== 'Default') {
+    if (font["font weight"] !== 'default' && font["font weight"] !== 'Default' && font["font weight"] !== 'undefined') {
       css += `font-weight: ${font["font weight"]}; `;
     }
 

@@ -99,16 +99,67 @@ async function getNavLogoCss({ data, win, directory }: navbarProps): Promise<str
   return css
 }
 
+async function getNavLinksCss({ data, win, directory }: navbarProps): Promise<string> {
+  let css = '';
+  let navLinksClassName = 'nav-links';
+
+  if (data.navLinkStyle) {
+    if (data.navLinkStyle.styles) {
+      let navLinksStyleCSS = await getCSS({
+        styleContent: 'navbar logo',
+        styleType: 'styles',
+        style: data.navLinkStyle.styles, win, directory
+      });
+
+      if (navLinksStyleCSS.code?.trim() !== '') {
+        css += `.${navLinksClassName} > div {\n${navLinksStyleCSS.code}\n}`;
+      } else {
+        sendLog({ message: 'No Style css of Navbar links was generated.', type: 'warning' }, win)
+      }
+
+    } else {
+      sendLog({ message: `Navbar's logo's Styling data doesn't exist`, type: 'error' }, win)
+    }
+
+    if (data.navLinkStyle.hoverStyles) {
+      let navLinksHoverStyleCSS = await getCSS({
+        styleContent: 'navbar',
+        styleType: 'hoverStyles',
+        style: data.navLinkStyle.hoverStyles, win, directory
+      });
+
+      if (navLinksHoverStyleCSS.code?.trim() !== '') {
+        css += `\n.${navLinksClassName} > div:hover {\n${navLinksHoverStyleCSS.code}\n}`;
+      } else {
+        sendLog({ message: 'No Hover style css of Navbar links was generated', type: 'warning' }, win)
+      }
+
+    } else {
+      sendLog({ message: `Navbar's links' hover style data doesn't exist`, type: 'error' }, win)
+    }
+  } else {
+    sendLog({ message: `Navbar's links' Styling and Hover styling data doesn't exist`, type: 'error' }, win)
+  }
+
+  return css
+}
+
 export async function buildNavbar({ data, win, directory }: navbarProps): Promise<returnProps> {
   let html: string = ``;
   let css: string = ``;
 
   sendLog({ message: 'Building Navbar...', type: 'normal' }, win);
 
+  sendLog({ message: 'processing navbar\'s css', type: 'normal' }, win)
   const navCSS = await getNavbarCss({ data, win, directory });
+  
+  sendLog({ message: 'processing navbar\'s Logo css', type: 'normal' }, win)
   const navLogoCSS = await getNavLogoCss({ data, win, directory });
 
-  css += `${navCSS}\n${navLogoCSS}`
+  sendLog({ message: 'processing navbar\'s Link css', type: 'normal' }, win)
+  const navLinkCSS = await getNavLinksCss({ data, win, directory });
+
+  css += `${navCSS}\n${navLogoCSS}\n${navLinkCSS}`
 
   return { htmlBlock: html, cssBlock: css }
 }

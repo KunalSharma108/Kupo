@@ -65,7 +65,7 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
         sendLog({ message: `Processing ${styleContent}'s layout`, type: 'normal' }, win)
 
         const layout = {
-          // "vertical align": style.layout['vertical align'].toLowerCase() as 'top' | 'center' | 'bottom' | 'undefined',
+          "vertical align": style.layout['vertical align']?.toLowerCase() as 'top' | 'center' | 'bottom' | 'undefined' | null,
           width: style.layout.width as 'fit-content' | 'string',
           height: style.layout.height as 'fit-content' | 'string',
           'max width': style.layout['max width'] as 'fit-content' | 'string' | 'none',

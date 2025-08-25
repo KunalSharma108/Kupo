@@ -15,8 +15,8 @@ export const defaultNavLogoStyle: styles = {
       "vertical align": 'Center',
       width: 'Default',
       height: 'Default',
-      "max width": "0-px",
-      "max height": "0-px"
+      "max width": "none",
+      "max height": "none"
     },
 
     border: {

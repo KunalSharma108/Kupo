@@ -22,7 +22,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
     } else {
       if (colors[background.color.toLowerCase()] !== undefined) {
-        return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: #${colors[background.color]}` }
+        return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: #${colors[background.color]}; ` }
       } else {
         return { success: false, msg: 'Color background failed.', type: 'error' }
       }
@@ -46,7 +46,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       success: true,
       msg: 'gradient background done. ✅',
       type: 'normal',
-      code: `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")});`
+      code: `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}); `
     }
 
   } else if (background.type === 'image + gradient' && background["image + gradient"] !== false) {
@@ -59,7 +59,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       const gradientDirection = gradientValues.split(' ')[gradientValues.split(' ').length - 1];
       const gradientColors = gradientValues.split(' ').filter((_, idx) => idx !== gradientValues.split(' ').length - 1);
 
-      const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat;`;
+      const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat; `;
 
       return { success: true, msg: 'Image + gradient background done. ✅', type: 'normal', code: css }
     } else {

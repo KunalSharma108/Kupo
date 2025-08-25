@@ -26,7 +26,7 @@ export async function getShadow({ shadow, win }: shadowProps): Promise<cssReturn
       shadow["spread radius"] === 'undefined' ||
       shadow.color === 'undefined' ||
       shadow.inset === 'undefined' ||
-      colors[shadow.color] === undefined
+      shadow.color[0] !== '#' && colors[shadow.color.toLowerCase()] === 'undefined'
     ) {
       sendLog({ message: 'skipping Shadow css because all of them has to contain a valid value', type: 'warning' }, win);
       return { success: false, msg: 'skipping shadow css because all of them has to contain a valid value', type: 'warning' }
