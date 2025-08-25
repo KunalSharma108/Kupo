@@ -25,7 +25,8 @@ export async function getShadow({ shadow, win }: shadowProps): Promise<cssReturn
       shadow["blur radius"] === 'undefined' ||
       shadow["spread radius"] === 'undefined' ||
       shadow.color === 'undefined' ||
-      shadow.inset === 'undefined'
+      shadow.inset === 'undefined' ||
+      colors[shadow.color] === undefined
     ) {
       sendLog({ message: 'skipping Shadow css because all of them has to contain a valid value', type: 'warning' }, win);
       return { success: false, msg: 'skipping shadow css because all of them has to contain a valid value', type: 'warning' }
@@ -42,7 +43,7 @@ export async function getShadow({ shadow, win }: shadowProps): Promise<cssReturn
       let blurNum = shadow["blur radius"].split('-')[0];
       let blurMetric = shadow["blur radius"].split('-')[1];
 
-      let color = shadow.color[0] === '#' ? shadow.color : `#${colors[shadow.color]}`;
+      let color = shadow.color[0] === '#' ? shadow.color : `#${colors[shadow.color.toLowerCase()]}`;
 
       css = `box-shadow: ${xNum}${xMetric} ${yNum}${yMetric} ${blurNum}${blurMetric} ${spreadNum}${spreadMetric} ${color} ${shadow.inset}; `
 

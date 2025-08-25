@@ -8,7 +8,7 @@ interface fontProps {
   font: {
     "font color": string;
     "font family": string;
-    "font weight": number | 'default';
+    "font weight": number | 'default' | 'Default';
     "font size": string;
   },
 
@@ -22,7 +22,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
     if (font["font color"][0] === '#') {
       css = `color: ${font["font color"]}; `
     } else if (colors[font["font color"]]) {
-      css += `color: #${colors[font["font color"]]}; `
+      css += `color: #${colors[font["font color"].toLowerCase()]}; `
     } else {
       sendLog({ message: 'Invalid color type of font.', type: 'error' }, win)
     }
@@ -35,7 +35,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
       });
     }
 
-    if (font["font weight"] !== 'default') {
+    if (font["font weight"] !== 'default' && font["font weight"] !== 'Default') {
       css += `font-weight: ${font["font weight"]}; `;
     }
 
@@ -46,7 +46,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
         }
       })
     }
-    
+
     return { success: true, msg: 'font is done', type: 'normal', code: css }
   } catch (error) {
     sendLog({ message: ' an error occured while generating font css', type: 'error' }, win)

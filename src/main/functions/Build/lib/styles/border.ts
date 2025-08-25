@@ -8,7 +8,7 @@ interface borderProps {
     'border color': string | false | undefined | 'undefined';
     'border width': string | false | undefined | 'undefined';
     'border style': 'none' | 'dotted' | 'dashed' | 'solid' | false | undefined | 'undefined';
-    'border radius': string;
+    'border radius': string | 'undefined';
   };
   win: BrowserWindow;
 }
@@ -36,7 +36,7 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
     let widthMetric = border["border width"].split('-')[1];
     let style = border["border style"];
 
-    let color = border["border color"][0] === '#' ? border["border color"] : `#${colors[border["border color"]]}`;
+    let color = border["border color"][0] === '#' ? border["border color"] : `#${colors[border["border color"].toLowerCase()]}`;
 
     if (color === undefined) {
       sendLog({
@@ -57,10 +57,12 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
     }, win)
   }
 
-  let radiusNumber = border["border radius"].split('-')[0];
-  let radiusMetric = border["border radius"].split('-')[1];
+  if (border["border radius"] !== 'Default' && border["border radius"] !== 'undefined') {
+    let radiusNumber = border["border radius"].split('-')[0];
+    let radiusMetric = border["border radius"].split('-')[1];
 
-  css += ` border-radius: ${radiusNumber}${radiusMetric}; `;
+    css += ` border-radius: ${radiusNumber}${radiusMetric}; `;
+  }
 
   return { success: true, msg: 'Border styling is done.', type: 'normal', code: css }
 }

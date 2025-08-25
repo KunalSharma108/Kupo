@@ -64,52 +64,53 @@ export const defaultNavLinkStyle: styles = {
 
   hoverStyles: {
     background: {
-      type: "color",
-      color: "lightBlue",
+      type:false,
+      color: false,
+      image: false,
+      gradient: false,
+      "image + gradient": false,
     },
 
     layout: {
-      "vertical align": "Center",
-      "horizontal align": "Right",
       width: "Default",
       height: "Default",
-      "max width": "0-px",
-      "max height": "0-px",
+      "max width": "undefined",
+      "max height": "undefined",
     },
 
     border: {
-      "border color": "lightBlue",
-      "border width": "Default (2px)",
-      "border style": "solid",
-      "border radius": "4-px",
+      "border color": "undefined",
+      "border width": "undefined",
+      "border style": "undefined",
+      "border radius": "undefined",
     },
 
     font: {
-      "font color": "lightBlue",
-      "font family": 'Default',
-      "font weight": "0-px",
-      "font size": 'Default',
+      "font color": "undefined",
+      "font family": 'undefined',
+      "font weight": "undefined",
+      "font size": 'undefined',
     },
 
     margin: {
-      "margin top": "0-px",
-      "margin bottom": "0-px",
-      "margin left": "0-px",
-      "margin right": "0-px",
+      "margin top": "undefined",
+      "margin bottom": "undefined",
+      "margin left": "undefined",
+      "margin right": "undefined",
     },
 
     padding: {
-      "padding top": "0-px",
-      "padding bottom": "0-px",
-      "padding left": "0-px",
-      "padding right": "0-px",
+      "padding top": "undefined",
+      "padding bottom": "undefined",
+      "padding left": "undefined",
+      "padding right": "undefined",
     },
 
     shadow: {
-      "offset x": "0-px",
-      "offset y": "2-px",
-      "blur radius": "6-px",
-      "spread radius": "0-px",
+      "offset x": "undefined",
+      "offset y": "undefined",
+      "blur radius": "undefined",
+      "spread radius": "undefined",
       color: "lightBlue",
       inset: false,
     },

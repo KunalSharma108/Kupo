@@ -16,12 +16,12 @@ interface bgProps {
 
 export async function getBgCSS({ background, directory }: bgProps): Promise<cssReturnProps> {
   if (background.type === false) return { success: false, msg: 'Background type is false', type: 'warning' }
-
+  
   if (background.type === 'color' && background.color !== false) {
     if (background.color[0] === '#') {
       return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
     } else {
-      if (colors[background.color] !== undefined) {
+      if (colors[background.color.toLowerCase()] !== undefined) {
         return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: #${colors[background.color]}` }
       } else {
         return { success: false, msg: 'Color background failed.', type: 'error' }

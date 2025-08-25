@@ -10,7 +10,7 @@ import { getPadding } from "../lib/styles/padding";
 import { getShadow } from "../lib/styles/shadow";
 
 interface getCssProps {
-  styleContent: 'navbar' | 'hero' | 'feature' | 'feature';
+  styleContent: 'navbar' | 'navbar logo' | 'navbar link' | 'hero' | 'feature' | 'feature';
   styleType: 'styles' | 'hoverStyles'
 
   style: any;
@@ -55,30 +55,31 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
 
         const res = await getBgCSS({ background, directory });
 
-        sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win)
-
-        styleCss += res.code + ' ';
-
+        if (res.success) {
+          sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
+          styleCss += res.code + ' ';
+        } else {
+          console.log(res)
+        }
       } else if (key.toLowerCase() === 'layout') {
         sendLog({ message: `Processing ${styleContent}'s layout`, type: 'normal' }, win)
 
         const layout = {
+          // "vertical align": style.layout['vertical align'].toLowerCase() as 'top' | 'center' | 'bottom' | 'undefined',
           width: style.layout.width as 'fit-content' | 'string',
           height: style.layout.height as 'fit-content' | 'string',
           'max width': style.layout['max width'] as 'fit-content' | 'string' | 'none',
           'max height': style.layout['max height'] as 'fit-content' | 'string' | 'none'
         }
 
-        if (style.layout['vertical align'] || style.layout['horizontal align']) {
-          continue;
-        }
-
         const res = await getLayoutCss({ layout: layout, win });
 
-        sendLog({ message: `${styleContent}'s ${res.msg}`, type: res.type }, win);
-
-        if (res.success) styleCss += res.code + ' ';
-
+        if (res.success) {
+          sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
+          styleCss += res.code + ' ';
+        } else {
+          console.log(res)
+        }
       } else if (key.toLowerCase() === 'border') {
         sendLog({ message: `processing ${styleContent}'s border styling`, type: 'normal' }, win);
 
@@ -91,9 +92,12 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
 
         const res = await getBorderCSS({ border, win });
 
-        sendLog({ message: `${styleContent}'s ${res.msg}`, type: res.type }, win);
-
-        if (res.success) styleCss += ` ${res.code}`;
+        if (res.success) {
+          sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
+          styleCss += res.code + ' ';
+        } else {
+          console.log(res)
+        }
       } else if (key.toLowerCase() === 'transition') {
         sendLog({ message: `processing ${styleContent}'s transition ${writtenStyleType} property`, type: 'normal' }, win);
 
@@ -104,8 +108,10 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
         const res = await getTransition({ transition, win });
 
         if (res.success) {
-          sendLog({ message: `${styleContent}'s ${res.msg}`, type: 'normal' }, win);
+          sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
           styleCss += res.code + ' ';
+        } else {
+          console.log(res)
         }
       } else if (key.toLowerCase() === 'font') {
         sendLog({ message: `processing ${styleContent}'s font ${writtenStyleType} property`, type: 'normal' }, win);

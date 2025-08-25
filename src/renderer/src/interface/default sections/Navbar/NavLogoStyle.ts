@@ -63,42 +63,40 @@ export const defaultNavLogoStyle: styles = {
     },
 
     layout: {
-      "horizontal align": 'Left',
-      "vertical align": 'Center',
       width: 'Default',
       height: 'Default',
-      "max width": "0-px",
-      "max height": "0-px"
+      "max width": "undefined",
+      "max height": "undefined"
     },
 
     border: {
-      "border color": 'none',
-      "border width": "0-px",
-      "border style": 'none',
-      "border radius": "0-px"
+      "border color": 'undefined',
+      "border width": "undefined",
+      "border style": 'undefined',
+      "border radius": "undefined"
     },
 
     font: false,
 
     margin: {
-      "margin top": "0-px",
-      "margin bottom": "0-px",
-      "margin left": "0-px",
-      "margin right": "0-px"
+      "margin top": "undefined",
+      "margin bottom": "undefined",
+      "margin left": "undefined",
+      "margin right": "undefined"
     },
 
     padding: {
-      "padding top": "0-px",
-      "padding bottom": "0-px",
-      "padding left": "0-px",
-      "padding right": "0-px"
+      "padding top": "undefined",
+      "padding bottom": "undefined",
+      "padding left": "undefined",
+      "padding right": "undefined"
     },
 
     shadow: {
-      "offset x": "0-px",
-      "offset y": "0-px",
-      "blur radius": "0-px",
-      "spread radius": "0-px",
+      "offset x": "undefined",
+      "offset y": "undefined",
+      "blur radius": "undefined",
+      "spread radius": "undefined",
       color: 'white',
       inset: false,
     }
