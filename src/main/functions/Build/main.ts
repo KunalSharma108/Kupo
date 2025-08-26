@@ -9,6 +9,9 @@ import { fontOptions } from "./lib/presets/fonts";
 function formatText(text: string): string {
   let result = text.replace(/ {2,}/g, " ");
   result = result.replace(/;/g, ";\n");
+  result = result.replace(/}/g, "}\n");
+  result = result.replace(/;\n/g, ";\n ");
+  result = result.replace(/{\n/g, "{\n  ");
   return result.trim();
 }
 
@@ -26,11 +29,13 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
   let html = ``;
   let css = ``;
 
-  let fontFamilyImports = '';
+  let defaultCss = '';
 
   Object.values(fontOptions).map((val) => {
-    fontFamilyImports += `${val.import}\n`
+    defaultCss += `${val.import}\n`
   });
+
+  defaultCss += `* {\n margin: 0;\n padding: 0;\n}`;
 
   for (const val of data.data.sectionOrders) {
     if (val.trim() === 'navbar') {
@@ -50,11 +55,10 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
     // }
   }
 
-  css = `${fontFamilyImports}\n${formatText(css)}`;
+  css = `${defaultCss}\n${formatText(css)}`;
 
   console.log(css)
 
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
-
 
 }

@@ -22,7 +22,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
     } else {
       if (colors[background.color.toLowerCase()] !== undefined) {
-        return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: #${colors[background.color]}; ` }
+        return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: #${colors[background.color]};`}
       } else {
         return { success: false, msg: 'Color background failed.', type: 'error' }
       }
@@ -33,7 +33,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
     if (res.success && res.baseName !== undefined) {
       const css = `background-image: url('${res.baseName}'); background-position: center; background-size: fit; background-repeat:no-repeat;`;
 
-      return { success: true, msg: 'Background image is done. ✅', type: 'normal', code: css }
+      return { success: true, msg: 'Background image is done. ✅', type: 'normal', code: css.trim() }
     } else {
       return { success: false, msg: res.msg, type: res.type }
     }
@@ -61,7 +61,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
 
       const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat; `;
 
-      return { success: true, msg: 'Image + gradient background done. ✅', type: 'normal', code: css }
+      return { success: true, msg: 'Image + gradient background done. ✅', type: 'normal', code: css.trim() }
     } else {
       return { success: false, msg: res.msg, type: res.type }
     }

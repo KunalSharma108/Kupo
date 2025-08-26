@@ -57,7 +57,11 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
     }, win)
   }
 
-  if (border["border radius"] !== 'Default' && border["border radius"] !== 'undefined') {
+  if (
+    border["border radius"] !== 'Default' &&
+    border["border radius"].toLowerCase() !== 'undefined' &&
+    border["border radius"].toLowerCase() !== 'none'
+  ) {
     let radiusNumber = border["border radius"].split('-')[0];
     let radiusMetric = border["border radius"].split('-')[1];
 

@@ -30,7 +30,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
     if (font["font family"].toLowerCase() !== 'default') {
       Object.entries(fontOptions).map((val) => {
         if (val[1].label.toLowerCase() === font["font family"].toLowerCase()) {
-          css += `font-family: ${val[1].fontFamily} `;
+          css += `font-family: ${val[1].fontFamily}; `;
         }
       });
     }

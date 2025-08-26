@@ -198,7 +198,7 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
       }
     }
 
-    return { success: true, msg: `Successfully built ${writtenStyleType} properties of ${styleContent}`, code: styleCss }
+    return { success: true, msg: `Successfully built ${writtenStyleType} properties of ${styleContent}`, code: styleCss.trim() }
 
   } catch (error) {
     sendLog({ message: `There was an error while processing ${writtenStyleType} properties of ${styleContent}`, type: 'error' }, win);
