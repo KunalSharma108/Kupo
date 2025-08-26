@@ -35,7 +35,7 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
     defaultCss += `${val.import}\n`
   });
 
-  defaultCss += `* {\n margin: 0;\n padding: 0;\n}`;
+  defaultCss += `* {\n margin: 0;\n padding: 0;\n box-sizing: border-box; background: transparent; border: none; outline: none;}`;
 
   for (const val of data.data.sectionOrders) {
     if (val.trim() === 'navbar') {
@@ -57,8 +57,7 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
 
   css = `${defaultCss}\n${formatText(css)}`;
 
-  console.log(css)
-
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
 
+  console.log(fullCode);
 }

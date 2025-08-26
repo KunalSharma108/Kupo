@@ -23,7 +23,7 @@
 
 .kupo-build-log {
     display: flex;
-    align-items: center;
+    align-items: center; 
     gap: 10px;
     text-align: left;
     margin: 0;

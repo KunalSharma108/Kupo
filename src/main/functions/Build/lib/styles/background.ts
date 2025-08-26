@@ -15,57 +15,69 @@ interface bgProps {
 }
 
 export async function getBgCSS({ background, directory }: bgProps): Promise<cssReturnProps> {
+  console.log(background)
   if (background.type === false) return { success: false, msg: 'Background type is false', type: 'warning' }
   
-  if (background.type === 'color' && background.color !== false) {
-    if (background.color[0] === '#') {
-      return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
-    } else {
-      if (colors[background.color.toLowerCase()] !== undefined) {
-        return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: #${colors[background.color]};`}
+  try {
+    if (background.type === 'color' && background.color !== false) {
+      console.log('passed first check')
+      if (background.color[0] === '#') {
+        console.log('in the # one')
+        return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
       } else {
-        return { success: false, msg: 'Color background failed.', type: 'error' }
+        if (colors[background.color.toLowerCase()] !== undefined) {
+          let color = `#${colors[background.color.toLowerCase()]}`;
+          console.log('in the second check:', color)
+          return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: ${color};` }
+        } else {
+          console.log('in the color background failed one.')
+          return { success: false, msg: 'Color background failed.', type: 'error' }
+        }
       }
-    }
-  } else if (background.type === 'image' && background.image !== false) {
-    const res = await copyImg({ imgPath: String(background.image), destPath: directory });
+    } else if (background.type === 'image' && background.image !== false) {
+      const res = await copyImg({ imgPath: String(background.image), destPath: directory });
 
-    if (res.success && res.baseName !== undefined) {
-      const css = `background-image: url('${res.baseName}'); background-position: center; background-size: fit; background-repeat:no-repeat;`;
+      if (res.success && res.baseName !== undefined) {
+        const css = `background-image: url('${res.baseName}'); background-position: center; background-size: fit; background-repeat:no-repeat;`;
 
-      return { success: true, msg: 'Background image is done. ✅', type: 'normal', code: css.trim() }
+        return { success: true, msg: 'Background image is done. ✅', type: 'normal', code: css.trim() }
+      } else {
+        return { success: false, msg: res.msg, type: res.type }
+      }
+
+    } else if (background.type === 'gradient' && background.gradient !== false) {
+      const gradientDirection = background.gradient.split(' ')[background.gradient.split(' ').length - 1];
+      const gradientColors = background.gradient.split(' ').filter((_, idx) => idx !== background.gradient.split(' ').length - 1);
+
+      return {
+        success: true,
+        msg: 'gradient background done. ✅',
+        type: 'normal',
+        code: `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}); `
+      }
+
+    } else if (background.type === 'image + gradient' && background["image + gradient"] !== false) {
+      const imgPath: string = background["image + gradient"].split(',')[0];
+      const gradientValues: string = background["image + gradient"].split(',')[1];
+
+      const res = await copyImg({ imgPath: imgPath, destPath: directory });
+
+      if (res.success && res.baseName !== undefined) {
+        const gradientDirection = gradientValues.split(' ')[gradientValues.split(' ').length - 1];
+        const gradientColors = gradientValues.split(' ').filter((_, idx) => idx !== gradientValues.split(' ').length - 1);
+
+        const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat; `;
+
+        return { success: true, msg: 'Image + gradient background done. ✅', type: 'normal', code: css.trim() }
+      } else {
+        return { success: false, msg: res.msg, type: res.type }
+      }
     } else {
-      return { success: false, msg: res.msg, type: res.type }
+      return { success: false, msg: `Background type is invalid or background type selected is false.`, type: 'error' }
     }
+  } catch (error) {
+    console.log(`THERE WAS ANN ERRORO ${error}`)
+    return { success: false, msg: `there was an error: ${error}`, type: 'error' }
 
-  } else if (background.type === 'gradient' && background.gradient !== false) {
-    const gradientDirection = background.gradient.split(' ')[background.gradient.split(' ').length - 1];
-    const gradientColors = background.gradient.split(' ').filter((_, idx) => idx !== background.gradient.split(' ').length - 1);
-
-    return {
-      success: true,
-      msg: 'gradient background done. ✅',
-      type: 'normal',
-      code: `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}); `
-    }
-
-  } else if (background.type === 'image + gradient' && background["image + gradient"] !== false) {
-    const imgPath: string = background["image + gradient"].split(',')[0];
-    const gradientValues: string = background["image + gradient"].split(',')[1];
-
-    const res = await copyImg({ imgPath: imgPath, destPath: directory });
-
-    if (res.success && res.baseName !== undefined) {
-      const gradientDirection = gradientValues.split(' ')[gradientValues.split(' ').length - 1];
-      const gradientColors = gradientValues.split(' ').filter((_, idx) => idx !== gradientValues.split(' ').length - 1);
-
-      const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat; `;
-
-      return { success: true, msg: 'Image + gradient background done. ✅', type: 'normal', code: css.trim() }
-    } else {
-      return { success: false, msg: res.msg, type: res.type }
-    }
-  } else {
-    return { success: false, msg: `Background type is invalid or background type selected is false.`, type: 'error' }
   }
 }

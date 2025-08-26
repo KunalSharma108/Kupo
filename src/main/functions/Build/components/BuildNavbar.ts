@@ -107,6 +107,8 @@ async function getNavLinksCss({ data, win, directory }: navbarProps): Promise<st
   let css = '';
   let navLinksClassName = 'nav-links';
 
+  css += `.${navLinksClassName} {display: flex;}`
+
   if (data.navLinkStyle) {
     if (data.navLinkStyle.styles) {
       let navLinksStyleCSS = await getCSS({
@@ -116,7 +118,7 @@ async function getNavLinksCss({ data, win, directory }: navbarProps): Promise<st
       });
 
       if (navLinksStyleCSS.code?.trim() !== '' && navLinksStyleCSS.success) {
-        css += `.${navLinksClassName} > div {\n${navLinksStyleCSS.code}\n}`;
+        css += `.${navLinksClassName} > button {\n${navLinksStyleCSS.code}\n}`;
       } else {
         sendLog({ message: 'No Style css of Navbar links was generated.', type: 'warning' }, win)
       }
@@ -135,7 +137,7 @@ async function getNavLinksCss({ data, win, directory }: navbarProps): Promise<st
       });
 
       if (navLinksHoverStyleCSS.code?.trim() !== '' && navLinksHoverStyleCSS.success) {
-        css += `\n.${navLinksClassName} > div:hover {\n${navLinksHoverStyleCSS.code}\n}`;
+        css += `\n.${navLinksClassName} > button:hover {\n${navLinksHoverStyleCSS.code}\n}`;
       } else {
         sendLog({ message: 'No Hover style css of Navbar links was generated', type: 'warning' }, win)
       }
@@ -163,6 +165,7 @@ async function getNavLinksCss({ data, win, directory }: navbarProps): Promise<st
         })
 
         if (valCss.code?.trim() !== '' && valCss.success) {
+          valCss.code = valCss.code?.replace(/;(?=\s|$)/g, " !important;") || "";
           css += `.${valClassName} {\n${valCss.code}\n}`;
         } else {
           console.log(valCss)
@@ -181,6 +184,7 @@ async function getNavLinksCss({ data, win, directory }: navbarProps): Promise<st
         })
 
         if (valCss.code?.trim() !== '' && valCss.success) {
+          valCss.code = valCss.code?.replace(/;(?=\s|$)/g, " !important;") || "";
           css += `.${valClassName}:hover {\n${valCss.code}\n}`;
         } else {
           console.log(valCss)
@@ -214,13 +218,9 @@ async function getNavLogoHTML({ data, win, directory }: navbarProps): Promise<st
   }
 }
 
-async function getNavLinksHTML({data, win, directory}): Promise<string> {
-  console.log(data, win, directory);
-
+async function getNavLinksHTML({ data, win, directory }): Promise<string> {
   let html: string = ''
-
   let count: number = 1;
-
   let linkHTML: string = '';
 
   for (const val of data.navLinks) {
@@ -252,9 +252,9 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
   sendLog({ message: `Navbar's styling is done, Working on HTML now.`, type: 'normal' }, win);
 
   const logoHTML = await getNavLogoHTML({ data, win, directory });
-  const linkHTML = await getNavLinksHTML({data, win , directory});
+  const linkHTML = await getNavLinksHTML({ data, win, directory });
 
-  console.log(logoHTML, linkHTML);
+  html = `<div class='navbar'>${logoHTML}\n${linkHTML}</div>`;
 
   return { htmlBlock: html, cssBlock: css }
 }
