@@ -23,7 +23,7 @@ async function getNavbarCss({ data, win, directory }: navbarProps): Promise<stri
       let navbarStyleCSS = await getCSS({ styleContent: 'navbar', styleType: 'styles', style: data.style.styles, win, directory });
 
       if (navbarStyleCSS.code?.trim() !== '') {
-        navbarStyleCSS.code = `display:flex; ${navbarStyleCSS.code}`.trim();
+        navbarStyleCSS.code = `display:flex; align-items: center; ${navbarStyleCSS.code}`.trim();
         css += `.${navbarClassName} {\n${navbarStyleCSS.code}\n}`;
       } else {
         sendLog({ message: 'No Style css of Navbar was generated.', type: 'warning' }, win)
@@ -98,7 +98,7 @@ async function getNavLogoCss({ data, win, directory }: navbarProps): Promise<str
     sendLog({ message: `Navbar's logo's Styling and Hover styling data doesn't exist`, type: 'error' }, win)
   }
 
-  css += `.nav-logo > img { height: 40px; width: auto;  object-fit: contain;}`
+  css += `.nav-logo > img { height: inherit; width: inherit;}`;
 
   return css
 }
@@ -218,15 +218,20 @@ async function getNavLogoHTML({ data, win, directory }: navbarProps): Promise<st
   }
 }
 
-async function getNavLinksHTML({ data, win, directory }): Promise<string> {
+async function getNavLinksHTML({ data, win }): Promise<string> {
   let html: string = ''
   let count: number = 1;
   let linkHTML: string = '';
 
-  for (const val of data.navLinks) {
-    linkHTML += `<button class='nav-link-${count}' href='${val.link}'>${val.label}</button>\n`;
-    count++
+  if (data.navLinks) {
+    for (const val of data.navLinks) {
+      linkHTML += `<button class='nav-link-${count}' href='${val.link}'>${val.label}</button>\n`;
+      count++
+    }
+  } else {
+    sendLog({ message: `Navbar's links dont exist.`, type: 'error' }, win)
   }
+
 
   html = `<div class='nav-links'> ${linkHTML} </div>`;
   return html
@@ -252,9 +257,9 @@ export async function buildNavbar({ data, win, directory }: navbarProps): Promis
   sendLog({ message: `Navbar's styling is done, Working on HTML now.`, type: 'normal' }, win);
 
   const logoHTML = await getNavLogoHTML({ data, win, directory });
-  const linkHTML = await getNavLinksHTML({ data, win, directory });
+  const linkHTML = await getNavLinksHTML({ data, win });
 
-  html = `<div class='navbar'>${logoHTML}\n${linkHTML}</div>`;
+  html = `<div class='navbar' style='justify-content: space-between;'>${logoHTML}\n${linkHTML}</div>`;
 
   return { htmlBlock: html, cssBlock: css }
 }

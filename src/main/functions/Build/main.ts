@@ -35,7 +35,9 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
     defaultCss += `${val.import}\n`
   });
 
-  defaultCss += `* {\n margin: 0;\n padding: 0;\n box-sizing: border-box; background: transparent; border: none; outline: none;}`;
+  defaultCss += formatText(
+    `* {margin: 0; padding: 0; box-sizing: border-box; background: transparent; border: none; outline: none;} button {cursor:pointer;}`
+  );
 
   for (const val of data.data.sectionOrders) {
     if (val.trim() === 'navbar') {

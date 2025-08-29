@@ -21,7 +21,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
 
     if (font["font color"][0] === '#') {
       css = `color: ${font["font color"]}; `
-    } else if (colors[font["font color"]]) {
+    } else if (colors[font["font color"].toLowerCase()]) {
       css += `color: #${colors[font["font color"].toLowerCase()]}; `
     } else {
       sendLog({ message: 'Invalid color type of font.', type: 'error' }, win)

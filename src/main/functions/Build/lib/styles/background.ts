@@ -15,22 +15,17 @@ interface bgProps {
 }
 
 export async function getBgCSS({ background, directory }: bgProps): Promise<cssReturnProps> {
-  console.log(background)
   if (background.type === false) return { success: false, msg: 'Background type is false', type: 'warning' }
   
   try {
     if (background.type === 'color' && background.color !== false) {
-      console.log('passed first check')
       if (background.color[0] === '#') {
-        console.log('in the # one')
         return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
       } else {
         if (colors[background.color.toLowerCase()] !== undefined) {
           let color = `#${colors[background.color.toLowerCase()]}`;
-          console.log('in the second check:', color)
           return { success: true, msg: "color background done. ✅", type: 'normal', code: `background: ${color};` }
         } else {
-          console.log('in the color background failed one.')
           return { success: false, msg: 'Color background failed.', type: 'error' }
         }
       }
@@ -76,7 +71,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       return { success: false, msg: `Background type is invalid or background type selected is false.`, type: 'error' }
     }
   } catch (error) {
-    console.log(`THERE WAS ANN ERRORO ${error}`)
+    console.log(`THERE WAS ANN ERROR: ${error}`)
     return { success: false, msg: `there was an error: ${error}`, type: 'error' }
 
   }

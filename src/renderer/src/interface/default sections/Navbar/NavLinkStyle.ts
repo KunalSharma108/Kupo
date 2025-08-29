@@ -11,7 +11,6 @@ export const defaultNavLinkStyle: styles = {
     },
 
     layout: {
-      "vertical align": "Center",
       "horizontal align": "Right",
       width: "Default",
       height: "Default",
