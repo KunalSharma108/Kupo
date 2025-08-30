@@ -20,7 +20,7 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
   try {
     if (background.type === 'color' && background.color !== false) {
       if (background.color[0] === '#') {
-        return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color}` }
+        return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color};` }
       } else {
         if (colors[background.color.toLowerCase()] !== undefined) {
           let color = `#${colors[background.color.toLowerCase()]}`;

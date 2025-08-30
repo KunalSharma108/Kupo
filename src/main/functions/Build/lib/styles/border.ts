@@ -14,8 +14,6 @@ interface borderProps {
 }
 
 export async function getBorderCSS({ border, win }: borderProps): Promise<cssReturnProps> {
-
-
   let css: string = '';
 
   if (

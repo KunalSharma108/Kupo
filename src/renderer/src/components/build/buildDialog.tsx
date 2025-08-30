@@ -4,7 +4,7 @@ import SelectProject from './pages/SelectProject';
 import SelectDir from './pages/SelectDir';
 import { faArrowLeft, faArrowRight, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { fetchProjects } from '@renderer/lib/ipc';
+import { fetchProjects, openFolder } from '@renderer/lib/ipc';
 import '../styles/fontFamily.css'
 import Build from './pages/Build';
 import Done from './pages/done';
@@ -87,14 +87,8 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
   }
 
   const openDirectory = () => {
-
+    openFolder({ directory: selectedDir });
   }
-
-  const handleClose = () => {
-    disableBuild();
-  }
-
-  // ! SOLVE THE BUTTONS ALIGNING ISSUE ON COMPLETE PAGE AND ALSO SET THE OPEN DIRECTORY THINGGGG
 
   return (
     <>
@@ -128,12 +122,13 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
               <FontAwesomeIcon icon={faTimes} /> Cancel
             </button>
           ) : (
-            <div></div>
+            null
           )}
 
-          <div className="nav-buttons">
-            {pages.length - 1 !== page ? (
-              <>
+          {pages.length - 1 !== page ? (
+            <>
+              <div className="nav-buttons">
+
                 <button onClick={goPrev} disabled={page === 0 || page === 2 || building} className=' inter-font'>
                   <FontAwesomeIcon icon={faArrowLeft} /> Previous
                 </button>
@@ -144,21 +139,22 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
                   }
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
-              </>
+              </div>
+            </>
 
-            ) : (
-              <>
-                <button onClick={openDirectory} className=' inter-font'>
-                  <FontAwesomeIcon icon={faArrowLeft} className='icon-rotate' /> Open Folder
-                </button>
+          ) : (
+            <>
+              <button onClick={callDisable} className='inter-font continue'>
+                <FontAwesomeIcon icon={faArrowRight} className='cont-rotate'/>
+                Continue
+              </button>
 
-                <button onClick={handleClose} className=' inter-font'>
-                  Continue
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              </>
-            )}
-          </div>
+              <button onClick={openDirectory} className='inter-font open-website'>
+                <FontAwesomeIcon icon={faArrowLeft} className='icon-rotate' /> Open Website
+              </button>
+
+            </>
+          )}
         </div>
       </div>
     </>

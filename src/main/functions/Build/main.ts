@@ -1,8 +1,7 @@
 import { BrowserWindow } from "electron";
 import { sendLog } from "./sendLog";
 import { fetchConfig } from "../config";
-import { buildNavbar } from "./components/BuildNavbar";
-import { buildHero } from "./components/BuildHero";
+import { buildNavbar } from "./components/navbar/BuildNavbar";
 import { fullHTML } from "./lib/template/HTML";
 import { fontOptions } from "./lib/presets/fonts";
 import fs from "fs"

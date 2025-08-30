@@ -28,7 +28,8 @@ if (process.contextIsolated) {
       },
       removeBuildLogListener: () => {
         ipcRenderer.removeAllListeners('build-log');
-      }
+      },
+      openFolder: (data: {directory: string}) =>ipcRenderer.send('openFolder', data),
     });
 
     contextBridge.exposeInMainWorld('electron', electronAPI)

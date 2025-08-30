@@ -86,7 +86,7 @@
     background: rgba(255, 255, 255, 0.1);
     margin: 0.5rem auto 0;
     border-radius: 2px;
-}  
+}
 
 .build-dialog.fade-in {
     animation: buildFadeIn 0.5s ease forwards;
@@ -321,4 +321,48 @@
 
 .icon-rotate {
     transform: rotate(140deg);
+}
+
+.open-website,
+.continue {
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    white-space: nowrap;
+    min-width: 84px;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+}
+
+.open-website {
+    background: #10a452;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(16, 164, 82, 0.4);
+}
+
+.open-website:hover {
+    background: #1ac666;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(26, 198, 102, 0.45);
+}
+
+.continue {
+    background: #3b3b3b;
+    color: #e6e6e6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.continue:hover {
+    background: #515151;
+    transform: translateY(-1px);
+}
+
+.cont-rotate {
+    transform: rotate(180deg);
 }

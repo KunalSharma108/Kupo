@@ -45,3 +45,7 @@ export const selectDir = () => {
 export const startBuild = (data: {project: string, directory: string}) => {
   return window.electronAPI.startBuild(data);
 }
+
+export const openFolder = (data: {directory: string}) => {
+  return window.electronAPI.openFolder(data)
+}

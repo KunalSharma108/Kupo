@@ -1,8 +1,9 @@
-import { BrowserWindow, dialog, ipcMain } from "electron";
+import { BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { mainWindow } from ".";
 import { addProject, deleteProject, fetchProjects, renameProject } from "./functions/Project";
 import { fetchConfig, updateConfig } from "./functions/config";
 import { buildMain } from "./functions/Build/main";
+import path from "path";
 
 export const setUpIpcHandlers = async () => {
   ipcMain.on('window-minimize', () => {
@@ -73,4 +74,15 @@ export const setUpIpcHandlers = async () => {
       const result = await buildMain({ project, directory, win })
     }
   });
+
+  ipcMain.on('openFolder', (_event, { directory }) => {
+    try {
+      directory = path.join(directory, 'index.html')
+      shell.openPath(directory)
+
+    } catch (error) {
+      alert('There was an error while opening the website.')
+      console.log(error)
+    }
+  })
 }
