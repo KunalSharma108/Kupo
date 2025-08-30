@@ -5,6 +5,8 @@ import { buildNavbar } from "./components/BuildNavbar";
 import { buildHero } from "./components/BuildHero";
 import { fullHTML } from "./lib/template/HTML";
 import { fontOptions } from "./lib/presets/fonts";
+import fs from "fs"
+import path from "path";
 
 function formatText(text: string): string {
   let result = text.replace(/ {2,}/g, " ");
@@ -36,7 +38,7 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
   });
 
   defaultCss += formatText(
-    `* {margin: 0; padding: 0; box-sizing: border-box; background: transparent; border: none; outline: none;} button {cursor:pointer;}`
+    `* {margin: 0; padding: 0; box-sizing: border-box; background: transparent; border: none; outline: none;} button {cursor:pointer;} a {text-decoration: none;}`
   );
 
   for (const val of data.data.sectionOrders) {
@@ -61,5 +63,10 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
 
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
 
+
   console.log(fullCode);
+
+  const filePath = path.join(directory, 'index.html');
+
+  fs.promises.writeFile(filePath, fullCode);
 }
