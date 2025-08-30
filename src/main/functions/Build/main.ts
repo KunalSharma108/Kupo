@@ -63,10 +63,8 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
 
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
 
-
-  console.log(fullCode);
-
   const filePath = path.join(directory, 'index.html');
-
   fs.promises.writeFile(filePath, fullCode);
+
+  sendLog({ message: 'done', type: 'normal' }, win)
 }

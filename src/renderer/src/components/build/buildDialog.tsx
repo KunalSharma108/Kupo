@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fetchProjects } from '@renderer/lib/ipc';
 import '../styles/fontFamily.css'
 import Build from './pages/Build';
+import Done from './pages/done';
 
 interface buildDialogProp {
   disableBuild: any;
@@ -67,7 +68,8 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
   const pages = [
     <SelectProject setProject={setProject} selectedProject={String(selectedProject)} projects={projects} />,
     <SelectDir selectedDir={selectedDir} changeDir={changeDir} />,
-    <Build project={selectedProject} directory={selectedDir}  />
+    <Build project={selectedProject} directory={selectedDir} goNext={goNext} />,
+    <Done />
   ];
 
   const goPrev = () => {
@@ -83,6 +85,16 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
       disableBuild()
     }, 500)
   }
+
+  const openDirectory = () => {
+
+  }
+
+  const handleClose = () => {
+    disableBuild();
+  }
+
+  // ! SOLVE THE BUTTONS ALIGNING ISSUE ON COMPLETE PAGE AND ALSO SET THE OPEN DIRECTORY THINGGGG
 
   return (
     <>
@@ -111,20 +123,41 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
         </div>
 
         <div className="dialog-footer">
-          <button className="cancel-btn inter-font" onClick={callDisable}>
-            <FontAwesomeIcon icon={faTimes} /> Cancel
-          </button>
+          {pages.length - 1 !== page ? (
+            <button className="cancel-btn inter-font" onClick={callDisable}>
+              <FontAwesomeIcon icon={faTimes} /> Cancel
+            </button>
+          ) : (
+            <div></div>
+          )}
 
           <div className="nav-buttons">
-            <button onClick={goPrev} disabled={page === 0 || page === 2 || building} className=' inter-font'>
-              <FontAwesomeIcon icon={faArrowLeft} /> Previous
-            </button>
-            <button onClick={goNext} disabled={page === pages.length - 1 || !pageNextPerm[page] || building} className=' inter-font'>
-              {
-                page === 1 ? 'Start Building' : page === 2 ? 'Close' : 'Next'
-              }
-              <FontAwesomeIcon icon={faArrowRight} />
-            </button>
+            {pages.length - 1 !== page ? (
+              <>
+                <button onClick={goPrev} disabled={page === 0 || page === 2 || building} className=' inter-font'>
+                  <FontAwesomeIcon icon={faArrowLeft} /> Previous
+                </button>
+
+                <button onClick={goNext} disabled={page === pages.length - 1 || !pageNextPerm[page] || building} className=' inter-font'>
+                  {
+                    page === 1 ? 'Start Building' : page === 2 ? 'Close' : 'Next'
+                  }
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </>
+
+            ) : (
+              <>
+                <button onClick={openDirectory} className=' inter-font'>
+                  <FontAwesomeIcon icon={faArrowLeft} className='icon-rotate' /> Open Folder
+                </button>
+
+                <button onClick={handleClose} className=' inter-font'>
+                  Continue
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

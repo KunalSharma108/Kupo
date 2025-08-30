@@ -6,6 +6,7 @@ import '../../styles/fontFamily.css'
 interface buildProps {
   project: string | null;
   directory: string;
+  goNext: any;
 }
 
 interface logsProps {
@@ -13,7 +14,7 @@ interface logsProps {
   type: "normal" | "warning" | "error" | "done";
 }
 
-function Build({ project, directory }: buildProps): React.JSX.Element {
+function Build({ project, directory, goNext}: buildProps): React.JSX.Element {
   const hasStarted = useRef(false);
   const [logs, setLogs] = useState<logsProps[]>([]);
   const progressTimer = useRef<NodeJS.Timeout | null>(null);
@@ -30,8 +31,11 @@ function Build({ project, directory }: buildProps): React.JSX.Element {
     window.electronAPI.onBuildLog((log) => {
       setLogs((prev) => [...prev, log]);
 
-      if (log.type === "done" && !buildDone.current) {
+      if (log.message === "done" && !buildDone.current) {
         buildDone.current = true;
+        setTimeout(() => {
+          goNext();
+        }, 200)
       }
     });
 
