@@ -34,7 +34,7 @@ export const defaultNavLinkStyle: styles = {
       "font color": "white",
       "font family": 'Default',
       "font weight": 500,
-      "font size": "md",
+      "font size": "normal",
     },
 
     margin: {

@@ -1,6 +1,7 @@
+import { getProps } from "../../lib/presets/getProps";
 import { sendLog } from "../../sendLog";
 
-export async function getNavLinksHTML({ data, win, }): Promise<string> {
+export async function getNavLinksHTML({ data, win} :getProps): Promise<string> {
   let html: string = ''
   let count: number = 1;
   let linkHTML: string = '';

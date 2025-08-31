@@ -41,22 +41,22 @@ export const HeroDefaultTextStyle: styles = {
     padding: {
       "padding top": '5-px',
       'padding bottom': '5-px',
-      'padding left': '0',
-      'padding right': '0'
+      'padding left': '0-px',
+      'padding right': '0-px'
     },
 
     margin: {
       "margin top": '5-px',
       'margin bottom': '5-px',
-      'margin left': '0',
-      "margin right": '0'
+      'margin left': '0-px',
+      "margin right": '0-px'
     },
 
     shadow: {
-      "offset x": '0',
-      'offset y': '0',
-      'blur radius': '0',
-      "spread radius": '0',
+      "offset x": '0-px',
+      'offset y': '0-px',
+      'blur radius': '0-px',
+      "spread radius": '0-px',
       color: 'none',
       'inset': false
     }

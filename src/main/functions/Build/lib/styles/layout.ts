@@ -32,7 +32,12 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
       if (layout[val] === 'fit-content') {
         css += ` ${val}: fit-content;`
 
-      } else if (typeof layout[val] === 'string' && layout[val] !== 'fit-content') {
+      } else if (
+        typeof layout[val] === 'string' &&
+        layout[val] !== 'fit-content' &&
+        layout[val].toLowerCase() !== 'default' &&
+        layout[val].toLowerCase() !== 'undefined'
+      ) {
         const numValue = layout[val].split('-')[0];
         const metric = layout[val].split('-')[1];
 
@@ -45,7 +50,12 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
 
       if (layout[val] === 'fit-content') {
         css += ` ${newValue}: fit-content;`
-      } else if (typeof layout[val] === 'string' && layout[val] !== 'fit-content') {
+      } else if (
+        typeof layout[val] === 'string' &&
+        layout[val] !== 'fit-content' &&
+        layout[val].toLowerCase() !== 'default' &&
+        layout[val].toLowerCase() !== 'undefined'
+      ) {
         const numValue = layout[val].split('-')[0];
         const metric = layout[val].split('-')[1];
 

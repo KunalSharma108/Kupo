@@ -1,8 +1,8 @@
+import { getProps } from "../../lib/presets/getProps";
 import { sendLog } from "../../sendLog";
 import { getCSS } from "../getCss";
-import { navbarProps } from "./BuildNavbar";
 
-export async function getNavbarCss({ data, win, directory }: navbarProps): Promise<string> {
+export async function getNavbarCss({ data, win, directory }: getProps): Promise<string> {
   let css: string = '';
   let navbarClassName = 'navbar';
 

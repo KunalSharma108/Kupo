@@ -1,8 +1,8 @@
 import { copyImg } from "../../lib/presets/copyImg";
+import { getProps } from "../../lib/presets/getProps";
 import { sendLog } from "../../sendLog";
-import { navbarProps } from "./BuildNavbar";
 
-export async function getNavLogoHTML({ data, win, directory }: navbarProps): Promise<string> {
+export async function getNavLogoHTML({ data, win, directory }: getProps): Promise<string> {
   let result = await copyImg({ imgPath: data.logo.logoURL as string, destPath: directory });
   let html: string = '';
 

@@ -58,3 +58,6 @@ export async function getShadow({ shadow, win }: shadowProps): Promise<cssReturn
     return { success: false, msg: `There was an error: ${error}`, type: 'error' };
   }
 }
+
+
+// FIX THIS COLOR OF SHADOW SHOWING #UNDEFINED

@@ -21,9 +21,9 @@ export const HeroDefaultButtonStyle: styles = {
 
     border: {
       "border color": 'none',
-      "border radius": '0',
+      "border radius": '0-px',
       "border style": 'none',
-      "border width": '0'
+      "border width": '0-px'
     },
 
     transition: {
@@ -46,10 +46,10 @@ export const HeroDefaultButtonStyle: styles = {
     },
 
     margin: {
-      "margin top": '0',
-      "margin bottom": '0',
-      "margin left": '0',
-      "margin right": '0'
+      "margin top": '0-px',
+      "margin bottom": '0-px',
+      "margin left": '0-px',
+      "margin right": '0-px'
     },
 
     shadow: {

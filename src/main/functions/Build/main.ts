@@ -6,15 +6,27 @@ import { fullHTML } from "./lib/template/HTML";
 import { fontOptions } from "./lib/presets/fonts";
 import fs from "fs"
 import path from "path";
+import { buildHero } from "./components/Hero/BuildHero";
 
-function formatText(text: string): string {
-  let result = text.replace(/ {2,}/g, " ");
-  result = result.replace(/;/g, ";\n");
-  result = result.replace(/}/g, "}\n");
-  result = result.replace(/;\n/g, ";\n ");
-  result = result.replace(/{\n/g, "{\n  ");
-  return result.trim();
+function formatText(css: string): string {
+  let indent = 0;
+  return css
+    .replace(/\s+/g, " ")
+    .replace(/\s*{\s*/g, " {\n") 
+    .replace(/\s*}\s*/g, "\n}\n")
+    .replace(/\s*;\s*/g, ";\n")
+    .split("\n")
+    .map(line => {
+      line = line.trim();
+      if (line.endsWith("}")) indent--;
+      const formatted = "  ".repeat(Math.max(indent, 0)) + line;
+      if (line.endsWith("{")) indent++;
+      return formatted;
+    })
+    .join("\n")
+    .trim();
 }
+
 
 interface buildMainProps {
   project: string;
@@ -44,23 +56,24 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
     if (val.trim() === 'navbar') {
 
       sendLog({ message: 'processing navbar...', type: 'normal' }, win);
-      const res = await buildNavbar({ data: data.data.sections[val.trim()], win, directory });
+      const res = await buildNavbar({ data: data.data.sections['navbar'], win, directory });
       html += ` ${res.htmlBlock}`;
       css += ` ${res.cssBlock}`;
 
-    }
-    // } else if (val.trim() === 'hero') {
+    } else if (val.trim() === 'hero') {
 
-    //   sendLog({ message: 'processing hero', type: 'normal' }, win);
-    //   const res = await buildHero({ data: data.data.sections[val.trim()], win });
-    //   html += ` ${res.htmlBlock}`;
-    //   css += ` ${res.cssBlock}`;
-    // }
+      sendLog({ message: 'processing hero', type: 'normal' }, win);
+      const res = await buildHero({ data: data.data.sections['hero'], win, directory });
+      html += ` ${res.htmlBlock}`;
+      css += ` ${res.cssBlock}`;
+    }
   }
 
   css = `${defaultCss}\n${formatText(css)}`;
 
   const fullCode = await fullHTML({ project, HtmlBlock: html, CssBlock: css });
+
+  console.log(fullCode)
 
   const filePath = path.join(directory, 'index.html');
   fs.promises.writeFile(filePath, fullCode);
