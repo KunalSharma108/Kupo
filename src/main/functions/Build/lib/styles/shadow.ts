@@ -20,13 +20,19 @@ export async function getShadow({ shadow, win }: shadowProps): Promise<cssReturn
   try {
     let css = '';
 
-    if (shadow["offset x"] === 'undefined' ||
-      shadow["offset y"] === 'undefined' ||
-      shadow["blur radius"] === 'undefined' ||
+    if (
+      shadow["offset x"].toLowerCase() === 'undefined' ||
+      shadow["offset x"].toLowerCase() === 'none' ||
+      shadow["offset y"].toLowerCase() === 'undefined' ||
+      shadow["offset y"].toLowerCase() === 'none' ||
+      shadow["blur radius"].toLowerCase() === 'undefined' ||
+      shadow["blur radius"].toLowerCase() === 'none' ||
       shadow["spread radius"] === 'undefined' ||
-      shadow.color === 'undefined' ||
-      shadow.inset === 'undefined' ||
+      shadow["spread radius"] === 'none' ||
+      shadow.color.toLowerCase() === 'undefined' ||
       shadow.color.toLowerCase() === 'default' ||
+      shadow.color.toLowerCase() === 'none' ||
+      shadow.inset === 'undefined' ||
       shadow.color[0] !== '#' && colors[shadow.color.toLowerCase()] === 'undefined'
     ) {
       sendLog({ message: 'skipping Shadow css because all of them has to contain a valid value', type: 'warning' }, win);
