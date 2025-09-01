@@ -8,19 +8,23 @@ export async function getNavLogoHTML({ data, win, directory }: getProps): Promis
 
   let alignmentDiv: string = '';
 
-  if (data.logo.style.styles.layout['horizontal align']) {
-    const align = data.logo.style.styles.layout['horizontal align'].toLowerCase();
+  let navLinkAlign = data.navLinkStyle.styles.layout['horizontal align'].toLowerCase();
+  let navLogoAlign = data.logo.style.styles.layout['horizontal align'].toLowerCase();
 
-    if (align === 'left') {
-      alignmentDiv = 'left';
-    } else if (align === 'center') {
-      alignmentDiv = 'center';
-    } else if (align === 'right') {
-      alignmentDiv = 'right';
+  if (navLogoAlign) {
+    if (navLinkAlign === 'center' && navLogoAlign === 'center') {
+      // do nothing
     } else {
-      sendLog({ message: 'Horizontal align of Logo doesn\'t have a valid value', type: 'error' }, win)
+      if (navLogoAlign === 'left') {
+        alignmentDiv = 'left';
+      } else if (navLogoAlign === 'center') {
+        alignmentDiv = 'center';
+      } else if (navLogoAlign === 'right') {
+        alignmentDiv = 'right';
+      } else {
+        sendLog({ message: 'Horizontal align of Logo doesn\'t have a valid value', type: 'error' }, win)
+      }
     }
-
   } else {
     sendLog({ message: 'Horizontal align doesn\'t exist in logo styling.', type: 'error' }, win)
   }

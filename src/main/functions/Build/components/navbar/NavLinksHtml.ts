@@ -1,26 +1,31 @@
 import { getProps } from "../../lib/presets/getProps";
 import { sendLog } from "../../sendLog";
 
-export async function getNavLinksHTML({ data, win} :getProps): Promise<string> {
+export async function getNavLinksHTML({ data, win }: getProps): Promise<string> {
   let html: string = ''
   let count: number = 1;
   let linkHTML: string = '';
 
   let alignmentDiv: string = '';
 
-  if (data.navLinkStyle.styles.layout['horizontal align']) {
-    const align = data.navLinkStyle.styles.layout['horizontal align'].toLowerCase();
+  let navLinkAlign = data.navLinkStyle.styles.layout['horizontal align'].toLowerCase();
+  let navLogoAlign = data.logo.style.styles.layout['horizontal align'].toLowerCase();
 
-    if (align === 'left') {
-      alignmentDiv = 'left';
-    } else if (align === 'center') {
-      alignmentDiv = 'center';
-    } else if (align === 'right') {
-      alignmentDiv = 'right';
+  if (navLinkAlign) {
+    if (navLinkAlign === 'center' && navLogoAlign === 'center') {
+      // do nothing
     } else {
-      sendLog({ message: 'Horizontal align of Links doesn\'t have a valid value', type: 'error' }, win)
-    }
 
+      if (navLinkAlign === 'left') {
+        alignmentDiv = 'left';
+      } else if (navLinkAlign === 'center') {
+        alignmentDiv = 'center';
+      } else if (navLinkAlign === 'right') {
+        alignmentDiv = 'right';
+      } else {
+        sendLog({ message: 'Horizontal align of Links doesn\'t have a valid value', type: 'error' }, win)
+      }
+    }
   } else {
     sendLog({ message: 'Horizontal align doesn\'t exist in Links styling.', type: 'error' }, win)
   }

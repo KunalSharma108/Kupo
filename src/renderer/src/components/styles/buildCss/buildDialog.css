@@ -210,7 +210,6 @@
     }
 }
 
-/* Apply animations */
 .slide-out-left {
     animation: slideOutLeft 0.4s forwards;
 }

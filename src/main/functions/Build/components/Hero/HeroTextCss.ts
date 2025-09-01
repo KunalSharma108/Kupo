@@ -12,7 +12,7 @@ export async function getHeroTextCss({ data, win, directory }: getProps): Promis
     return '';
   }
 
-  css += `.hero-text { width: 100%; height:fit-content; display: flex; flex-direction: column; } .hero-text > div { flex: 0 0 auto; } .hero-text > div.left { margin-right: auto; } .hero-text > div.center { position: absolute; left: 50%; transform: translateX(-50%); } .hero-text > div.right { margin-left: auto; }
+  css += `.hero-text { width: 100%; height:fit-content; display: flex; flex-direction: column; } .hero-text > div { flex: 0 0 auto; } .hero-text > div.left { margin-right: auto; } .hero-text > div.center { margin-right: auto; margin-left: auto; } .hero-text > div.right { margin-left: auto; }
   `;
 
   for (const textData of data.texts) {
