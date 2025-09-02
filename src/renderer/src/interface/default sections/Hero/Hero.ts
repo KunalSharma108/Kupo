@@ -75,7 +75,7 @@ export const HeroDefaultStyle: styles = {
     layout: {
       width: 'default',
       height: 'default',
-      "max width": 'defauult',
+      "max width": 'default',
       "max height": 'default'
     },
 

@@ -10,7 +10,7 @@ import { getPadding } from "../lib/styles/padding";
 import { getShadow } from "../lib/styles/shadow";
 
 interface getCssProps {
-  styleContent: 'navbar' | 'navbar logo' | 'navbar link' | 'hero' | 'hero text' | 'hero link' | 'feature' | 'feature';
+  styleContent: 'navbar' | 'navbar logo' | 'navbar link' | 'hero' | 'hero text' | 'hero button' | 'feature' | 'feature';
   styleType: 'styles' | 'hoverStyles'
 
   style: any;
