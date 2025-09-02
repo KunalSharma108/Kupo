@@ -1,7 +1,17 @@
 appId: com.electron.app
 productName: backend
 directories:
-  buildResources: build
+  buildResources: resources
+
+win:
+  icon: resources/favicon.ico
+
+linux: 
+  icon: resources/Logo.png
+
+mac: 
+  icon: resources/icon.icns
+  
 files:
   - '!**/.vscode/*'
   - '!src/*'

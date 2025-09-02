@@ -30,7 +30,7 @@ export async function getHeroButtonHtml({ data, win }: getProps): Promise<string
 
     align = allCenter ? '' : align;
 
-    buttonHTML += `<div class='${className} ${align}'><a href='${buttonData.link}' target='_blank'>${buttonData.label}</a></div>`
+    buttonHTML += `<a class='${className} ${align}' href='${buttonData.link}' target='_blank'>${buttonData.label}</a>`
 
     count++;
   }

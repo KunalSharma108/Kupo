@@ -1,18 +1,16 @@
 import { BrowserWindow } from "electron";
+import { getProps } from "../../lib/presets/getProps";
 
 interface returnProps {
   htmlBlock: string;
   cssBlock: string;
 }
 
-interface footerProps {
-  data: any;
-  win: BrowserWindow;
-}
+export async function buildNavbar({ data, win, directory }: getProps): Promise<returnProps> {
+  let html: string = '';
+  let css: string = '';
 
-export async function buildNavbar({ data, win }: footerProps): Promise<returnProps> {
+  console.log(data, win , directory)
 
-  console.log(data)
-
-  return { htmlBlock: '', cssBlock: '' }
+  return { htmlBlock: html, cssBlock: css }
 }

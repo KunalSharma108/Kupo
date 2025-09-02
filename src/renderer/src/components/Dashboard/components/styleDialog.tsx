@@ -131,7 +131,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
               {dropdownOpen && (
                 <div className="dropdown-options">
-                  {["color", "image", "gradient", "image + gradient"].map((option) => (
+                  {["color", "image", "gradient", "image + gradient", "false"].map((option) => (
                     <div
                       key={option}
                       className={`dropdown-option ${inputValue === option ? "selected" : ""}`}

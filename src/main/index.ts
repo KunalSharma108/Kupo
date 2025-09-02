@@ -1,7 +1,6 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
 import { setUpIpcHandlers } from './main'
 
 let mainWindow: BrowserWindow | null = null;
@@ -10,17 +9,18 @@ function createWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     show: false,
-    title: 'Kupo',
+    title: "Kupo",
     frame: false,
-    titleBarStyle: 'hidden',
+    titleBarStyle: "hidden",
     autoHideMenuBar: true,
-    icon: 'renderer/src/components/assets/Logo.ico',
-    ...(process.platform === 'linux' ? { icon } : {}),
+    icon: process.platform === "win32"
+      ? join(__dirname, "../../resources/favicon.ico") // for Windows builds
+      : join(__dirname, "../../resources/Logo.png"), // for Linux
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
-    }
-  })
+    },
+  });
 
   mainWindow.on('ready-to-show', () => {
     mainWindow?.maximize()

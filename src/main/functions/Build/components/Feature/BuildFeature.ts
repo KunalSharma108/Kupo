@@ -1,18 +1,18 @@
-import { BrowserWindow } from "electron";
+import { getProps } from "../../lib/presets/getProps";
+import { sendLog } from "../../sendLog";
 
 interface returnProps {
   htmlBlock: string;
   cssBlock: string;
 }
 
-interface featureProps {
-  data: any;
-  win: BrowserWindow;
-}
+export async function buildFeature({ data, win, directory }: getProps): Promise<returnProps> {
+  sendLog({message: 'Building Feature block....', type:'normal'}, win);
+  let html: string = '';
+  let css: string = '';
 
-export async function buildNavbar({ data, win }: featureProps): Promise<returnProps> {
+  sendLog({message: 'Building Feature\'s css', type:'normal'}, win);
+  
 
-  console.log(data)
-
-  return { htmlBlock: '', cssBlock: '' }
+  return { htmlBlock: html, cssBlock: css}
 }

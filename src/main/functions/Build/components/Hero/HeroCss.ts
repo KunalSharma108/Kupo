@@ -39,7 +39,7 @@ export async function getHeroCss({ data, win, directory }: getProps): Promise<st
   });
 
   if (heroCss.success && heroCss.code?.trim() !== '') {
-    heroCss.code = `display: flex; flex-direction: column; ${heroCss.code}`;
+    heroCss.code = `display: flex; flex-direction: column; gap: 10px; ${heroCss.code}`;
     css += `.${className} {${heroCss.code}}`;
   }
 
