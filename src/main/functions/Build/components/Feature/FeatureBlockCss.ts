@@ -3,7 +3,7 @@ import { sendLog } from "../../sendLog";
 import { getCSS } from "../getCss";
 
 export async function getFeatureBlockCss({ data, win, directory }: getProps): Promise<string> {
-  let css: string = '.feature-block {display: flex; width:100%;} .feature-block > div {flex: 1; min-width:0px;} .feature-image {flex: 1; display: flex; justify-content: center; align-items: center;}';
+  let css: string = `.feature-block {display: flex; width:100%;} .feature-block > div {flex: 1; min-width:0px;} .feature-image {flex: 1; display: flex; justify-content: center; align-items: center; object-fit: contain;} .feature-block-content {display:flex; flex-direction: column; gap:0px;} .feature-block-content > div.left { text-align: left; } .feature-block-content > div.center { text-align: center; } .feature-block-content > div.right { text-align: right; } .feature-image img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }`;
 
   let count: number = 1;
 

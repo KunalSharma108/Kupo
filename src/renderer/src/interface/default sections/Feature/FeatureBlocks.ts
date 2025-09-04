@@ -122,7 +122,7 @@ export const defaultFeaturesBlocks: FeatureBlock[] = [
     id: 'featureBlock1',
     description: featureBlockDesc,
     style: featureBlockStyle,
-    imageURl: 'false'
+    imageURL: 'false'
   }
 ]
 
@@ -131,5 +131,5 @@ export const singleFeatureBlock: FeatureBlock = {
   id: 'featureBlock',
   description: featureBlockDesc,
   style: featureBlockStyle,
-  imageURl: 'false'
+  imageURL: 'false'
 }

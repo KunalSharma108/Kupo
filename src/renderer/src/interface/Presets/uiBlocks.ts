@@ -53,7 +53,7 @@ export interface FeatureBlock {
   title: FeatureBlockTitle;
   description: FeatureBlockDesc;
 
-  imageURl: string
+  imageURL: string
 
   style: styles;
 }

@@ -111,6 +111,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
   };
 
   const renderNestedDropdown = (obj: Record<string, any>, styleType: string, styleContentType: string[]) => {
+
     return Object.entries(obj).map(([key, value]) => {
       if (!value || typeof value !== 'object') return null
 
@@ -1020,14 +1021,14 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
     interface forBlockProps {
       idx: number;
-      data: any;
+      blockData: any;
     }
 
-    const Blocks: React.FC<forBlockProps> = ({ idx, data }) => {
-      const [title, setTitle] = useState<string>(data.title.text);
+    const Blocks: React.FC<forBlockProps> = ({ idx, blockData }) => {
+      const [title, setTitle] = useState<string>(blockData.title.text);
       const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false)
 
-      const [description, setDescription] = useState<string>(data.description.text);
+      const [description, setDescription] = useState<string>(blockData.description.text);
       const [isDescEditing, setIsDescEditing] = useState<boolean>(false);
 
       const [blockDropdownOpen, setBlockDropdownOpen] = useState<boolean>(false);
@@ -1039,7 +1040,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       const [descDropdownOpen, setDescDropdownOpen] = useState<boolean>(false)
       const descDropdownRef = useRef<HTMLDivElement>(null);
 
-      const [imageURL, setImageURL] = useState<string | false>(data.imageURL !== "false" ? data.imageURL : false)
+      const [imageURL, setImageURL] = useState<string | false>(blockData.imageURL !== "false" ? blockData.imageURL : false)
 
       useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -1081,7 +1082,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
           console.log('inside the if blockkkk')
           console.log(response.filePaths[0])
           setImageURL(response.filePaths[0]);
-          data.imageURL = response.filePaths[0]
+          blockData.imageURL = response.filePaths[0]
           return { success: true, data: response.filePaths[0] }
 
         } else {
@@ -1127,8 +1128,8 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       }
 
       useEffect(() => {
-        setImageURL(data.imageURL !== "false" ? data.imageURL : false);
-      }, [data.imageURL]);
+        setImageURL(blockData.imageURL !== "false" ? blockData.imageURL : false);
+      }, [blockData.imageURL]);
 
       const applyChange = (val: string, part: 'title' | 'description') => {
         if (val.trim() !== '') {
@@ -1156,6 +1157,8 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         setFeatureBlocks(newValue);
       }
 
+      console.log(data)
+
       return (
         <>
           <div className="feature-block-wrapper">
@@ -1178,7 +1181,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style.styles || {}, 'styles', ['blocks', String(idx), 'style'])}
+                          {renderNestedDropdown(data.blocks[idx].style.styles || {}, 'styles', ['blocks', String(idx), 'style'])}
                         </div>
                       </div>
 
@@ -1186,7 +1189,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                         Hover Styles
                         <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                         <div className="navbar-submenu">
-                          {renderNestedDropdown(data.style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'style'])}
+                          {renderNestedDropdown(data.blocks[idx].style.hoverStyles || {}, 'hoverStyles', ['blocks', String(idx), 'style'])}
                         </div>
                       </div>
                     </div>
@@ -1245,7 +1248,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.title.style.styles || {}, 'styles',
+                                    data.blocks[idx].title.style.styles || {}, 'styles',
                                     ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1254,7 +1257,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 Hover Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                  {renderNestedDropdown(data.blocks[idx].title.style.hoverStyles || {},
                                     'hoverStyles', ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1303,7 +1306,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.styles || {},
+                                    data.blocks[idx].description.style.styles || {},
                                     'styles', ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1313,7 +1316,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    data.blocks[idx].description.style.hoverStyles || {}, 'hoverStyles',
                                     ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1381,7 +1384,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.title.style.styles || {}, 'styles',
+                                    data.blocks[idx].title.style.styles || {}, 'styles',
                                     ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1390,7 +1393,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 Hover Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                  {renderNestedDropdown(data.blocks[idx].title.style.hoverStyles || {},
                                     'hoverStyles', ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1439,7 +1442,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.styles || {},
+                                    data.blocks[idx].description.style.styles || {},
                                     'styles', ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1449,7 +1452,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    data.blocks[idx].description.style.hoverStyles || {}, 'hoverStyles',
                                     ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1543,7 +1546,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.title.style.styles || {}, 'styles',
+                                    data.blocks[idx].title.style.styles || {}, 'styles',
                                     ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1552,7 +1555,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 Hover Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                  {renderNestedDropdown(data.blocks[idx].title.style.hoverStyles || {},
                                     'hoverStyles', ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1601,7 +1604,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.styles || {},
+                                    data.blocks[idx].description.style.styles || {},
                                     'styles', ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1611,7 +1614,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    data.blocks[idx].description.style.hoverStyles || {}, 'hoverStyles',
                                     ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1731,7 +1734,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.title.style.styles || {}, 'styles',
+                                    data.blocks[idx].title.style.styles || {}, 'styles',
                                     ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1740,7 +1743,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 Hover Styles
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
-                                  {renderNestedDropdown(data?.title.style.hoverStyles || {},
+                                  {renderNestedDropdown(data.blocks[idx].title.style.hoverStyles || {},
                                     'hoverStyles', ['blocks', String(idx), 'title', 'style']
                                   )}
                                 </div>
@@ -1789,7 +1792,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.styles || {},
+                                    data.blocks[idx].description.style.styles || {},
                                     'styles', ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1799,7 +1802,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                                 <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
                                 <div className="navbar-submenu">
                                   {renderNestedDropdown(
-                                    data?.description.style.hoverStyles || {}, 'hoverStyles',
+                                    data.blocks[idx].description.style.hoverStyles || {}, 'hoverStyles',
                                     ['blocks', String(idx), 'description', 'style']
                                   )}
                                 </div>
@@ -1930,7 +1933,7 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
             <div className="feature-blocks">
               {featureBlocks.map((data, idx) => (
-                <Blocks idx={idx} data={data} key={idx} />
+                <Blocks idx={idx} blockData={data} key={idx} />
               ))}
             </div>
 

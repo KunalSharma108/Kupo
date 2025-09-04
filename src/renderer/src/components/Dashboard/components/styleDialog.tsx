@@ -832,7 +832,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         );
       } else if (subType.toLowerCase() === 'border width') {
-        const initialType = typeof value === 'string' && value?.split(' ').length === 2 ? 'string' : 'number'
+        const initialType = typeof value === 'string' && value?.split('-').length === 2 ? 'string' : 'number'
         const [layoutType, setLayoutType] = useState<
           'number' | 'none'
         >
@@ -840,8 +840,8 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             'number' : 'none'
           );
 
-        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
-        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
+        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split('-')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split('-')[1] : 'px')
 
         const metricOptions = ['px', 'rem'];
         const typeOptions = ['number', 'none'];
@@ -938,7 +938,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         );
       } else if (subType.toLowerCase() === 'border radius') {
-        const initialType = typeof value === 'string' && value?.split(' ').length === 2 ? 'string' : 'number'
+        const initialType = typeof value === 'string' && value?.split('-').length === 2 ? 'string' : 'number'
         const [layoutType, setLayoutType] = useState<
           'number' | 'none'
         >
@@ -946,8 +946,8 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             'number' : 'none'
           );
 
-        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
-        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
+        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split('-')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split('-')[1] : 'px')
 
         const metricOptions = ['px', '%'];
         const typeOptions = ['number', 'none'];

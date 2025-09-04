@@ -4,7 +4,6 @@ import { FeatureBlockDesc } from "@renderer/interface/Presets/uiBlocks";
 export const featureDescStyle: styles = {
   styles: {
     layout: {
-      'vertical align': 'Center',
       "horizontal align": 'Center',
       width: '100-%',
       height: 'fit-content',
