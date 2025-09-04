@@ -22,7 +22,7 @@ export const featureBlockStyle: styles = {
 
     border: {
       "border color": 'black',
-      'border radius': '0',
+      'border radius': '0-px',
       'border style': 'solid',
       'border width': '2-px'
     },
@@ -47,15 +47,15 @@ export const featureBlockStyle: styles = {
     margin: {
       'margin top': '5-px',
       'margin bottom': '5-px',
-      'margin left': '0',
-      'margin right': '0'
+      'margin left': '0-px',
+      'margin right': '0-px'
     },
 
     shadow: {
-      "offset x": '0',
-      "offset y": '0',
-      'blur radius': '0',
-      'spread radius': '0',
+      "offset x": '0-px',
+      "offset y": '0-px',
+      'blur radius': '0-px',
+      'spread radius': '0-px',
       color: 'none',
       inset: false
     }

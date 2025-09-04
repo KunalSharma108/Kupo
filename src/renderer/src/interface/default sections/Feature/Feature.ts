@@ -41,15 +41,15 @@ export const defaultFeatureStyle: styles = {
     margin: {
       "margin top": '10-px',
       "margin bottom": '10-px',
-      "margin left": '0',
-      "margin right":  '0'
+      "margin left": '0-px',
+      "margin right":  '0-px'
     },
 
     shadow:{
-      "offset x": '0',
-      "offset y": '0',
-      'blur radius': '0',
-      'spread radius': '0',
+      "offset x": '0-px',
+      "offset y": '0-px',
+      'blur radius': '0-px',
+      'spread radius': '0-px',
       color: 'none',
       inset: false
     }

@@ -46,10 +46,10 @@ export const defaultFeatureTitleStyle: styles = {
     },
 
     shadow: {
-      'offset x': '0',
-      'offset y': '0',
-      'blur radius': '0',
-      'spread radius': '0',
+      'offset x': '0-px',
+      'offset y': '0-px',
+      'blur radius': '0-px',
+      'spread radius': '0-px',
       color: 'none',
       inset: false
     }

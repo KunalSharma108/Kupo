@@ -7,12 +7,13 @@ import { fontOptions } from "./lib/presets/fonts";
 import fs from "fs"
 import path from "path";
 import { buildHero } from "./components/Hero/BuildHero";
+import { buildFeature } from "./components/Feature/BuildFeature";
 
 function formatText(css: string): string {
   let indent = 0;
   return css
     .replace(/\s+/g, " ")
-    .replace(/\s*{\s*/g, " {\n") 
+    .replace(/\s*{\s*/g, " {\n")
     .replace(/\s*}\s*/g, "\n}\n")
     .replace(/\s*;\s*/g, ";\n")
     .split("\n")
@@ -66,6 +67,12 @@ export async function buildMain({ project, directory, win }: buildMainProps) {
       const res = await buildHero({ data: data.data.sections['hero'], win, directory });
       html += ` ${res.htmlBlock}`;
       css += ` ${res.cssBlock}`;
+    } else if (val.trim() === 'feature') {
+
+      sendLog({ message: 'Processing Feature', type: 'normal' }, win);
+      const res = await buildFeature({data: data.data.sections['feature'], win ,directory});
+      html += `${res.htmlBlock}`;
+      css += `${res.cssBlock}`;
     }
   }
 
