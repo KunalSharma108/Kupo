@@ -200,14 +200,39 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
                   <>
                     <div className="color-picker-container">
-                      <HexColorPicker color={color} onChange={setColor} />
+                      <HexColorPicker
+                        color={color.slice(0, 7)}
+                        onChange={(val) => setColor(val + (color.slice(7, 9) || "FF"))}
+                      />
+
                       <input
-                        className='color-picker-input'
-                        ref={inputRef}
+                        className="color-picker-input"
                         type="text"
                         value={color}
                         onChange={(e) => setColor(e.target.value)}
                       />
+
+                      <div className="opacity-control">
+                        <label htmlFor="opacity-slider">Opacity</label>
+                        <input
+                          id="opacity-slider"
+                          type="range"
+                          min="0"
+                          max="255"
+                          value={parseInt(color.slice(7, 9) || "FF", 16)}
+                          onChange={(e) => {
+                            const alpha = Number(e.target.value)
+                              .toString(16)
+                              .padStart(2, "0")
+                              .toUpperCase();
+                            setColor(color.slice(0, 7) + alpha);
+                          }}
+                        />
+
+                        <span className="opacity-value">
+                          {(parseInt(color.slice(7, 9) || "FF", 16) / 255).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </>
                 ) : null
@@ -264,7 +289,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         const gradientValue =
           typeof value === 'string' && subType.toLowerCase() === 'gradient' && value.split(' ').length !== 2
             ? value.split(' ')
-            : ['#000000ff', '#000000ff', '#fff000', 'to-right']
+            : ['#000000ff', '#000000ff', '#ffee00ff', 'to-right']
 
         const [gradientDirection, setGradientDirection] = useState<string>(gradientValue[gradientValue.length - 1])
         const [gradientDirectionOpen, setGradientDirectionOpen] = useState<boolean>(false);
@@ -291,7 +316,6 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
         const handleSelect = (idx: number) => {
           setSelectedGradient(idx);
-          setSelectedGradientValue(setGradientColorValues[idx]);
         };
 
         const handleAddColor = () => {
@@ -399,7 +423,10 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               </div>
 
               <div className="gradient-color-picker-wrapper">
-                <HexColorPicker color={selectedGradientValue} onChange={handleColorChange} />
+                <HexColorPicker color={selectedGradientValue.slice(0, 7) || '#000000ff'} onChange={(val) => {
+                  const newGradientColor = `${val}${selectedGradientValue.slice(7, 9) || 'ff'}`
+                  handleColorChange(newGradientColor);
+                }} />
                 <input
                   className='color-picker-input'
                   ref={inputRef}
@@ -407,6 +434,27 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                   value={selectedGradientValue}
                   onChange={(e) => handleColorChange(e.target.value)}
                 />
+
+                <div className="opacity-control">
+                  <label htmlFor="opacity-slider">Opacity</label>
+                  <input
+                    id="opacity-slider"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value={parseInt(selectedGradientValue.slice(7, 9) || "FF", 16)}
+                    onChange={(e) => {
+                      const alpha = Number(e.target.value)
+                        .toString(16)
+                        .padStart(2, "0")
+                        .toUpperCase();
+                      handleColorChange(selectedGradientValue.slice(0, 7) + alpha);
+                    }}
+                  />
+                  <span className="opacity-value">
+                    {(parseInt(selectedGradientValue.slice(7, 9) || "FF", 16) / 255).toFixed(2)}
+                  </span>
+                </div>
               </div>
             </div>
           </>
@@ -604,7 +652,10 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               </div>
 
               <div className="gradient-color-picker-wrapper">
-                <HexColorPicker color={selectedImageGradientValue} onChange={handleColorChange} />
+                <HexColorPicker color={selectedImageGradientValue.slice(0, 7) || '#000000ff'} onChange={(val) => {
+                  const newGradientColor = `${val}${selectedImageGradientValue.slice(7, 9) || 'ff'}`
+                  handleColorChange(newGradientColor);
+                }} />
                 <input
                   className='color-picker-input'
                   ref={inputRef}
@@ -612,6 +663,27 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                   value={selectedImageGradientValue}
                   onChange={(e) => handleColorChange(e.target.value)}
                 />
+
+                <div className="opacity-control">
+                  <label htmlFor="opacity-slider">Opacity</label>
+                  <input
+                    id="opacity-slider"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value={parseInt(selectedImageGradientValue.slice(7, 9) || "FF", 16)}
+                    onChange={(e) => {
+                      const alpha = Number(e.target.value)
+                        .toString(16)
+                        .padStart(2, "0")
+                        .toUpperCase();
+                      handleColorChange(selectedImageGradientValue.slice(0, 7) + alpha);
+                    }}
+                  />
+                  <span className="opacity-value">
+                    {(parseInt(selectedImageGradientValue.slice(7, 9) || "FF", 16) / 255).toFixed(2)}
+                  </span>
+                </div>
               </div>
             </div>
           </>
@@ -816,14 +888,39 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
                   <>
                     <div className="color-picker-container">
-                      <HexColorPicker color={color} onChange={setColor} />
+                      <HexColorPicker
+                        color={color.slice(0, 7)}
+                        onChange={(val) => setColor(val + (color.slice(7, 9) || "FF"))}
+                      />
+
                       <input
-                        className='color-picker-input'
-                        ref={inputRef}
+                        className="color-picker-input"
                         type="text"
                         value={color}
                         onChange={(e) => setColor(e.target.value)}
                       />
+
+                      <div className="opacity-control">
+                        <label htmlFor="opacity-slider">Opacity</label>
+                        <input
+                          id="opacity-slider"
+                          type="range"
+                          min="0"
+                          max="255"
+                          value={parseInt(color.slice(7, 9) || "FF", 16)}
+                          onChange={(e) => {
+                            const alpha = Number(e.target.value)
+                              .toString(16)
+                              .padStart(2, "0")
+                              .toUpperCase();
+                            setColor(color.slice(0, 7) + alpha);
+                          }}
+                        />
+
+                        <span className="opacity-value">
+                          {(parseInt(color.slice(7, 9) || "FF", 16) / 255).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </>
                 ) : null
@@ -1201,14 +1298,39 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
                   <>
                     <div className="color-picker-container">
-                      <HexColorPicker color={color} onChange={setColor} />
+                      <HexColorPicker
+                        color={color.slice(0, 7)}
+                        onChange={(val) => setColor(val + (color.slice(7, 9) || "FF"))}
+                      />
+
                       <input
-                        className='color-picker-input'
-                        ref={inputRef}
+                        className="color-picker-input"
                         type="text"
                         value={color}
                         onChange={(e) => setColor(e.target.value)}
                       />
+
+                      <div className="opacity-control">
+                        <label htmlFor="opacity-slider">Opacity</label>
+                        <input
+                          id="opacity-slider"
+                          type="range"
+                          min="0"
+                          max="255"
+                          value={parseInt(color.slice(7, 9) || "FF", 16)}
+                          onChange={(e) => {
+                            const alpha = Number(e.target.value)
+                              .toString(16)
+                              .padStart(2, "0")
+                              .toUpperCase();
+                            setColor(color.slice(0, 7) + alpha);
+                          }}
+                        />
+
+                        <span className="opacity-value">
+                          {(parseInt(color.slice(7, 9) || "FF", 16) / 255).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </>
                 ) : null
@@ -1518,14 +1640,39 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                 typeof inputValue === 'string' && inputValue.toLowerCase() === 'custom color' ? (
                   <>
                     <div className="color-picker-container">
-                      <HexColorPicker color={color} onChange={setColor} />
+                      <HexColorPicker
+                        color={color.slice(0, 7)}
+                        onChange={(val) => setColor(val + (color.slice(7, 9) || "FF"))}
+                      />
+
                       <input
-                        className='color-picker-input'
-                        ref={inputRef}
+                        className="color-picker-input"
                         type="text"
                         value={color}
                         onChange={(e) => setColor(e.target.value)}
                       />
+
+                      <div className="opacity-control">
+                        <label htmlFor="opacity-slider">Opacity</label>
+                        <input
+                          id="opacity-slider"
+                          type="range"
+                          min="0"
+                          max="255"
+                          value={parseInt(color.slice(7, 9) || "FF", 16)}
+                          onChange={(e) => {
+                            const alpha = Number(e.target.value)
+                              .toString(16)
+                              .padStart(2, "0")
+                              .toUpperCase();
+                            setColor(color.slice(0, 7) + alpha);
+                          }}
+                        />
+
+                        <span className="opacity-value">
+                          {(parseInt(color.slice(7, 9) || "FF", 16) / 255).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </>
                 ) : null
@@ -1617,11 +1764,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                   {
                     type === 'navLinks'
                       ? 'Navbar Link'
-                      : type === 'globalDefaultButtonStyle' 
-                      ? 'global links style'                      
-                      : !isNaN(Number(type))
-                        ? Number(type) + 1
-                        : type
+                      : type === 'globalDefaultButtonStyle'
+                        ? 'global links style'
+                        : !isNaN(Number(type))
+                          ? Number(type) + 1
+                          : type
                   }
                 </span>
                 <FontAwesomeIcon icon={faChevronRight} className="style-dialog-arrow" />
