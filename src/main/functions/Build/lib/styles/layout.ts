@@ -36,7 +36,8 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
         typeof layout[val] === 'string' &&
         layout[val] !== 'fit-content' &&
         layout[val].toLowerCase() !== 'default' &&
-        layout[val].toLowerCase() !== 'undefined'
+        layout[val].toLowerCase() !== 'undefined' &&
+        layout[val].toLowerCase() !== 'auto'
       ) {
         const numValue = layout[val].split('-')[0];
         const metric = layout[val].split('-')[1];
@@ -54,7 +55,8 @@ export async function getLayoutCss({ layout, win }: layoutProps): Promise<cssRet
         typeof layout[val] === 'string' &&
         layout[val] !== 'fit-content' &&
         layout[val].toLowerCase() !== 'default' &&
-        layout[val].toLowerCase() !== 'undefined'
+        layout[val].toLowerCase() !== 'undefined' &&
+        layout[val].toLowerCase() !== 'auto'
       ) {
         const numValue = layout[val].split('-')[0];
         const metric = layout[val].split('-')[1];

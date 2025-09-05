@@ -1617,6 +1617,8 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
                   {
                     type === 'navLinks'
                       ? 'Navbar Link'
+                      : type === 'globalDefaultButtonStyle' 
+                      ? 'global links style'                      
                       : !isNaN(Number(type))
                         ? Number(type) + 1
                         : type

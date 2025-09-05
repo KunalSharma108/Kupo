@@ -11,8 +11,6 @@ export const defaultFooterButtonStyle: styles = {
       'image + gradient': false
     },
     layout: {
-      'vertical align': 'undefined',
-      'horizontal align': 'undefined',
       width: 'undefined',
       height: 'undefined',
       'max width': 'undefined',

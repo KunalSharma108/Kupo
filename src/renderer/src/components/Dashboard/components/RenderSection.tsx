@@ -2152,13 +2152,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
                       {renderNestedDropdown(data.style?.styles || {}, 'styles', ['style'])}
                     </div>
                   </div>
-                  <div className="navbar-dropdown-item has-sub inter-font weight-600">
-                    Hover Styles
-                    <FontAwesomeIcon icon={faChevronRight} className="submenu-icon" />
-                    <div className="navbar-submenu">
-                      {renderNestedDropdown(data.style?.hoverStyles || {}, 'hoverStyles', ['style'])}
-                    </div>
-                  </div>
                 </div>
               )}
             </div>

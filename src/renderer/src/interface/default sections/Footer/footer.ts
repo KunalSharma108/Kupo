@@ -75,7 +75,6 @@ export const defaultGlobalButtonStyle: styles = {
       'image + gradient': false
     },
     layout: {
-      'vertical align': 'Center',
       'horizontal align': 'Center',
       width: 'auto',
       height: 'auto',
@@ -84,9 +83,9 @@ export const defaultGlobalButtonStyle: styles = {
     },
     border: {
       'border color': '#444444',
-      'border width': '1px',
+      'border width': '1-px',
       'border style': 'solid',
-      'border radius': '4px'
+      'border radius': '4-px'
     },
     transition: {
       'transition duration': 200,
@@ -107,8 +106,8 @@ export const defaultGlobalButtonStyle: styles = {
     padding: {
       'padding top': '8px',
       'padding bottom': '8px',
-      'padding left': '16px',
-      'padding right': '16px'
+      'padding left': '16-px',
+      'padding right': '16-px'
     },
     shadow: false
   },
@@ -121,8 +120,6 @@ export const defaultGlobalButtonStyle: styles = {
       'image + gradient': false
     },
     layout: {
-      'vertical align': 'Center',
-      'horizontal align': 'Center',
       width: 'auto',
       height: 'auto',
       'max width': 'undefined',
@@ -130,9 +127,9 @@ export const defaultGlobalButtonStyle: styles = {
     },
     border: {
       'border color': '#555555',
-      'border width': '1px',
+      'border width': '1-px',
       'border style': 'solid',
-      'border radius': '4px'
+      'border radius': '4-px'
     },
     font: {
       'font color': '#ffffff',
@@ -147,10 +144,10 @@ export const defaultGlobalButtonStyle: styles = {
       'margin right': 'undefined'
     },
     padding: {
-      'padding top': '8px',
-      'padding bottom': '8px',
-      'padding left': '16px',
-      'padding right': '16px'
+      'padding top': '8-px',
+      'padding bottom': '8-px',
+      'padding left': '16-px',
+      'padding right': '16-px'
     },
     shadow: {
       "offset x": 'undefined',
