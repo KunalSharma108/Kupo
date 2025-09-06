@@ -1,9 +1,9 @@
 {
   "name": "kupo",
   "version": "1.0.0",
-  "description": "An Electron application that lets you build static websites wihout any code.",
+  "description": "Kupo - A static site builder.",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "Kunal",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
