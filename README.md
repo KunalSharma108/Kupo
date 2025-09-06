@@ -122,6 +122,78 @@ The frontend lives in the **`src/renderer`** folder. The entry point is `App.tsx
 - Sections are modular and extendable — new sections can be added by following the `RenderSection` pattern.  
 - IPC bridge in `lib/ipc.ts` is the main way frontend communicates with the backend.  
 
+### Preload (bridge listeners)
+
+The `preload` script exposes a thin API (`window.electronAPI.*`) to the renderer.  
+It’s mostly the same as vanilla preload, but with extra `.on` listeners and convenience wrappers for common actions.  
+Example: complex native calls are exposed as simple functions (e.g. `sendData(payload)`), so frontend code doesn't need to deal with low-level IPC details.
+
+---
+
+### Backend Overview
+
+Backend code lives in `src/main` (or `main/` depending on your layout). The entry files:
+
+- `index.ts` — standard Electron bootstrap (creates BrowserWindow, basic config).  
+- `main.ts` — central IPC router: listens to preload/renderer events and delegates work to helper modules. `main.ts` keeps logic thin and calls functions defined elsewhere to keep concerns separated.
+
+#### `functions/` folder
+Two main files plus a `build/` folder:
+
+- `project.ts`
+  - CRUD for projects: `fetchProjects()`, `createProject()`, `renameProject()`, `deleteProject()`, etc.
+  - Responsible for filesystem-level project management and project metadata.
+
+- `config.ts`
+  - Handles config data for a given project.
+  - Exposes `fetchConfig(projectId)` and `updateConfig(projectId, data)` used by the UI.
+
+#### `build/` folder (the build system)
+This is where the static-site generation happens.
+
+- `main.ts`
+  - Entry point for the build process. Orchestrates building of all sections by calling component-specific builders.
+  - Receives `data`, `win` (BrowserWindow) and `directory` (output dir) — these are the three main props passed around.
+
+- `sendLog.ts`
+  - Small helper to send build logs back to the renderer (like a lightweight websocket).
+  - Standard message shape: `{ message: string, type: 'normal'|'warning'|'error' }`.
+  - Use this instead of calling `win.webContents.send()` everywhere.
+
+- `lib/` (helpers used during build)
+  - `preset/` — presets used by the builder (e.g., color presets).
+  - `style/` — helper utilities to translate config styles into CSS-friendly values (used by build).
+  - `template/`
+    - `html.ts` — returns final HTML string for `index.html`.
+    - `props.ts` — returns CSS props / values for templates.
+
+- `components/` (actual component builders)
+  - Each major section (navbar, hero, feature, footer) has its own folder and build functions.
+  - **Important:** `getcss.ts` is the critical helper — it accepts the `style` or `hoverStyle` object for a component and returns compiled CSS for that section.
+  - File counts vary by component complexity (navbar more files, footer fewer).
+
+#### Conventions / important notes
+- The build pipeline mostly passes three things around:
+  1. `data` — the config object for the project/sections
+  2. `win` — the BrowserWindow (used for progress/log IPC)
+  3. `directory` — output root where `index.html`, images, fonts, and assets are placed
+- Asset handling:
+  - `lib/copyImage.ts` is used to copy images from user locations into the output directory.
+  - Fonts, images and other assets are copied into the build output automatically during the build.
+- Styles generation:
+  - Styles are produced by modular functions in `build/lib/style/` (background, border, layout, shadow, transition, etc.) — these produce strings that `getcss.ts` stitches into the final CSS.
+- Keep `main.ts` thin — it should delegate. If you add new features, add them under `functions/` or `build/components/` rather than stuffing logic into `main.ts`.
+
+---
+
+### Quick pointers for contributors
+- If you want to add a new section:
+  1. Add default config + types in `frontend/src/renderer/interface/*` (default sections, types, presets).
+  2. Implement a renderer UI in `Dashboard/RenderSection` + `StyleDialog` pattern.
+  3. Add a build implementation in `main/functions/build/components/<your-section>` that outputs HTML + CSS and uses `getcss.ts` pattern.
+- To follow logs during a build, use `sendLog()` rather than emitting arbitrary events.
+- Search for `updateData({})` (frontend) → trace to `project/config` functions (backend) to see the full data flow.
+
 ## License
 
 This project is licensed under the [MIT License](./LICENSE).  
