@@ -22,7 +22,7 @@ export const defaultFooterStyle: styles = {
 
     border: {
       "border color": 'black',
-      'border radius': '0',
+      'border radius': '0-px',
       'border style': 'solid',
       'border width': '2-px'
     },
@@ -35,7 +35,7 @@ export const defaultFooterStyle: styles = {
     font: {
       "font color": 'white',
       'font family': 'inter',
-      'font size': 'md',
+      'font size': 'medium',
       'font weight': 600
     },
 
@@ -54,10 +54,10 @@ export const defaultFooterStyle: styles = {
     },
 
     shadow: {
-      "offset x": '0',
-      'offset y': '0',
-      "blur radius": '0',
-      "spread radius": '0',
+      "offset x": '0-px',
+      'offset y': '0-px',
+      "blur radius": '0-px',
+      "spread radius": '0-px',
       color: 'none',
       inset: false,
     }
@@ -104,8 +104,8 @@ export const defaultGlobalButtonStyle: styles = {
       'margin right': 'undefined'
     },
     padding: {
-      'padding top': '8px',
-      'padding bottom': '8px',
+      'padding top': '8-px',
+      'padding bottom': '8-px',
       'padding left': '16-px',
       'padding right': '16-px'
     },
@@ -134,7 +134,7 @@ export const defaultGlobalButtonStyle: styles = {
     font: {
       'font color': '#ffffff',
       'font family': 'Default',
-      'font weight': '500',
+      'font weight': '500-px',
       'font size': 'Medium'
     },
     margin: {

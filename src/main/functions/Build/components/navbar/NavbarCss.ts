@@ -19,9 +19,11 @@ export async function getNavbarCss({ data, win, directory }: getProps): Promise<
         let navLogoAlign = data.logo.style.styles.layout['horizontal align'].toLowerCase();
         
         let justifyContent = navLinkAlign === 'center' && navLogoAlign === 'center' ? 'center' : 'space-between'
+
+        let isSticky: 'sticky' | 'relative' = data.sticky ? 'sticky' : 'relative'
         
         navbarStyleCSS.code = `
-        display:flex; justify-content: ${justifyContent}; align-items: center; position: relative; gap: 20px;${navbarStyleCSS.code}
+        display:flex; justify-content: ${justifyContent}; align-items: center; position: ${isSticky}; ${isSticky ? 'top:0px; z-index: 100;' : ''} gap: 20px; ${navbarStyleCSS.code}
         `.trim();
 
         css += `.${navbarClassName} {\n${navbarStyleCSS.code}\n}`;
