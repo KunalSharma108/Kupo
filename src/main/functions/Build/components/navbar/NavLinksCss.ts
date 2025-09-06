@@ -67,7 +67,6 @@ export async function getNavLinksCss({ data, win, directory }: getProps): Promis
           valCss.code = valCss.code?.replace(/;(?=\s|$)/g, " !important;") || "";
           css += `.${valClassName} {\n${valCss.code}\n}`;
         } else {
-          console.log(valCss)
         }
       } else {
         sendLog({ message: `navbar's link's style doesn't exist`, type: 'error' }, win);
@@ -86,7 +85,6 @@ export async function getNavLinksCss({ data, win, directory }: getProps): Promis
           valCss.code = valCss.code?.replace(/;(?=\s|$)/g, " !important;") || "";
           css += `.${valClassName}:hover {\n${valCss.code}\n}`;
         } else {
-          console.log(valCss)
         }
       } else {
         sendLog({ message: `navbar's link's hover style doesn't exist`, type: 'error' }, win);

@@ -59,7 +59,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
           styleCss += res.code + ' ';
         } else {
-          console.log(res)
         }
       } else if (key.toLowerCase() === 'layout') {
         sendLog({ message: `Processing ${styleContent}'s layout`, type: 'normal' }, win)
@@ -78,7 +77,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
           styleCss += res.code + ' ';
         } else {
-          console.log(res)
         }
       } else if (key.toLowerCase() === 'border') {
         sendLog({ message: `processing ${styleContent}'s border styling`, type: 'normal' }, win);
@@ -96,7 +94,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
           styleCss += res.code + ' ';
         } else {
-          console.log(res)
         }
       } else if (key.toLowerCase() === 'transition') {
         sendLog({ message: `processing ${styleContent}'s transition ${writtenStyleType} property`, type: 'normal' }, win);
@@ -111,7 +108,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           sendLog({ message: `${styleContent}'s  ${res.msg}`, type: res.type }, win);
           styleCss += res.code + ' ';
         } else {
-          console.log(res)
         }
       } else if (key.toLowerCase() === 'font') {
         sendLog({ message: `processing ${styleContent}'s font ${writtenStyleType} property`, type: 'normal' }, win);
@@ -129,7 +125,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           styleCss += `${res.code} `;
           sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
         } else {
-          console.log(res)
         }
 
       } else if (key.toLowerCase() === 'margin') {
@@ -148,7 +143,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           styleCss += `${res.code} `;
           sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
         } else {
-          console.log(res)
         }
 
       } else if (key.toLowerCase() === 'padding') {
@@ -167,7 +161,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           styleCss += `${res.code} `;
           sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
         } else {
-          console.log(res)
         }
 
       } else if (key.toLowerCase() === 'shadow') {
@@ -188,7 +181,6 @@ export async function getCSS({ styleContent, styleType, style, win, directory }:
           styleCss += `${res.code} `;
           sendLog({ message: `${styleContent}'s ${writtenStyleType} ${res.msg}`, type: res.type }, win);
         } else {
-          console.log(res)
         }
       } else {
         sendLog({

@@ -7,8 +7,8 @@ It provides plenty of customization options for different components, including 
 
 You can download the latest stable release of Kupo for your platform:
 
-- **Windows:** Download the `.exe` installer from the [Releases](https://github.com/<your-username>/Kupo/releases) page.
-- **Linux:** Download the `.AppImage` or `.deb` package from the same [Releases](https://github.com/<your-username>/Kupo/releases) page.
+- **Windows:** Download the `.exe` installer from the [Releases](https://github.com/KunalSharma108/Kupo/releases) page.
+- **Linux:** Download the `.AppImage` or `.deb` package from the same [Releases](https://github.com/KunalSharma108/Kupo/releases) page.
 
 Simply run the installer (Windows) or follow your distro’s installation steps (Linux) to start using Kupo.
 

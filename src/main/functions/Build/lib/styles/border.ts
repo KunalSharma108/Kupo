@@ -2,6 +2,7 @@ import { BrowserWindow } from "electron";
 import { cssReturnProps } from "../template/props";
 import { colors } from "../presets/color";
 import { sendLog } from "../../sendLog";
+import { hexToRgba } from "../presets/HexToRgb";
 
 interface borderProps {
   border: {
@@ -34,7 +35,9 @@ export async function getBorderCSS({ border, win }: borderProps): Promise<cssRet
     let widthMetric = border["border width"].split('-')[1];
     let style = border["border style"];
 
-    let color = border["border color"][0] === '#' ? border["border color"] : `#${colors[border["border color"].toLowerCase()]}`;
+    let color = border["border color"][0] === '#'
+      ? hexToRgba(border["border color"])
+      : `#${colors[border["border color"].toLowerCase()]}`;
 
     if (color === undefined) {
       sendLog({

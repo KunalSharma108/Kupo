@@ -1,6 +1,7 @@
 import { colors } from "../presets/color";
 import { copyImg } from "../presets/copyImg";
 import { cssReturnProps } from "../template/props";
+import { hexToRgba } from "../presets/HexToRgb";
 
 interface bgProps {
   background: {
@@ -16,11 +17,13 @@ interface bgProps {
 
 export async function getBgCSS({ background, directory }: bgProps): Promise<cssReturnProps> {
   if (background.type === false) return { success: false, msg: 'Background type is false', type: 'warning' }
-  
+
   try {
     if (background.type === 'color' && background.color !== false) {
       if (background.color[0] === '#') {
-        return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${background.color};` }
+        let rgbColor = hexToRgba(background.color);
+
+        return { success: true, msg: 'Custom color background done. ✅', type: 'normal', code: `background: ${rgbColor};` }
       } else {
         if (colors[background.color.toLowerCase()] !== undefined) {
           let color = `#${colors[background.color.toLowerCase()]}`;
@@ -41,14 +44,17 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       }
 
     } else if (background.type === 'gradient' && background.gradient !== false) {
-      const gradientDirection = background.gradient.split(' ')[background.gradient.split(' ').length - 1];
+      const gradientDirection = background.gradient.split(' ')[background.gradient.split(' ').length - 1].replace(/-+/g, ' ');
       const gradientColors = background.gradient.split(' ').filter((_, idx) => idx !== background.gradient.split(' ').length - 1);
+
+      const rgbaColors = gradientColors.map(val => hexToRgba(val));
+      console.log(rgbaColors)
 
       return {
         success: true,
         msg: 'gradient background done. ✅',
         type: 'normal',
-        code: `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}); `
+        code: `background: linear-gradient(${gradientDirection}, ${rgbaColors.join(", ")}); `
       }
 
     } else if (background.type === 'image + gradient' && background["image + gradient"] !== false) {
@@ -58,8 +64,12 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       const res = await copyImg({ imgPath: imgPath, destPath: directory });
 
       if (res.success && res.baseName !== undefined) {
-        const gradientDirection = gradientValues.split(' ')[gradientValues.split(' ').length - 1];
+        const gradientDirection = gradientValues.split(' ')[gradientValues.split(' ').length - 1].replace('-', ' ');
         const gradientColors = gradientValues.split(' ').filter((_, idx) => idx !== gradientValues.split(' ').length - 1);
+
+        gradientColors.map((val) => {
+          return hexToRgba(val);
+        })
 
         const css = `background: linear-gradient(${gradientDirection}, ${gradientColors.join(", ")}), url('${res.baseName}'); background-position: center; background-size: cover; background-repeat: no-repeat; `;
 

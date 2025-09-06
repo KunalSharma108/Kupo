@@ -2,6 +2,7 @@ import { BrowserWindow } from "electron";
 import { cssReturnProps } from "../template/props";
 import { sendLog } from "../../sendLog";
 import { colors } from "../presets/color";
+import { hexToRgba } from "../presets/HexToRgb";
 
 interface shadowProps {
   shadow: {
@@ -50,7 +51,7 @@ export async function getShadow({ shadow, win }: shadowProps): Promise<cssReturn
       let blurNum = shadow["blur radius"].split('-')[0];
       let blurMetric = shadow["blur radius"].split('-')[1];
 
-      let color = shadow.color[0] === '#' ? shadow.color : `#${colors[shadow.color.toLowerCase()]}`;
+      let color = shadow.color[0] === '#' ? hexToRgba(shadow.color) : `#${colors[shadow.color.toLowerCase()]}`;
 
       let inset = shadow.inset ? 'inset' : '';
 

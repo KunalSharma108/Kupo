@@ -316,6 +316,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
 
         const handleSelect = (idx: number) => {
           setSelectedGradient(idx);
+          setSelectedGradientValue(gradientColorValues[idx]);
         };
 
         const handleAddColor = () => {
@@ -1468,11 +1469,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
         );
       }
     } else if (type.toLowerCase() === 'margin' || type.toLowerCase() === 'padding') {
-      const initialType = typeof value === 'string' && value?.split(' ')?.length === 2 ? 'string' : 0
+      const initialType = typeof value === 'string' && value?.split('-')?.length === 2 ? 'string' : 0
       const [layoutType, setLayoutType] = useState<'number'>('number');
 
-      const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
-      const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
+      const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split('-')[0]) : 0);
+      const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split('-')[1] : 'px')
 
       const metricOptions = ['px', 'rem', '%'];
       const typeOptions = ['number'];
@@ -1529,11 +1530,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
       );
     } else if (type.toLowerCase() === 'shadow') {
       if (subType.toLowerCase() !== 'color' && subType.toLowerCase() !== 'inset') {
-        const initialType = typeof value === 'string' && value?.split(' ')?.length === 2 ? 'string' : 0
+        const initialType = typeof value === 'string' && value?.split('-')?.length === 2 ? 'string' : 0
         const [layoutType, setLayoutType] = useState<'number'>('number');
 
-        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split(' ')[0]) : 0);
-        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split(' ')[1] : 'px')
+        const [layout, setLayout] = useState<number>(initialType === 'string' ? Number(value.split('-')[0]) : 0);
+        const [layoutMetric, setLayoutMetric] = useState<string>(initialType === 'string' ? value.split('-')[1] : 'px')
 
         const metricOptions = ['px', 'rem'];
         const typeOptions = ['number'];

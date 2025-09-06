@@ -3,6 +3,7 @@ import { cssReturnProps } from "../template/props";
 import { colors } from "../presets/color";
 import { sendLog } from "../../sendLog";
 import { fontOptions, fontSizes } from "../presets/fonts";
+import { hexToRgba } from "../presets/HexToRgb";
 
 interface fontProps {
   font: {
@@ -20,7 +21,7 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
     let css = ``;
 
     if (font["font color"][0] === '#') {
-      css = `color: ${font["font color"]}; `
+      css = `color: ${hexToRgba(font["font color"])}; `
     } else if (colors[font["font color"].toLowerCase()]) {
       css += `color: #${colors[font["font color"].toLowerCase()]}; `
     } else {
