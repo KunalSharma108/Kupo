@@ -7,6 +7,8 @@ interface buildProps {
   project: string | null;
   directory: string;
   goNext: any;
+  startBuilding: any;
+  stopBuilding: any;
 }
 
 interface logsProps {
@@ -14,7 +16,7 @@ interface logsProps {
   type: "normal" | "warning" | "error" | "done";
 }
 
-function Build({ project, directory, goNext}: buildProps): React.JSX.Element {
+function Build({ project, directory, goNext, startBuilding, stopBuilding}: buildProps): React.JSX.Element {
   const hasStarted = useRef(false);
   const [logs, setLogs] = useState<logsProps[]>([]);
   const progressTimer = useRef<NodeJS.Timeout | null>(null);
@@ -24,6 +26,7 @@ function Build({ project, directory, goNext}: buildProps): React.JSX.Element {
 
   if (project !== null && directory.trim() !== "" && hasStarted.current === false) {
     startBuild({ project, directory });
+    startBuilding();
     hasStarted.current = true;
   }
 
@@ -34,6 +37,7 @@ function Build({ project, directory, goNext}: buildProps): React.JSX.Element {
       if (log.message === "done" && !buildDone.current) {
         buildDone.current = true;
         setTimeout(() => {
+          stopBuilding();
           goNext();
         }, 200)
       }

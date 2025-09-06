@@ -1,17 +1,8 @@
-appId: com.electron.app
-productName: backend
+appId: com.kupo.app
+productName: Kupo
 directories:
   buildResources: resources
 
-win:
-  icon: resources/favicon.ico
-
-linux: 
-  icon: resources/Logo.png
-
-mac: 
-  icon: resources/icon.icns
-  
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -21,14 +12,30 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
+
 win:
-  executableName: backend
+  target: nsis
+  executableName: kupo
+  icon: resources/favicon.ico
+
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+
+linux:
+  target:
+    - AppImage
+    - deb
+  icon: resources/Logo.png
+  maintainer: electronjs.org
+  category: Utility
+  artifactName: ${name}-${version}.${ext}
+
 mac:
+  target: dmg
+  icon: resources/icon.icns
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -36,20 +43,8 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
-dmg:
   artifactName: ${name}-${version}.${ext}
-linux:
-  target:
-    - AppImage
-    - snap
-    - deb
-  maintainer: electronjs.org
-  category: Utility
-appImage:
-  artifactName: ${name}-${version}.${ext}
+
 npmRebuild: false
-publish:
-  provider: generic
-  url: https://example.com/auto-updates
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

@@ -1,4 +1,4 @@
-import { dynamicStyleOption, styleOption } from "./Style";
+import { dynamicStyleOption } from "./Style";
 import { ColorOptions } from "./uiBlocks";
 
 export interface imageBackgroundValue {
@@ -117,11 +117,6 @@ export const customImageGradientBackground: Record<string, dynamicStyleOption<Im
       size: "cover"
     },
     css: (val) => {
-      const stopString = val.gradientStops
-        .map(stop => stop.position ? `${stop.color} ${stop.position}` : stop.color)
-        .join(", ");
-
-      const gradientLayer = `linear-gradient(${val.gradientDirection}, ${stopString})`;
 
       const gradientWithOpacity = `linear-gradient(${val.gradientDirection}, ${val.gradientStops.map(
         stop =>

@@ -71,7 +71,9 @@ export const setUpIpcHandlers = async () => {
   ipcMain.handle('startBuild', async (event, { project, directory }) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     if (win !== null) {
-      const result = await buildMain({ project, directory, win })
+      const result = await buildMain({ project, directory, win });
+
+      return result;
     }
   });
 

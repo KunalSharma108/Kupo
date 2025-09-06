@@ -108,6 +108,7 @@
     align-items: center;
     gap: 0.5rem;
     -webkit-app-region: no-drag;
+    cursor: pointer;
 }
 
 .nav-link:hover {

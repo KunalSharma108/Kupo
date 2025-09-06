@@ -6,23 +6,22 @@ import { faWindowMinimize, faWindowMaximize, faTimes, faRocket, faBook } from '@
 import { closeWindow, maximizeWindow, minimizeWindow } from '@renderer/lib/ipc';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import BuildDialog from '../build/buildDialog';
+import '../styles/fontFamily.css'
 
 const NavDashboard = (): React.JSX.Element => {
   const [showBuild, setShowBuild] = useState<boolean>(false);
-
-  const disableBuild = () => setShowBuild(false)
+  const disableBuild = () => setShowBuild(false);
 
   return (
     <nav className="dashboard-navbar">
       {/* Left: Docs & GitHub */}
       <div className="nav-section nav-left">
-        <a href="https://yourdocslink.com" target="_blank" className="nav-link">
+        <a className="nav-link inter-font" onClick={() => alert('Sorry! Documentation is under progress...')}>
           <FontAwesomeIcon icon={faBook} /> Documentation
         </a>
 
         <a href="https://github.com/KunalSharma108/Kupo" target="_blank" className="nav-link github-link">
-          <FontAwesomeIcon icon={faGithub} className="github-icon" />
-          <span className="github-stars">1</span>
+          <FontAwesomeIcon icon={faGithub} className="github-icon inter-font" />
         </a>
       </div>
 

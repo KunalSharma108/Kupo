@@ -1,4 +1,3 @@
-import { BrowserWindow } from "electron";
 import { getProps } from "../../lib/presets/getProps";
 import { sendLog } from "../../sendLog";
 import { getFooterCss } from "./FooterCss";

@@ -33,6 +33,14 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
     FetchProjects()
   }, []);
 
+  const startBuilding = () => {
+    setBuilding(true)
+  }
+
+  const stopBuilding = () => {
+    setBuilding(false)
+  }
+
   const setProject = (project: string) => {
     setSelectedProject(project)
     setPageNextPerm((prev) => {
@@ -68,7 +76,7 @@ function BuildDialog({ disableBuild }: buildDialogProp): React.JSX.Element {
   const pages = [
     <SelectProject setProject={setProject} selectedProject={String(selectedProject)} projects={projects} />,
     <SelectDir selectedDir={selectedDir} changeDir={changeDir} />,
-    <Build project={selectedProject} directory={selectedDir} goNext={goNext} />,
+    <Build project={selectedProject} directory={selectedDir} goNext={goNext} startBuilding={startBuilding} stopBuilding={stopBuilding} />,
     <Done />
   ];
 
