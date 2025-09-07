@@ -227,6 +227,18 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     const globalLinksDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+      if (data?.navLinks) {
+        setNavLinks([...data.navLinks]);
+      }
+    }, [data]);
+
+    useEffect(() => {
+      if (data?.logo.logoURL) {
+        setLogoURL(data.logo.logoURL);
+      }
+    }, [data]);
+
+    useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         if (navDropdownRef.current && !navDropdownRef.current.contains(event.target as Node)) {
           setDropdownOpen(false)
@@ -627,14 +639,27 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [heroDropdownRef])
 
+    
     const [heroTexts, setHeroTexts] = useState<TextBlock[]>(data?.texts);
     const [heroButtons, setHeroButtons] = useState<ButtonBlock[]>(data?.buttons);
+
+    useEffect(() => {
+      if (data?.texts) {
+        setHeroTexts([...data.texts]);
+      }
+    }, [data]);
+
+    useEffect(() => {
+      if (data?.buttons) {
+        setHeroButtons([...data.buttons]);
+      }
+    }, [data]);
 
     const handleTextAdd = () => {
       let text = structuredClone(HeroText);
       text.text = `${text.text} ${heroTexts.length + 1}`;
 
-      let newValue = structuredClone(heroTexts);
+      let newValue = structuredClone(data.texts);
 
       newValue.push(text)
       const pathParts = ['sections', 'hero', 'texts'];
@@ -994,6 +1019,12 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
     const [featureDropdownOpen, setFeatureDropdownOpen] = useState<boolean>(false);
     const featureDropdownRef = useRef<HTMLDivElement>(null);
     const [featureBlocks, setFeatureBlocks] = useState<Object[]>(data?.blocks)
+
+    useEffect(() => {
+      if (data?.blocks) {
+        setFeatureBlocks([...data.blocks]);
+      }
+    }, [data]);
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -1957,6 +1988,12 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
 
     const [globalLinksDropdownOpen, setGlobalLinksDropdownOpen] = useState<boolean>(false);
     const globalLinksDropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      if (data?.buttons) {
+        setFooterLinks([...data.buttons]);
+      }
+    }, [data]);
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {

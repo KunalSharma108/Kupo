@@ -48,7 +48,6 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       const gradientColors = background.gradient.split(' ').filter((_, idx) => idx !== background.gradient.split(' ').length - 1);
 
       const rgbaColors = gradientColors.map(val => hexToRgba(val));
-      console.log(rgbaColors)
 
       return {
         success: true,
@@ -81,7 +80,6 @@ export async function getBgCSS({ background, directory }: bgProps): Promise<cssR
       return { success: false, msg: `Background type is invalid or background type selected is false.`, type: 'error' }
     }
   } catch (error) {
-    console.log(`THERE WAS ANN ERROR: ${error}`)
     return { success: false, msg: `there was an error: ${error}`, type: 'error' }
 
   }

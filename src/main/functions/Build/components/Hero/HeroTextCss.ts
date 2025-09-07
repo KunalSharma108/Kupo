@@ -49,6 +49,8 @@ export async function getHeroTextCss({ data, win, directory }: getProps): Promis
     } else {
       sendLog({ message: `hover style doesn't exist of hero text number ${count}`, type: 'error' }, win);
     }
+
+    count++;
   }
 
   return css

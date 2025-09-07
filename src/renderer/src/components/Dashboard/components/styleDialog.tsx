@@ -285,7 +285,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         )
       } else if (subType.toLowerCase() === 'gradient') {
-
+        
         const gradientValue =
           typeof value === 'string' && subType.toLowerCase() === 'gradient' && value.split(' ').length !== 2
             ? value.split(' ')
