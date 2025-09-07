@@ -38,10 +38,10 @@ Kupo is designed to help non-technical users create static websites quickly and 
 Here’s a quick look at Kupo in action:
 
 ### App Interface
-![App Screenshot]()
+![App Screenshot](/Kupo_UI.PNG)
 
 ### Example Site Built with Kupo
-![Demo Site]()
+![Demo Site](dummy_img)
 
 
 ## Contributing

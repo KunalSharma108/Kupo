@@ -285,7 +285,7 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
           </div>
         )
       } else if (subType.toLowerCase() === 'gradient') {
-        
+
         const gradientValue =
           typeof value === 'string' && subType.toLowerCase() === 'gradient' && value.split(' ').length !== 2
             ? value.split(' ')
@@ -774,8 +774,8 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               type="number"
               value={layoutType === 'number' ? layout : ''}
               onChange={(e) => {
-                setLayout(Number(e.target.value))
-                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+                setLayout(Math.abs(Number(e.target.value)))
+                updateInputValue(`${Math.abs(Number(e.target.value))}-${layoutMetric}`)
               }}
               disabled={layoutType !== 'number'}
               autoFocus
@@ -974,8 +974,10 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               type="number"
               value={layoutType === 'number' ? layout : ''}
               onChange={(e) => {
-                setLayout(Number(e.target.value))
-                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+                if (Number(e.target.value) >= 0) {
+                  setLayout(Math.abs(Number(e.target.value)))
+                  updateInputValue(`${Math.abs(Number(e.target.value))}-${layoutMetric}`)
+                }
               }}
               disabled={layoutType !== 'number'}
               autoFocus
@@ -1080,8 +1082,10 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               type="number"
               value={layoutType === 'number' ? layout : ''}
               onChange={(e) => {
-                setLayout(Number(e.target.value))
-                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+                if (Number(e.target.value) >= 0) {
+                  setLayout(Math.abs(Number(e.target.value)))
+                  updateInputValue(`${Math.abs(Number(e.target.value))}-${layoutMetric}`)
+                }
               }}
               disabled={layoutType !== 'number'}
               autoFocus
@@ -1506,8 +1510,10 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
             type="number"
             value={layoutType === 'number' ? layout : ''}
             onChange={(e) => {
-              setLayout(Number(e.target.value))
-              updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+              if (Number(e.target.value) >= 0) {
+                setLayout(Number(e.target.value))
+                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+              }
             }}
             disabled={layoutType !== 'number'}
             autoFocus
@@ -1567,8 +1573,11 @@ export const StyleDialog: React.FC<StyleDialogProps> = ({
               type="number"
               value={layoutType === 'number' ? layout : ''}
               onChange={(e) => {
-                setLayout(Number(e.target.value))
-                updateInputValue(`${Number(e.target.value)}-${layoutMetric}`)
+                if (Number(e.target.value) >= 0) {
+                  setLayout(Math.abs(Number(e.target.value)))
+                  updateInputValue(`${Math.abs(Number(e.target.value))}-${layoutMetric}`)
+                }
+
               }}
               disabled={layoutType !== 'number'}
               autoFocus
