@@ -54,6 +54,3 @@ export async function getFont({ font, win }: fontProps): Promise<cssReturnProps>
     return { success: false, msg: `an error occured: ${error}`, type: 'error' }
   }
 }
-
-
-// EXAMPLE CODE
