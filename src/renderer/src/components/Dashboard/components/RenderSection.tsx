@@ -1110,8 +1110,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         const response = await selectImage();
 
         if (!response.canceled && response.filePaths.length === 1) {
-          console.log('inside the if blockkkk')
-          console.log(response.filePaths[0])
           setImageURL(response.filePaths[0]);
           blockData.imageURL = response.filePaths[0]
           return { success: true, data: response.filePaths[0] }
@@ -1143,7 +1141,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
             });
           }
         } catch (error) {
-          console.log(error)
         }
       }
 
@@ -1187,8 +1184,6 @@ function RenderSection({ type, data, styleContent, updateData }: RenderSectionPr
         updateData({ pathParts, newValue });
         setFeatureBlocks(newValue);
       }
-
-      console.log(data)
 
       return (
         <>

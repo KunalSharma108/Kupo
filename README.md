@@ -41,7 +41,7 @@ Here’s a quick look at Kupo in action:
 ![App Screenshot](/Kupo_UI.PNG)
 
 ### Example Site Built with Kupo
-![Demo Site](dummy_img)
+![Demo Site](/demo_site.PNG)
 
 
 ## Contributing

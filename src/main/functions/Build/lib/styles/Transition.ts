@@ -4,7 +4,7 @@ import { sendLog } from "../../sendLog";
 
 interface getTranstionProps {
   transition: {
-    'transition duration': number | undefined | 'undefined';
+    'transition duration': undefined | 'undefined' | any;
     'transition style': 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'undefined';
   }
 
@@ -16,7 +16,7 @@ export async function getTransition({ transition, win }: getTranstionProps): Pro
     let css = '';
 
     if (transition["transition duration"] !== undefined &&
-      transition["transition duration"] !== 'undefined' &&
+      transition["transition duration"].toLowerCase() !== 'undefined' &&
       transition["transition style"] === 'undefined'
     ) {
       css += `transition-duration: ${transition["transition duration"]}ms; `

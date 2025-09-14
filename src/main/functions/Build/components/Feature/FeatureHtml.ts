@@ -51,7 +51,7 @@ export async function getFeatureHtml({ data, win, directory }: getProps): Promis
       <div class='feature-image'><img src='${imgURL}'></img></div>
       <div class='feature-block-content'>
         <div class='${featureTitleClassName} ${titleAlign}'>${block.title.text}</div>
-        <div class='${featureDescClassName}' ${descAlign}>${block.description.text}</div>
+        <div class='${featureDescClassName} ${descAlign}'>${block.description.text}</div>
       </div>
       </div>
       `
