@@ -109,7 +109,14 @@ export const defaultGlobalButtonStyle: styles = {
       'padding left': '16-px',
       'padding right': '16-px'
     },
-    shadow: false
+    shadow: {
+      "offset x": '0-px',
+      "offset y": '0-px',
+      "blur radius": '0-px',
+      "spread radius": '0-px',
+      color: 'none',
+      inset: false
+    }
   },
   hoverStyles: {
     background: {
