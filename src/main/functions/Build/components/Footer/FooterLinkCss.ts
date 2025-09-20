@@ -18,7 +18,7 @@ export async function getFooterLinkCss({ data, win, directory }: getProps): Prom
     });
 
     if (globalFooterLinksCss.success && globalFooterLinksCss.code?.trim() !== '' && globalFooterLinksCss) {
-      css += `.${className} {${globalFooterLinksCss.code}}`;
+      css += `.${className} > a {${globalFooterLinksCss.code}}`;
     }
   }
 
@@ -34,7 +34,7 @@ export async function getFooterLinkCss({ data, win, directory }: getProps): Prom
     });
 
     if (globalFooterLinksCss.success && globalFooterLinksCss.code?.trim() !== '' && globalFooterLinksCss) {
-      css += `.${className}:hover {${globalFooterLinksCss.code}}`;
+      css += `.${className} > a:hover {${globalFooterLinksCss.code}}`;
     }
   }
 

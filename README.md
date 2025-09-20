@@ -53,7 +53,7 @@ Contributions are welcome! Whether it’s fixing bugs, adding new features, or i
 2. **Clone** your fork  
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/Kupo.git
+git clone https://github.com/KunalSharma108/Kupo.git
 ```  
 
 3. **Create a new branch**  
